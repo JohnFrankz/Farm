@@ -6,7 +6,7 @@ import javax.persistence.Table;
 import cn.jxufe.bean.EntityID;
 
 @Entity
-@Table(name = "T_seed")
+@Table(name = "T_Seed")
 public class Seed extends EntityID {
 	// 种子id 
 	private int seedId;
