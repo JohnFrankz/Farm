@@ -20,6 +20,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script type="text/javascript" src="<%=basePath%>ext/farm/helper.js?346t"></script>    
 </head>
 <body>
-
+ok
 </body>
 </html>
