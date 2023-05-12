@@ -35,17 +35,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</div>
 	<div id="msgBox"></div>
 	
-	<div id="formSeedContainer" class="easyui-dialog" style="width:680px; height:400px; padding:10px 10px" closed="true" buttons="#formSeedButtons">
+	<div id="formSeedContainer" class="easyui-dialog" style="width:880px; height:400px; padding:10px 10px" closed="true" buttons="#formSeedButtons">
 		<form id="formSeedManage" method="POST" novalidate>
 			<table >
 				<tr>
 					<td>ID</td>
-					<td><input name="id" required="true" class="w200" value="0" readonly="readonly"></td>
+					<td><input name="id" required="true" class="w150" value="0" readonly="readonly"></td>
 				</tr>
 				
 				<tr>
 					<td>种子ID</td>
-					<td><input name="seedId" required="true" class="w200"></td>
+					<td><input name="seedId" required="true"  readonly="readonly" class="w150"></td>
 				</tr>
 				
 				<tr>
@@ -128,12 +128,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			seedManageGrid = $('#seedManage').edatagrid({
 				title: '种子清单',
 				width:'100%',
-				/* height:'100%', */
+				height:800, 
 				method:'post',
 				url:'<%=basePath%>/seed/data',
-				saveUrl: '',
+				saveUrl: '<%=basePath%>/seed/save',
 				updateUrl: '',
-				destroyUrl: '',
+				destroyUrl: '<%=basePath%>/seed/delete',
 				
 				editable: true,
 				border: false,
@@ -148,8 +148,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 //分页
                 pagination:true,
                 pagePosition:'bottom',
-                pageSize:2,
-                pageList:[2,4,6],
+                pageSize:3,
+                pageList:[3,6,9],
                 
                 columns: [
                 	[{field: 'id',		title: 'ID', width: 10,	sortable: true,	align: 'center', halign: 'center'}, 
@@ -162,7 +162,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                              }
                          }
                 	 }, 
-                	 {field: 'season',	title: 'x季作物', width: 30,	sortable: true,	align: 'center', halign: 'center',
+                	 {field: 'season', title: 'x季作物', width: 30,	sortable: true,	align: 'center', halign: 'center',
                 		 editor: {
                              type: 'numberbox',
                              options: {
@@ -173,7 +173,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    		 					return Number(value) + '季作物';
    		 				}
                 	 }, 
-                	 {field: 'seedLevel',	title: '种子等级', width: 30,	sortable: true,	align: 'center', halign: 'center',
+                	 {field: 'seedLevel', title: '种子等级', width: 30, sortable: true, align: 'center', halign: 'center',
                 		 editor: {
                              type: 'numberbox',
                              options: {
@@ -184,7 +184,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		 					return Number(value) + '级作物';
  		 				}
                 	 }, 
-                	 {field: 'seedType',	title: '种子类型', width: 30,	sortable: true,	align: 'center',	halign: 'center' ,
+                	 {field: 'seedType', title: '种子类型', width: 30, sortable: true,	align: 'center', halign: 'center' ,
                 		 editor: {
                              type: 'combobox',
                              options: {
@@ -192,7 +192,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                              }
                          },	 
                 	 }, 
-                	 {field: 'experience',		title: '可获经验', 			width: 30,	sortable: true,	align: 'center',	halign: 'center',
+                	 {field: 'experience', title: '可获经验', width: 30,	sortable: true,	align: 'center', halign: 'center',
                 		 editor: {
                              type: 'numberbox',
                              options: {
@@ -200,18 +200,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                              }
                          },	 
                 	 }, 
-                	 {field: 'matureTime',	title: '每季成熟所需时间',	width: 30,	sortable: true,	align: 'center',	halign: 'center',
+                	 {field: 'matureTime',	title: '每季成熟所需时间', width: 30,	sortable: true,	align: 'center', halign: 'center',
                 		 editor: {
                              type: 'numberbox',
                              options: {
                                  required: true
                              }
                          },
-				                		 formatter: function(value){
-				 		 					return Number(value) + '秒';
-				 		 				}	 
+	                		 formatter: function(value){
+	 		 					return Number(value) + '秒';
+	 		 				}	 
                 	 }, 
-                	 {field: 'harvest',		title: '每季成熟可获收成', 	width: 30,	sortable: true,	align: 'center',	halign: 'center',
+                	 {field: 'harvest', title: '每季成熟可获收成', width: 30,	sortable: true,	align: 'center', halign: 'center',
                 		 editor: {
                              type: 'numberbox',
                              options: {
@@ -219,7 +219,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                              }
                          },	 
                 	 }, 
-                	 {field: 'purchasePrice',	title: '种子采购价',			width: 30,	sortable: true,	align: 'center',	halign: 'center',
+                	 {field: 'purchasePrice', title: '种子采购价', width: 30,	sortable: true,	align: 'center', halign: 'center',
                 		 editor: {
                              type: 'numberbox',
                              options: {
@@ -230,7 +230,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					 		 					return Number(value) + '金币';
 					 		 				} 
                 	 }, 
-                	 {field: 'salePrice',		title: '每个收获的果实单价', 	width: 30,	sortable: true,	align: 'center',	halign: 'center',
+                	 {field: 'salePrice', title: '每个收获的果实单价', width: 30,	sortable: true,	align: 'center', halign: 'center',
                 		 editor: {
                              type: 'numberbox',
                              options: {
@@ -241,7 +241,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 		 					return Number(value) + '金币';
 	 		 				}  
                 	 }, 
-                	 {field: 'soil',	title: '土地需求',			width: 30,	sortable: true,	align: 'center',	halign: 'center',
+                	 {field: 'soil', title: '土地需求', width: 30, sortable: true, align: 'center', halign: 'center',
                 		 editor: {
                              type: 'combobox',
                              options: {
@@ -249,7 +249,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                              }
                          },	 
                 	 }, 
-                	 {field: 'points',		title: '每季成熟可获积分', 	width: 30,	sortable: true,	align: 'center',	halign: 'center',
+                	 {field: 'points', title: '每季成熟可获积分', 	width: 30,	sortable: true,	align: 'center', halign: 'center',
                 		 editor: {
                              type: 'numberbox',
                              options: {
@@ -260,15 +260,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 		 					return Number(value) + '分';
 	 		 				} 	 
                 	 }, 
-                	 {field: 'prompt',	title: '提示信息',			width: 30,	sortable: true,	align: 'center',	halign: 'center',
+                	 {field: 'prompt',	title: '提示信息', width: 30,	sortable: true,	align: 'center', halign: 'center',
                 		 editor: {
                              type: 'validatebox',
                              options: {
                                  required: true
                              }
                          },}, 
-                	 {field: 'operation',		title: '操作', 		width: 30,	sortable: true,	align: 'center',	halign: 'center',
-                		 				/* formatter: founction(){ }	 */ 
+                	 {field: 'operation', title: '操作', width: 30,	sortable: true,	align: 'center', halign: 'center',
+                		 				formatter: function(value, row){
+                		 					var growthStage = '<a href="#" class="easyui-linkbutton c4" iconCls="icon-remove" onclick="grothStage('+ row.seedId +')">成长阶段</a>';
+                		 					return growthStage;
+                		 				}
                 	 }
                 	]
                 ],
@@ -295,6 +298,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		})
 		
 		
+		function doSeedSearch(){
+			seedManageGrid.datagrid('load',{
+				seedName: $('#seedSearch').val()
+			});
+		}
+		
+		
 		function editRow() {
             var row = seedManageGrid.datagrid('getSelected');
             if (row) {
@@ -306,6 +316,39 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 alert("请先选择一行数据，然后再尝试点击操作按钮！");
             }
         }
+		
+		
+		function saveForm() {
+            $('#formSeedManage').form('submit', {
+                url: '<%=basePath%>/seed/save',
+                onSubmit: function(param) {
+                    //param.id = params.id;
+                    //param.mode = params.mode; 
+                    return $(this).form('validate');
+                },
+                success: function(result) {
+                    var result = eval('(' + result + ')');
+                    if (result.code == 0) {
+                        $('#formSeedContainer').dialog('close');
+                        seedManageGrid.datagrid('reload');
+                    }
+                    $.messager.show({
+                        title: "消息",
+                        msg: result.msg
+                    });
+                }}
+            )}
+		
+		
+		function growthStage(){
+			seedManageGrid.datagrid({
+	        	//这里和上面不一样，这里采用自带的回调函数来获取本行数据
+	                onClickRow: function(rowIndex, rowData){
+	                    // console.log(rowIndex+"--------------------");
+	                    parent.document.getElementById("moneyList").src = "<%=basePath%>/growth/gridData?seedId="+ rowData.seedId;
+	                }
+	        });
+	    }
 		
 	</script>
 </body>
