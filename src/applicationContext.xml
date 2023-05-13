@@ -15,8 +15,10 @@
 	<description>Spring公共配置 </description>
 
 	<context:component-scan base-package="cn.jxufe" use-default-filters="true"/>
-
 	<context:annotation-config />
+
+	<!-- 配置文件上传所需要的Bean -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
 
 	<mvc:annotation-driven>
 		<mvc:message-converters register-defaults="true">

@@ -45,10 +45,6 @@ public class UserController {
     @ResponseBody
     public EasyUIData<User> getUser(EasyUIDataPageRequest request,
                                     @RequestParam(defaultValue = "") String userName) {
-        System.out.println("\n\n\n\n\n\n\n\n\n");
-        System.out.println("userName = " + userName);
-        System.out.println("request = " + request);
-        System.out.println("\n\n\n\n\n\n\n\n\n");
         List<Sort.Order> orders = new ArrayList<>();
         Sort.Direction direction = request.getOrder().equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
         orders.add(new Sort.Order(direction, request.getSort()));
@@ -87,11 +83,13 @@ public class UserController {
     }
 
     /**
-     * 更新用户头像
+         * 更新用户头像
+     * @param id 用户id
+     * @param avatar 用户头像文件名
      */
     @RequestMapping("/updateAvatar")
     @ResponseBody
     public Message updateAvatar(Long id, String avatar) {
-        return null;
+        return userService.updateAvatar(id, avatar);
     }
 }

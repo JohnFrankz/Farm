@@ -64,6 +64,17 @@ public class UserImp implements UserService {
 
     @Override
     public Message updateAvatar(Long id, String avatar) {
-        return null;
+    	Message message = new Message();
+        try {
+            User user = userDao.findOne(id);
+            user.setAvatar(avatar);
+            userDao.save(user);
+            message.setCode(0);
+            message.setMsg("更新头像成功");
+        } catch (Exception e) {
+            message.setCode(-1);
+            message.setMsg("更新头像失败");
+        }
+        return message;
     }
 }
