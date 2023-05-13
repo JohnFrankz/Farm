@@ -133,3 +133,22 @@ VALUES
 	(0.2, '开花', 4, 70, 200, 23, 93, 940, 2, 141),
 	(0, '成熟', 5, 80, 200, 25, 96, 940, 3, 142),
 	(0, '枯草', 6, 0, 200, 31, 182, 940, 4, 142)
+
+-- Create TABLE T_User 
+CREATE TABLE [dbo].[T_User] (
+  [id] bigint IDENTITY(1,1) PRIMARY KEY NOT NULL,
+  [username] varchar(255) COLLATE Chinese_PRC_CI_AS NULL,
+  [nickname] varchar(255) COLLATE Chinese_PRC_CI_AS NULL,
+  [experience] int NOT NULL,
+  [points] int NOT NULL,
+  [money] int NOT NULL,
+  [avatar] varchar(255) NULL
+);
+
+INSERT INTO [dbo].[T_User] ([username], [nickname], [experience], [points], [money], [avatar])
+VALUES
+('zhaoyun', '赵云', 889, 62989, 7860, '123.jpg'),
+('guanyu', '关羽', 750, 54236, 6320, '456.jpg'),
+('liubei', '刘备', 920, 71459, 8960, '789.jpg'),
+('sunquan', '孙权', 620, 41975, 5480, '234.jpg'),
+('diaochan', '貂蝉', 480, 32541, 4320, '567.jpg');
