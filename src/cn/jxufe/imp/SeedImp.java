@@ -29,7 +29,7 @@ public class SeedImp implements SeedService {
 
     @Override
     public EasyUIData<Seed> findBySeedNameLike(String seedName, Pageable pageable) {
-        Page<Seed> page = seedDao.findBySeedNameLike(seedName, pageable);
+        Page<Seed> page = seedDao.findBySeedNameContaining(seedName, pageable);
         EasyUIData<Seed> data = new EasyUIData<>();
 
         data.setTotal(page.getTotalElements());
