@@ -7,6 +7,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>ext/easyui/themes/green/easyui.css?t=34355">
@@ -22,50 +23,55 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body>
 	<div id="seedManageCon">
 		<span style="color:#ffffff;">种子：</span>
-		<input id="seedSearch" class="easyui-validatebox" panelHeight="auto">
+		<input id="seedSearch"  class="easyui-textbox" panelHeight="auto">
 		<a href="#" class="easyui-linkbutton c1" iconCls="icon-search" onclick="doSeedSearch()">查询</a>
-		<a href="#" class="easyui-linkbutton c2" iconCls="icon-add" onclick="javascript:seedManageGrid.edatagrid('addRow')">添加</a>
+		<a href="#" class="easyui-linkbutton c2" iconCls="icon-add" onclick="addSeed()">添加</a>
 		<a href="#" class="easyui-linkbutton c3" iconCls="icon-edit" onclick="editRow()">编辑</a>
 		<a href="#" class="easyui-linkbutton c4" iconCls="icon-remove" onclick="javascript:seedManageGrid.edatagrid('cancelRow')">取消</a>
 		<a href="#" class="easyui-linkbutton c5" iconCls="icon-cancel" onclick="javascript:seedManageGrid.edatagrid('destroyRow')">删除</a>
 		
 	</div>
-	<div id="seedTableContainer" >
-		<table id="seedManage" style="width:100%; "></table>
-	</div>
+
+		<table id="seedManage"></table>
+
 	<div id="msgBox"></div>
 	
 	<div id="formSeedContainer" class="easyui-dialog" style="width:880px; height:400px; padding:10px 10px" closed="true" buttons="#formSeedButtons">
 		<form id="formSeedManage" method="POST" novalidate>
-			<table >
+			<table style="width:100%">
 				<tr>
-					<td>ID</td>
-					<td><input name="id" required="true" class="w150" value="0" readonly="readonly"></td>
+					<td  style="width:25%">ID：</td>
+					<td  style="width:25%"><input name="id" required="true" class="w150" value="0" readonly="readonly" ></td>
 				</tr>
 				
 				<tr>
-					<td>种子ID</td>
-					<td><input name="seedId" required="true"  readonly="readonly" class="w150"></td>
+					<td style="width:25%">种子ID：</td>
+					<td style="width:25%"><input name="seedId" required="true" class="easyui-numberbox w150"></td>
 				</tr>
 				
 				<tr>
-					<td>种子名称</td>
-					<td><input name="seedName" required="true" class="easyui-validatebox w50"></td>
+					<td>种子名称：</td>
+					<td><input name="seedName" required="true" class="easyui-textbox w50"></td>
 				</tr>
 				
 				<tr>
-					<td>X季作物</td>
+					<td>X季作物：</td>
 					<td><input name="season" required="true" class="easyui-numberbox w50"></td>
 				</tr>
 				
 				<tr>
-					<td>种子等级</td>
+					<td>种子等级：</td>
 					<td><input name="seedLevel" required="true" class="easyui-numberbox w50"  ></td>
 				</tr>
 				
 				<tr>
-					<td>种子类型</td>
-					<td><input name="seedType" required="true" class="easyui-combobox w50"></td>
+					<td>种子类型：</td>
+					<td><input name="seedType" required="true" class="easyui-combobox w50" data-options="valueField: 'value',textField: 'text', panelHeight: 'auto',
+				               data: [
+				                 {value: '1', text: '普通'},
+				                 {value: '2', text: '高级'},
+				                 {value: '3', text: '梦幻'}
+				               ]"></td>
 				</tr>
 				
 				<tr>
@@ -89,13 +95,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</tr>
 				
 				<tr>
-					<td>每个收获的果实单价</td>
+					<td>每个收获的果实单价：</td>
 					<td><input name="salePrice" required="true" class="easyui-numberbox">个金币</td>
 				</tr>
 				
 				<tr>
 					<td>土地需求：</td>
-					<td><input name="soil" required="true" class="easyui-combobox"></td>
+					<td><input name="soil" required="true" class="easyui-combobox" data-options="valueField: 'value',textField: 'text', panelHeight: 'auto',
+				               data: [
+				                 {value: '1', text: '黄土地'},
+				                 {value: '2', text: '黑土地'},
+				                 {value: '3', text: '红土地'},
+				                 {value: '4', text: '金土地'}
+				               ]">
+
+                </td>
 				</tr>
 				
 				<tr>
@@ -105,7 +119,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				
 				<tr>
 					<td>提示信息：</td>
-					<td><input name="prompt" required="true" class="easyui-validatebox"></td>
+					<td><input name="prompt" required="true" class="easyui-textbox"></td>
 				</tr>
 				
 			</table>
@@ -117,7 +131,107 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick ="javascript:$('#formSeedContainer').dialog('close')">取消</a>
     </div>
     
+    <div id="growthStageButton" class="easyui-dialog" style="width:1200px; height:550px;" closed="true">
+    	<div style="padding:5px 0 0 10px;">
+	    	<a href="#" class="easyui-linkbutton c2" iconCls="icon-add" onclick="addGrowthStage()">添加</a>
+			<a href="#" class="easyui-linkbutton c3" iconCls="icon-edit" onclick="editGrowthStage()">编辑</a>
+			<a href="#" class="easyui-linkbutton c4" iconCls="icon-remove" onclick="javascript:$('#growthStage').edatagrid('cancelRow')">取消</a>
+			<a href="#" class="easyui-linkbutton c5" iconCls="icon-cancel" onclick="javascript:$('#growthStage').edatagrid('destroyRow')">删除</a>
+		 </div>
+    	<table id="growthStage" style="width:100%; "></table>
+   
+	    <div id="formGrowthContainer" class="easyui-dialog" style="width:880px; height:400px; padding:10px 10px" closed="true" buttons="#formGrowthButtons">
+	    	<form id="formGrowthStage" method="POST" novalidate>
+	    		<table>
+	    			<tr>
+						<td  style="width:25%">ID：</td>
+						<td  style="width:25%"><input name="id" required="true" class="w150" value="0" readonly="readonly" ></td>
+					</tr>
+					
+					<tr>
+						<td style="width:25%">种子ID：</td>
+						<td style="width:25%"><input id="seedId" name="seedId" required="true" readonly="readonly"  class=" w150" ></td>
+					</tr>
+					
+					<tr>
+						<td>生长阶段:</td>
+						<td><input id="growthStage2" name="growthStage" required="true" class="easyui-numberbox w50"></td>
+					</tr>
+					
+					<tr>
+						<td>生长阶段标题：</td>
+						<td><input name="growthName" required="true" class="easyui-textbox w50"></td>
+					</tr>
+					
+					<tr>
+						<td>阶段生长时间：</td>
+						<td><input name="growthTime" required="true" class="easyui-numberbox w50">秒</td>
+					</tr>
+					
+					<tr>
+						<td>生虫概率：</td>
+						<td><input name="pestProbability" required="true" class="easyui-numberbox w50"></td>
+					</tr>
+					
+					<tr>
+						<td>图片宽度：</td>
+						<td><input id="pWidth" name="width" required="true" class="easyui-numberbox w50">px</td>
+					</tr>
+					
+					<tr>
+						<td>图片高度：</td>
+						<td><input id="pHeight" name="height" required="true" class="easyui-numberbox w50">px</td>
+					</tr>
+					
+					<tr>
+						<td>图片offsetX：</td>
+						<td><input id="pX" name="x" required="true" class="easyui-numberbox w50" >px</td>
+					</tr>
+					
+					<tr>
+						<td>图片offsetY：</td>
+						<td><input id="pY" name="y" required="true" class="easyui-numberbox w150">px</td>
+					</tr>
+					
+					<tr>
+						<td>作物状态：</td>
+						<td><input name="state" required="true" class="easyui-combobox w50" data-options="valueField: 'value',textField: 'text', panelHeight: 'auto',
+				               data: [
+				                 {value: '1', text: '种子阶段'},
+				                 {value: '2', text: '生长阶段'},
+				                 {value: '3', text: '成熟阶段'},
+				                 {value: '4', text: '枯草期'}
+				               ]">
+				        </td>
+					</tr>
+					
+					<tr>
+						<td></td>
+						<td><a href="#" class="easyui-linkbutton c1" onclick="moveImg()">编辑图片位置</a></td>
+					</tr>
+	    		</table>
+	    	</form>
+	    </div>
+	    
+    	<div id="formGrowthButtons">
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick ="saveFormGrowth()">保存</a> 
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick ="javascript:$('#formGrowthContainer').dialog('close')">取消</a>
+	    </div>
+	    
+	    <div id="positionDialog" class="easyui-dialog" style="position:relative; width:240px;height:420px;padding:10px 10px; background: url(../images/positioning.png) no-repeat center;" closed="true" buttons="#positionDialogButtons">
+		    <div id="tools-imagePositioner-display" class="tools-imagePositioner-display">
+		        <img class="easyui-draggable easyui-resizable" style="position:resolute; width:70px; height:70px; border:1px solid red;" data - options="onDrag:imagePositioneronDrag" src="">
+		    </div>
+		</div>
+		<div id="positionDialogButtons">
+		    <a href="javascript:void(0)" class="easyui-linkbutton" icon Cls="icon-ok" onclick="gainPostion()">确定 </a>
+		    <a href="javascript:void(0)" class="easyui-linkbutton" icon Cls="icon-cancel" onclick="javascript:$('#positionDialog').dialog('close')">取消</a>
+		</div>
+     </div>
+    
 	<script>
+	
+	$("body").css("height",$(window).height());
 		var params ={
 				id:'',
 				mode:'insert'
@@ -128,13 +242,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			seedManageGrid = $('#seedManage').edatagrid({
 				title: '种子清单',
 				width:'100%',
-				height:800, 
+				height:800,
 				method:'post',
 				url:'<%=basePath%>/seed/data',
 				saveUrl: '<%=basePath%>/seed/save',
-				updateUrl: '',
+				updateUrl: '<%=basePath%>/seed/save',
 				destroyUrl: '<%=basePath%>/seed/delete',
-				
 				editable: true,
 				border: false,
                 rownumbers: true,
@@ -153,10 +266,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 
                 columns: [
                 	[{field: 'id',		title: 'ID', width: 10,	sortable: true,	align: 'center', halign: 'center'}, 
-                	 {field: 'seedId',	title: '种子ID', width: 20,	sortable: true,	align: 'center', halign: 'center'}, 
+                	 {field: 'seedId',	title: '种子ID', width: 20,	sortable: true,	align: 'center', halign: 'center',
+                		editor: {
+                            type: 'numberbox',
+                            options: {
+                                required: true
+                            }
+                        }	
+                	 }, 
                 	 {field: 'seedName',title: '种子名称', width: 30,	sortable: true,	align: 'center', halign: 'center',
                 		 editor: {
-                             type: 'validatebox',
+                             type: 'textbox',
                              options: {
                                  required: true
                              }
@@ -188,9 +308,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 		 editor: {
                              type: 'combobox',
                              options: {
-                                 required: true
-                             }
+                                 required: true,
+                                 valueField: 'key',
+                                 textField: 'value',
+                                 panelHeight: 'auto',
+	                             data: [{
+	                                 key: '1',
+	                                 value: '普通'
+	                             }, {
+	                                 key: '2',
+	                                 value: '高级'
+	                             }, {
+	                                 key: '3',
+	                                 value: '梦幻'
+	                             }],
+                             },
                          },	 
+                         formatter: function(value, row) {
+	                            if (value == "1") {
+	                                return '普通';
+	                            } else if(value == "2"){
+	                                return '高级';
+	                            } else {
+	                            	return '梦幻';
+	                            }
+	                        }
                 	 }, 
                 	 {field: 'experience', title: '可获经验', width: 30,	sortable: true,	align: 'center', halign: 'center',
                 		 editor: {
@@ -245,9 +387,36 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 		 editor: {
                              type: 'combobox',
                              options: {
-                                 required: true
-                             }
-                         },	 
+                                 required: true,
+                                 valueField: 'key',
+                                 textField: 'value',
+                                 panelHeight: 'auto',
+	                             data: [{
+	                                 key: '1',
+	                                 value: '黄土地'
+	                             }, {
+	                                 key: '2',
+	                                 value: '黑土地'
+	                             }, {
+	                                 key: '3',
+	                                 value: '红土地'
+	                             }, {
+	                                 key: '4',
+	                                 value: '金土地'
+	                             }],
+                             },
+	                        },
+	                        
+	                        formatter: function(value, row) {
+	                            if (value == "1") {
+	                                return '黄土地';
+	                            } else if(value == "2"){
+	                                return '黑土地';
+	                            } else if(value == "3"){
+	                            	return '红土地';
+	                            }else
+	                            	return '金土地';
+	                        }
                 	 }, 
                 	 {field: 'points', title: '每季成熟可获积分', 	width: 30,	sortable: true,	align: 'center', halign: 'center',
                 		 editor: {
@@ -262,24 +431,137 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 	 }, 
                 	 {field: 'prompt',	title: '提示信息', width: 30,	sortable: true,	align: 'center', halign: 'center',
                 		 editor: {
-                             type: 'validatebox',
+                             type: 'textbox',
                              options: {
                                  required: true
                              }
                          },}, 
                 	 {field: 'operation', title: '操作', width: 30,	sortable: true,	align: 'center', halign: 'center',
                 		 				formatter: function(value, row){
-                		 					var growthStage = '<a href="#" class="easyui-linkbutton c4" iconCls="icon-remove" onclick="grothStage('+ row.seedId +')">成长阶段</a>';
+                		 					var growthStage = '<a href="#" class="easyui-linkbutton c4" iconCls="icon-remove" onclick="growthStage('+ row.seedId +')">成长阶段</a>';
                 		 					return growthStage;
                 		 				}
                 	 }
                 	]
                 ],
-
+                
+                
+                onBeforeEdit: function (index, row) {  
+                    row.editing = true;  
+                    updateActions(index);
+                },
+                onAfterEdit: function (index, row) {  
+                    row.editing = false;  
+                    updateActions(index);
+                },
+                onCancelEdit: function (index,row,changes) {
+                    alert(changes);
+                    row.editing = false;  
+                    updateActions(index);
+                },
+                
+              
            	 destroyMsg: {
                     norecord: {
                         title: '警告',
-                        msg: '首先需要选中记录，然后在点击删除按钮'
+                        msg: '首先需要选中记录，然后在点击删除按钮!'
+                    },
+                    confirm: {
+                        title: '确认',
+                        msg: '是否删除选中记录?'
+                    }
+                },
+                onSuccess: function(index, result) {
+                    console.log(result);
+                    $("#msgBox").text(result.msg);
+                },
+                onDestroy: function(index, result) {
+                    console.log(result);
+                    $("#msgBox").text(result.msg);
+                }
+			});
+		});
+	
+ 
+		
+		var gorwthStageGrid;
+		function growthStage(seedId){
+			$('#growthStageButton').dialog('open').dialog('setTitle','编辑成长阶段');
+			growthStageGrid = $('#growthStage').edatagrid({
+				title:'成长阶段定义',
+				width:'100%',
+				height:300, 
+				method:'post',
+				url:'<%=basePath%>/growth/gridData?seedId=' + seedId,
+				saveUrl: '<%=basePath%>/growth/save',
+				updateUrl: '',
+				destroyUrl: '<%=basePath%>/growth/delete',
+				
+				editable: true,
+				border: false,
+                rownumbers: true,
+                remoteSort: true,
+                nowrap: false,
+                singleSelect: true,
+                fitColumns: true,
+                striped: true,
+                autoSave: true,
+                idField: "id",
+           
+                
+                columns: [
+                	[{field: 'id', title: 'ID', width: 10,	sortable: true,	align: 'center', halign: 'center'},
+                		{field: 'seedId', title: '种子ID', width: 10,	sortable: true,	align: 'center', halign: 'center'},
+                		{field: 'growthStage', title: '生长阶段', width: 10,	sortable: true,	align: 'center', halign: 'center'},
+                		{field: 'growthName', title: '生长阶段标题', width: 10,	sortable: true,	align: 'center', halign: 'center'},
+                		{field: 'growthTime', title: '阶段生长时间', width: 10,	sortable: true,	align: 'center', halign: 'center'},
+                		{field: 'pestProbability', title: '生虫概率', width: 10,	sortable: true,	align: 'center', halign: 'center'},
+                		{field: 'width', title: '宽度', width: 10,	sortable: true,	align: 'center', halign: 'center'},
+                		{field: 'height', title: '高度', width: 10,	sortable: true,	align: 'center', halign: 'center'},
+                		{field: 'x', title: 'offsetX', width: 10,	sortable: true,	align: 'center', halign: 'center'},
+                		{field: 'y', title: 'offsetY', width: 10,	sortable: true,	align: 'center', halign: 'center'},
+                		{field: 'state', title: '作物状态', width: 10,	sortable: true,	align: 'center', halign: 'center',
+                			editor: {
+                                type: 'combobox',
+                                options: {
+                                    required: true,
+                                    valueField: 'key',
+                                    textField: 'value',
+                                    panelHeight: 'auto',
+   	                             data: [{
+   	                                 key: '1',
+   	                                 value: '种子阶段'
+   	                             }, {
+   	                                 key: '2',
+   	                                 value: '生长阶段'
+   	                             }, {
+   	                                 key: '3',
+   	                                 value: '成熟阶段'
+   	                             }, {
+   	                                 key: '4',
+   	                                 value: '枯草期'
+   	                             }],
+                                },
+   	                        },
+   	                        
+   	                        formatter: function(value, row) {
+   	                            if (value == "1") {
+   	                                return '种子阶段';
+   	                            } else if(value == "2"){
+   	                                return '生长阶段';
+   	                            } else if(value == "3"){
+   	                            	return '成熟阶段';
+   	                            }else
+   	                            	return '枯草期';
+   	                        }	
+                		},
+                		]
+                	],
+				
+				destroyMsg: {
+                    norecord: {
+                        title: '警告',
+                        msg: '首先需要选中记录，然后在点击删除按钮!'
                     },
                     confirm: {
                         title: '确认',
@@ -295,13 +577,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     $("#msgBox").text(result.msg);
                 }
 			})
-		})
+				
+		}
 		
-		
-		function doSeedSearch(){
-			seedManageGrid.datagrid('load',{
-				seedName: $('#seedSearch').val()
+			
+		function updateActions(index){
+			$('#seedManage').datagrid('updateRow',{
+				index: index,
+				row:{}
 			});
+		}
+			
+			
+		function doSeedSearch() {
+	        seedManageGrid.datagrid("load", {
+	            seedName: $('#seedSearch').val()
+	        });
+	    }
+		
+		function addSeed() {
+		    $('#formSeedContainer').dialog('open')
+		        .dialog('center')
+		        .dialog('setTitle', '添加数据');
+		    $('#formSeedManage').form('clear');
+		    $('#formSeedManage').find("input[name='id']").val(0);
 		}
 		
 		
@@ -339,16 +638,87 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 }}
             )}
 		
+		function addGrowthStage() {
+			var row = $('#seedManage').datagrid('getSelected');
+		    $('#formGrowthContainer').dialog('open')
+		        .dialog('center')
+		        .dialog('setTitle', '添加数据');
+		    $('#formGrowthStage').form('clear');
+		    $('#formGrowthStage').find("input[name='id']").val(0);
+		    $('#formGrowthStage').find("input[name='seedId']").val(row.seedId);
+		}
 		
-		function growthStage(){
-			seedManageGrid.datagrid({
-	        	//这里和上面不一样，这里采用自带的回调函数来获取本行数据
-	                onClickRow: function(rowIndex, rowData){
-	                    // console.log(rowIndex+"--------------------");
-	                    parent.document.getElementById("moneyList").src = "<%=basePath%>/growth/gridData?seedId="+ rowData.seedId;
-	                }
-	        });
+		function editGrowthStage(){
+			var row = $('#growthStage').datagrid('getSelected');
+            if (row) {
+                params.id = row.id;
+                params.mode = 'edit';
+                $('#formGrowthContainer').dialog('open').dialog('setTitle', '编辑数据');
+                $('#formGrowthStage').form('load', row);
+            } else {
+                alert("请先选择一行数据，然后再尝试点击操作按钮！");
+            }
+		}
+		
+		
+		function saveFormGrowth() {
+            $('#formGrowthStage').form('submit', {
+                url: '<%=basePath%>/growth/save',
+                onSubmit: function(param) {
+                    //param.id = params.id;
+                    //param.mode = params.mode; 
+                    return $(this).form('validate');
+                },
+                success: function(result) {
+                    var result = eval('(' + result + ')');
+                    if (result.code == 0) {
+                        $('#formGrowthContainer').dialog('close');
+                        $('#growthStage').datagrid('reload');
+                    }
+                    $.messager.show({
+                        title: "消息",
+                        msg: result.msg
+                    });
+                }}
+            )}
+		
+		
+		function moveImg(){
+			$('#positionDialog').dialog("open").dialog('setTitle', '编辑图片位置');
+			
+			var imgUrl;
+			if ($('#growthStage2').val() == 0){
+				imgUrl = "../images/crops/basic/0.png";
+			}else if($('#growthStage2').val() == 6){
+				imgUrl="../images/crops/basic/9.png";
+			}else{
+				imgUrl="../images/crops/" + $("#seedId").val() + "/"+ $('#growthStage2').val() +".png";
+			}
+			$("#positionDialog img").css({"width":$("#pWidth").val()+"px","height":$("#pHeight").val()+"px","top":$("#pY").val()+"px","left":$("#pX").val()+"px",})
+			$("#positionDialog img").attr("src", imgUrl);
+		}
+		
+		function gainPostion(){
+	    	var img=$("#positionDialog img");
+	    	var width=img.css("width");
+	    	var height=img.css("height");
+	    	var top=img.css("top");
+	    	var left=img.css("left");
+	    	width=width.replace("px","");
+	    	var widthNumber=parseInt(width);
+	    	height=height.replace("px","");
+	    	var heightNumber=parseInt(height);
+	    	top=top.replace("px","");
+	    	var topNumber=parseInt(top);
+	    	left=left.replace("px","");
+	    	var leftNumber=parseInt(left);
+	    	$("#pWidth").numberbox('setValue',widthNumber);
+	    	$("#pHeight").numberbox('setValue',heightNumber);
+	    	$("#pX").numberbox('setValue',leftNumber);
+	    	$("#pY").numberbox('setValue',topNumber);
+	    	$("#positionDialog").dialog("close");
 	    }
+		
 		
 	</script>
 </body>
