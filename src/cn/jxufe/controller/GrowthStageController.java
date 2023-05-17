@@ -1,7 +1,9 @@
 package cn.jxufe.controller;
 
 import cn.jxufe.bean.Message;
+import cn.jxufe.entity.CropStatus;
 import cn.jxufe.entity.SeedGrowthStage;
+import cn.jxufe.service.CropStatusService;
 import cn.jxufe.service.SeedGrowthStageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,7 +22,9 @@ public class GrowthStageController {
 
     @Autowired
     private SeedGrowthStageService stageService;
-
+    @Autowired
+    private CropStatusService cropStatusService;
+    
     /**
      * 这是一个获取种子生长阶段的API
      * @param seedId 种子id
@@ -52,5 +56,26 @@ public class GrowthStageController {
     @ResponseBody
     public Message delete(Long id) {
         return stageService.delete(id);
+    }
+    
+    /**
+     * 这是获取作物状态的API
+     * @param statusId 作物状态id
+     * @return 返回对应的作物状态
+     */
+    @RequestMapping(value = "getCropStatus", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public CropStatus getCropStatus(int statusId) {
+        return cropStatusService.findByStatusId(statusId);
+    }
+
+    /**
+     * 这是获取所有作物状态的API
+     * @return 返回所有作物状态
+     */
+    @RequestMapping(value = "getAllCropStatus")
+    @ResponseBody
+    public List<CropStatus> getAllCropStatus() {
+        return cropStatusService.findAll();
     }
 }

@@ -3,11 +3,9 @@ package cn.jxufe.controller;
 import cn.jxufe.bean.EasyUIData;
 import cn.jxufe.bean.EasyUIDataPageRequest;
 import cn.jxufe.bean.Message;
-import cn.jxufe.entity.GrowthStage;
 import cn.jxufe.entity.Seed;
 import cn.jxufe.entity.SeedType;
 import cn.jxufe.entity.Soil;
-import cn.jxufe.service.GrowthStageService;
 import cn.jxufe.service.SeedService;
 import cn.jxufe.service.SeedTypeService;
 import cn.jxufe.service.SoilService;
@@ -41,8 +39,6 @@ public class SeedController {
 	private SeedTypeService seedTypeService;
 	@Autowired
 	private SoilService soilService;
-	@Autowired
-	private GrowthStageService growthStageService;
 
 	@RequestMapping("grid")
 	public String grid() {
@@ -137,27 +133,5 @@ public class SeedController {
 	@ResponseBody
 	public List<Soil> getAllSoilType() {
 		return soilService.findAll();
-	}
-
-	/**
-	 * 这是一个获取种子生长阶段的API
-	 * @param stageId  种子生长阶段id
-	 * @return 返回生长阶段
-	 */
-	@RequestMapping(value = "getGrowthStage", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public GrowthStage getGrowthStage(int stageId) {
-		return growthStageService.findByStageId(stageId);
-	}
-	
-
-	/**
-	 * 这是一个获取所有生长阶段的API
-	 * @return 返回所有生长阶段
-	 */
-	@RequestMapping(value = "getAllGrowthStage")
-	@ResponseBody
-	public List<GrowthStage> getAllGrowthStage() {
-		return growthStageService.findAll();
 	}
 }
