@@ -1,3 +1,41 @@
+-- Create TABLE T_SeedType
+CREATE TABLE [dbo].[T_SeedType] (
+  [id] bigint  IDENTITY(1,1) PRIMARY KEY NOT NULL,
+  [typeId] int  NOT NULL,
+  [typeName] varchar(255) COLLATE Chinese_PRC_CI_AS  NULL
+)
+
+INSERT INTO [dbo].[T_SeedType] ([typeId], [typeName]) 
+VALUES 	(1, '普通'),
+		(2, '高级'),
+		(3, '梦幻')
+
+-- Create Table T_Soil
+CREATE TABLE [dbo].[T_Soil] (
+	[id] bigint  IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	[soilId] int  NOT NULL,
+	[soilName] varchar(255) COLLATE Chinese_PRC_CI_AS  NULL
+)
+
+INSERT INTO [dbo].[T_Soil] ([soilId], [soilName]) 
+VALUES	(1, '黄土地'),
+		(2, '黑土地'),
+		(3, '红土地'),
+		(4, '金土地')
+
+-- Create Table T_GrowthStage
+CREATE TABLE [dbo].[T_GrowthStage] (
+	[id] bigint  IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	[stageId] int  NOT NULL,
+	[stageName] varchar(255) COLLATE Chinese_PRC_CI_AS  NULL
+)
+
+INSERT INTO [dbo].[T_GrowthStage] ([stageId], [stageName])
+VALUES	(1, '种子阶段'),
+		(2, '生长阶段'),
+		(3, '成熟阶段'),
+		(4, '枯草期')
+	
 -- Create table T_Seed
 CREATE TABLE [dbo].[T_Seed] (
   [id] bigint  IDENTITY(1,1) PRIMARY KEY NOT NULL,
