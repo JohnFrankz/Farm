@@ -33,15 +33,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<a href="#" class="easyui-linkbutton c1" iconCls="icon-search" onclick="doSeedSearch()">查询</a>
 		<a href="#" class="easyui-linkbutton c2" iconCls="icon-add" onclick="addSeed()">添加</a>
 		<a href="#" class="easyui-linkbutton c3" iconCls="icon-edit" onclick="editRow()">编辑</a>
-		<a href="#" class="easyui-linkbutton c4" iconCls="icon-remove" onclick="javascript:seedManageGrid.edatagrid('cancelRow')">取消</a>
+		<a href="#" class="easyui-linkbutton c4" iconCls="icon-remove" onclick="cancel()">取消</a>
 		<a href="#" class="easyui-linkbutton c5" iconCls="icon-cancel" onclick="javascript:seedManageGrid.edatagrid('destroyRow')">删除</a>
 		
 	</div>
 
-		<table id="seedManage"></table>
+	<table id="seedManage"></table>
 
-	<div id="msgBox"></div>
-	
 	<div id="formSeedContainer" class="easyui-dialog" style="width:880px; height:400px; padding:10px 10px" closed="true" buttons="#formSeedButtons">
 		<form id="formSeedManage" method="POST" novalidate>
 			<table style="width:100%">
@@ -72,12 +70,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				
 				<tr>
 					<td>种子类型：</td>
-					<td><input name="seedType" required="true" class="easyui-combobox w50" data-options="valueField: 'value',textField: 'text', panelHeight: 'auto',
-				               data: [
-				                 {value: '1', text: '普通'},
-				                 {value: '2', text: '高级'},
-				                 {value: '3', text: '梦幻'}
-				               ]"></td>
+					<td><input name="seedType" required="true" class="easyui-combobox w50" data-options="valueField: 'typeId',textField: 'typeName', panelHeight: 'auto',
+				               url:'<%=basePath%>/seed/getAllSeedType', "></td>
 				</tr>
 				
 				<tr>
@@ -107,13 +101,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				
 				<tr>
 					<td>土地需求：</td>
-					<td><input name="soil" required="true" class="easyui-combobox" data-options="valueField: 'value',textField: 'text', panelHeight: 'auto',
-				               data: [
-				                 {value: '1', text: '黄土地'},
-				                 {value: '2', text: '黑土地'},
-				                 {value: '3', text: '红土地'},
-				                 {value: '4', text: '金土地'}
-				               ]">
+					<td><input id="soil" name="soil" required="true" class="easyui-combobox" data-options="valueField: 'soilId',textField: 'soilName', panelHeight: 'auto',
+				                url:'<%=basePath%>/seed/getAllSoil', ">
 
                 </td>
 				</tr>
@@ -201,13 +190,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					
 					<tr>
 						<td>作物状态：</td>
-						<td><input name="state" required="true" class="easyui-combobox w50" data-options="valueField: 'value',textField: 'text', panelHeight: 'auto',
-				               data: [
-				                 {value: '1', text: '种子阶段'},
-				                 {value: '2', text: '生长阶段'},
-				                 {value: '3', text: '成熟阶段'},
-				                 {value: '4', text: '枯草期'}
-				               ]">
+						<td><input name="state" required="true" class="easyui-combobox w50" data-options="valueField: 'statusId',textField: 'statusName', panelHeight: 'auto',
+				               url:'<%=basePath%>/growth/getAllCropStatus',
+				               ">
 				        </td>
 					</tr>
 					
@@ -224,7 +209,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick ="javascript:$('#formGrowthContainer').dialog('close')">取消</a>
 	    </div>
 	    
-	    <div id="positionDialog" class="easyui-dialog" style="position:relative; width:240px;height:420px;padding:10px 10px; background: url(../images/positioning.png) no-repeat center;" closed="true" buttons="#positionDialogButtons">
+	    <div id="positionDialog" class="easyui-dialog" style="position:relative; width:260px;height:440px;padding:10px 10px; background: url(../images/positioning.png) no-repeat center;" closed="true" buttons="#positionDialogButtons">
 		    <div id="tools-imagePositioner-display" class="tools-imagePositioner-display">
 		        <img class="easyui-draggable easyui-resizable" style="position:resolute; width:70px; height:70px; border:1px solid red;" data - options="onDrag:imagePositioneronDrag" src="">
 		    </div>
@@ -315,30 +300,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                              type: 'combobox',
                              options: {
                                  required: true,
-                                 valueField: 'key',
-                                 textField: 'value',
+                                 valueField: 'typeId',
+                                 textField: 'typeName',
                                  panelHeight: 'auto',
-	                             data: [{
-	                                 key: '1',
-	                                 value: '普通'
-	                             }, {
-	                                 key: '2',
-	                                 value: '高级'
-	                             }, {
-	                                 key: '3',
-	                                 value: '梦幻'
-	                             }],
+	                             url:'<%=basePath%>/seed/getAllSeedType'
                              },
                          },	 
                          formatter: function(value, row) {
-	                            if (value == "1") {
-	                                return '普通';
-	                            } else if(value == "2"){
-	                                return '高级';
-	                            } else {
-	                            	return '梦幻';
-	                            }
-	                        }
+                 	 		return $.ajax({
+                     		    url: '<%=basePath%>/seed/getSeedType?typeId=' + value,
+                     		    async : false,
+                 		  	}).responseJSON.typeName;
+                 		}
                 	 }, 
                 	 {field: 'experience', title: '可获经验', width: 30,	sortable: true,	align: 'center', halign: 'center',
                 		 editor: {
@@ -368,13 +341,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                          },	 
                 	 }, 
                 	 {field: 'purchasePrice', title: '种子采购价', width: 30,	sortable: true,	align: 'center', halign: 'center',
-                		 editor: {
-                             type: 'numberbox',
-                             options: {
-                                 required: true
-                             }
-                         },
-					                		 formatter: function(value){
+					                		 editor: {
+					                             type: 'numberbox',
+					                             options: {
+					                                 required: true
+					                             }
+					                         },
+						                	formatter: function(value){
 					 		 					return Number(value) + '金币';
 					 		 				} 
                 	 }, 
@@ -393,36 +366,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 		 editor: {
                              type: 'combobox',
                              options: {
+                            	 url:'<%=basePath%>/seed/getAllSoil' ,
                                  required: true,
-                                 valueField: 'key',
-                                 textField: 'value',
-                                 panelHeight: 'auto',
-	                             data: [{
-	                                 key: '1',
-	                                 value: '黄土地'
-	                             }, {
-	                                 key: '2',
-	                                 value: '黑土地'
-	                             }, {
-	                                 key: '3',
-	                                 value: '红土地'
-	                             }, {
-	                                 key: '4',
-	                                 value: '金土地'
-	                             }],
+                                 valueField: 'soilId',
+                                 textField: 'soilName',
+                                 panelHeight: 'auto'
+                         
                              },
 	                        },
 	                        
 	                        formatter: function(value, row) {
-	                            if (value == "1") {
-	                                return '黄土地';
-	                            } else if(value == "2"){
-	                                return '黑土地';
-	                            } else if(value == "3"){
-	                            	return '红土地';
-	                            }else
-	                            	return '金土地';
-	                        }
+	                        	 		return $.ajax({
+		                        		    url: '<%=basePath%>/seed/getSoilType?soilId=' + value,
+		                        		    async : false,
+	                        		  	}).responseJSON.soilName;
+	                        		}
                 	 }, 
                 	 {field: 'points', title: '每季成熟可获积分', 	width: 30,	sortable: true,	align: 'center', halign: 'center',
                 		 editor: {
@@ -484,6 +442,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 onSuccess: function(index, result) {
                     console.log(result);
                     $("#msgBox").text(result.msg);
+                    
+                    $.messager.show({
+                        title: "消息",
+                        msg: result.msg
+                    });
                 },
                 onDestroy: function(index, result) {
                     console.log(result);
@@ -517,8 +480,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 striped: true,
                 autoSave: true,
                 idField: "id",
-           
-                
+
                 columns: [
                 	[{field: 'id', title: 'ID', width: 10,	sortable: true,	align: 'center', halign: 'center'},
                 		{field: 'seedId', title: '种子ID', width: 10,	sortable: true,	align: 'center', halign: 'center'},
@@ -535,35 +497,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 type: 'combobox',
                                 options: {
                                     required: true,
-                                    valueField: 'key',
-                                    textField: 'value',
+                                    valueField: ' ',
+                                    textField: 'statusName',
                                     panelHeight: 'auto',
-   	                             data: [{
-   	                                 key: '1',
-   	                                 value: '种子阶段'
-   	                             }, {
-   	                                 key: '2',
-   	                                 value: '生长阶段'
-   	                             }, {
-   	                                 key: '3',
-   	                                 value: '成熟阶段'
-   	                             }, {
-   	                                 key: '4',
-   	                                 value: '枯草期'
-   	                             }],
+   	                             	url:'<%=basePath%>/growth/getAllCropStatus',
                                 },
    	                        },
    	                        
-   	                        formatter: function(value, row) {
-   	                            if (value == "1") {
-   	                                return '种子阶段';
-   	                            } else if(value == "2"){
-   	                                return '生长阶段';
-   	                            } else if(value == "3"){
-   	                            	return '成熟阶段';
-   	                            }else
-   	                            	return '枯草期';
-   	                        }	
+	   	                     formatter: function(value, row) {
+	                 	 		return $.ajax({
+	                     		    url: '<%=basePath%>/growth/getCropStatus?statusId=' + value,
+	                     		    async : false,
+	                 		  	}).responseJSON.statusName;
+	                 		}	
                 		},
                 		]
                 	],
@@ -581,6 +527,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 onSuccess: function(index, result) {
                     console.log(result);
                     $("#msgBox").text(result.msg);
+                    
+                    $.messager.show({
+                        title: "消息",
+                        msg: result.msg
+                    });
                 },
                 onDestroy: function(index, result) {
                     console.log(result);
@@ -625,6 +576,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 alert("请先选择一行数据，然后再尝试点击操作按钮！");
             }
         }
+		
+		function cancel(){
+			seedManageGrid.edatagrid('cancelRow');
+			seedManageGrid.datagrid('reload');
+		}
 		
 		
 		function saveForm() {
@@ -710,22 +666,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		
 		function gainPostion(){
 	    	var img=$("#positionDialog img");
+	    	
 	    	var width=img.css("width");
-	    	var height=img.css("height");
-	    	var top=img.css("top");
-	    	var left=img.css("left");
 	    	width=width.replace("px","");
 	    	var widthNumber=parseInt(width);
+	    	
+	    	var height=img.css("height");
 	    	height=height.replace("px","");
 	    	var heightNumber=parseInt(height);
+	    	
+	    	var top=img.css("top");
 	    	top=top.replace("px","");
 	    	var topNumber=parseInt(top);
+	    	
+	    	var left=img.css("left");
 	    	left=left.replace("px","");
 	    	var leftNumber=parseInt(left);
 	    	$("#pWidth").numberbox('setValue',widthNumber);
 	    	$("#pHeight").numberbox('setValue',heightNumber);
 	    	$("#pX").numberbox('setValue',leftNumber);
 	    	$("#pY").numberbox('setValue',topNumber);
+	    	
 	    	$("#positionDialog").dialog("close");
 	    }
 		
