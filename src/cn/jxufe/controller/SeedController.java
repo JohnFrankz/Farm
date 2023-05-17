@@ -109,6 +109,16 @@ public class SeedController {
 	}
 
 	/**
+	 * 这是一个获取所有种子类型的API
+	 * @return 返回所有种子类型
+	 */
+	@RequestMapping(value = "getAllSeedType")
+	@ResponseBody
+	public List<SeedType> getAllSeedType() {
+		return seedTypeService.findAll();
+	}
+
+	/**
 	 * 这是一个获取种子所需土地类型的API
 	 * @param soilId   种子所需土地类型id
 	 * @return 返回所有土地类型
@@ -117,6 +127,16 @@ public class SeedController {
 	@ResponseBody
 	public Soil getSoilType(int soilId) {
 		return soilService.findBySoilId(soilId);
+	}
+	
+	/**
+	 * 这是一个获取所有土地类型的API
+	 * @return 返回所有土地类型
+	 */
+	@RequestMapping(value = "getAllSoil")
+	@ResponseBody
+	public List<Soil> getAllSoilType() {
+		return soilService.findAll();
 	}
 
 	/**
@@ -128,5 +148,16 @@ public class SeedController {
 	@ResponseBody
 	public GrowthStage getGrowthStage(int stageId) {
 		return growthStageService.findByStageId(stageId);
+	}
+	
+
+	/**
+	 * 这是一个获取所有生长阶段的API
+	 * @return 返回所有生长阶段
+	 */
+	@RequestMapping(value = "getAllGrowthStage")
+	@ResponseBody
+	public List<GrowthStage> getAllGrowthStage() {
+		return growthStageService.findAll();
 	}
 }
