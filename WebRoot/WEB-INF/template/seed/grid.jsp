@@ -7,7 +7,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-
+<style>
+	body{
+		margin:0 auto;
+		width:100%;
+		height:100%;
+	}
+</style>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>ext/easyui/themes/green/easyui.css?t=34355">
@@ -231,11 +237,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
 	<script>
 	
-	$("body").css("height",$(window).height());
+	 $("body").css("height",$(window).height());
 		var params ={
 				id:'',
 				mode:'insert'
-		};
+		}; 
 	
 		var seedManageGrid;
 		$(document).ready(function() {
@@ -438,12 +444,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                          },}, 
                 	 {field: 'operation', title: '操作', width: 30,	sortable: true,	align: 'center', halign: 'center',
                 		 				formatter: function(value, row){
-                		 					var growthStage = '<a href="#" class="easyui-linkbutton c4" iconCls="icon-remove" onclick="growthStage('+ row.seedId +')">成长阶段</a>';
+                		 					var growthStage = '<a href="#" class="easyui-linkbutton c4" onclick="growthStage('+ row.seedId +')">成长阶段</a>';
                 		 					return growthStage;
                 		 				}
                 	 }
                 	]
                 ],
+                
+                onLoadSuccess: function(){
+                	$.parser.parse($('.c4').parent());
+                },
                 
                 
                 onBeforeEdit: function (index, row) {  
