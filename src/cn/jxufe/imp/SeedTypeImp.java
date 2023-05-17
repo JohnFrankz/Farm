@@ -6,6 +6,8 @@ import cn.jxufe.service.SeedTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SeedTypeImp implements SeedTypeService {
 
@@ -15,5 +17,10 @@ public class SeedTypeImp implements SeedTypeService {
     @Override
     public SeedType findByTypeId(int seedId) {
         return seedTypeDao.findByTypeId(seedId);
+    }
+
+    @Override
+    public List<SeedType> findAll() {
+        return seedTypeDao.findAll();
     }
 }

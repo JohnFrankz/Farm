@@ -6,6 +6,8 @@ import cn.jxufe.service.SoilService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SoilImp implements SoilService {
 
@@ -15,5 +17,10 @@ public class SoilImp implements SoilService {
     @Override
     public Soil findBySoilId(int soilId) {
         return soilDao.findBySoilId(soilId);
+    }
+
+    @Override
+    public List<Soil> findAll() {
+        return soilDao.findAll();
     }
 }
