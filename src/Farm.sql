@@ -23,14 +23,14 @@ VALUES	(1, '黄土地'),
 		(3, '红土地'),
 		(4, '金土地')
 
--- Create Table T_GrowthStage
-CREATE TABLE [dbo].[T_GrowthStage] (
+-- Create Table T_CropStatus
+CREATE TABLE [dbo].[T_CropStatus] (
 	[id] bigint  IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	[stageId] int  NOT NULL,
-	[stageName] varchar(255) COLLATE Chinese_PRC_CI_AS  NULL
+	[statusId] int  NOT NULL,
+	[statusName] varchar(255) COLLATE Chinese_PRC_CI_AS  NULL
 )
 
-INSERT INTO [dbo].[T_GrowthStage] ([stageId], [stageName])
+INSERT INTO [dbo].[T_CropStatus] ([statusId], [statusName])
 VALUES	(1, '种子阶段'),
 		(2, '生长阶段'),
 		(3, '成熟阶段'),
