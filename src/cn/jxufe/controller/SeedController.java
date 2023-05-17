@@ -3,8 +3,14 @@ package cn.jxufe.controller;
 import cn.jxufe.bean.EasyUIData;
 import cn.jxufe.bean.EasyUIDataPageRequest;
 import cn.jxufe.bean.Message;
+import cn.jxufe.entity.GrowthStage;
 import cn.jxufe.entity.Seed;
+import cn.jxufe.entity.SeedType;
+import cn.jxufe.entity.Soil;
+import cn.jxufe.service.GrowthStageService;
 import cn.jxufe.service.SeedService;
+import cn.jxufe.service.SeedTypeService;
+import cn.jxufe.service.SoilService;
 import cn.jxufe.utils.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -31,6 +37,12 @@ public class SeedController {
 
 	@Autowired
 	private SeedService seedService;
+	@Autowired
+	private SeedTypeService seedTypeService;
+	@Autowired
+	private SoilService soilService;
+	@Autowired
+	private GrowthStageService growthStageService;
 
 	@RequestMapping("grid")
 	public String grid() {
@@ -82,5 +94,39 @@ public class SeedController {
 	public Message delete(HttpServletRequest request) {
 		long id = DataUtils.ParseInt(request.getParameter("id"));
 		return seedService.delete(id);
+	}
+	
+
+	/**
+	 * 这是一个获取种子类型的API
+	 * @param typeId   种子类型id
+	 * @return 返回所有种子类型
+	 */
+	@RequestMapping(value = "getSeedType", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public SeedType getSeedType(int typeId) {
+		return seedTypeService.findByTypeId(typeId);
+	}
+
+	/**
+	 * 这是一个获取种子所需土地类型的API
+	 * @param soilId   种子所需土地类型id
+	 * @return 返回所有土地类型
+	 */
+	@RequestMapping(value = "getSoilType", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public Soil getSoilType(int soilId) {
+		return soilService.findBySoilId(soilId);
+	}
+
+	/**
+	 * 这是一个获取种子生长阶段的API
+	 * @param stageId  种子生长阶段id
+	 * @return 返回生长阶段
+	 */
+	@RequestMapping(value = "getGrowthStage", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public GrowthStage getGrowthStage(int stageId) {
+		return growthStageService.findByStageId(stageId);
 	}
 }
