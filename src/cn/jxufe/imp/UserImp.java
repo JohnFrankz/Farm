@@ -10,12 +10,38 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserImp implements UserService {
 
     @Autowired
     private UserDao userDao;
 
+    @Override
+    public User findById(Long id) {
+        return userDao.findOne(id);
+    }
+
+    @Override
+    public List<User> findAllUser() {
+        return userDao.findAll();
+    }
+
+    @Override
+    public Message login(Long id) {
+        Message message = new Message();
+        User user = userDao.findOne(id);
+        if (user != null) {
+            message.setCode(0);
+            message.setMsg("登录成功");
+        } else {
+            message.setCode(1);
+            message.setMsg("登录失败");
+        }
+        return message;
+    }
+    
     @Override
     public EasyUIData<User> findAll(Pageable pageable) {
         Page<User> page = userDao.findAll(pageable);

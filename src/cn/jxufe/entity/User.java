@@ -16,6 +16,8 @@ public class User extends EntityID {
     private int experience;
     // 积分
     private int points;
+    // 金币
+    private float money;
     // 头像
     private String avatar;
 
@@ -51,6 +53,14 @@ public class User extends EntityID {
         this.points = points;
     }
 
+    public float getMoney() {
+        return money;
+    }
+
+    public void setMoney(float money) {
+        this.money = money;
+    }
+    
     public String getAvatar() {
         return avatar;
     }
@@ -66,6 +76,7 @@ public class User extends EntityID {
                 ", nickname='" + nickname + '\'' +
                 ", experience=" + experience +
                 ", points=" + points +
+                ", money=" + money +
                 ", avatar='" + avatar + '\'' +
                 '}';
     }
