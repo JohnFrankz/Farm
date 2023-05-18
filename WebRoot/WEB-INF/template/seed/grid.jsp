@@ -247,14 +247,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 singleSelect: true,
                 fitColumns: true,
                 striped: true,
-                autoSave: true,
                 idField: "id",
                 //分页
                 pagination:true,
                 pagePosition:'bottom',
                 pageSize:3,
                 pageList:[3,6,9],
-                
                 columns: [
                 	[{field: 'id',		title: 'ID', width: 10,	sortable: true,	align: 'center', halign: 'center'}, 
                 	 {field: 'seedId',	title: '种子ID', width: 20,	sortable: true,	align: 'center', halign: 'center',
@@ -341,15 +339,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                          },	 
                 	 }, 
                 	 {field: 'purchasePrice', title: '种子采购价', width: 30,	sortable: true,	align: 'center', halign: 'center',
-					                		 editor: {
-					                             type: 'numberbox',
-					                             options: {
-					                                 required: true
-					                             }
-					                         },
-						                	formatter: function(value){
-					 		 					return Number(value) + '金币';
-					 		 				} 
+                		 editor: {
+                             type: 'numberbox',
+                             options: {
+                                 required: true
+                             }
+                         },
+	                	formatter: function(value){
+ 		 					return Number(value) + '金币';
+ 		 				} 
                 	 }, 
                 	 {field: 'salePrice', title: '每个收获的果实单价', width: 30,	sortable: true,	align: 'center', halign: 'center',
                 		 editor: {
@@ -412,9 +410,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 onLoadSuccess: function(){
                 	$.parser.parse($('.c4').parent());
                 },
-                
-                
-                onBeforeEdit: function (index, row) {  
+
+                /* onBeforeEdit: function (index, row) {  
                     row.editing = true;  
                     updateActions(index);
                 },
@@ -426,9 +423,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     alert(changes);
                     row.editing = false;  
                     updateActions(index);
-                },
-                
-              
+                }, */
+
            	 destroyMsg: {
                     norecord: {
                         title: '警告',
@@ -467,9 +463,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				method:'post',
 				url:'<%=basePath%>/growth/gridData?seedId=' + seedId,
 				saveUrl: '<%=basePath%>/growth/save',
-				updateUrl: '',
+				updateUrl: '<%=basePath%>/growth/save',
 				destroyUrl: '<%=basePath%>/growth/delete',
-				
 				editable: true,
 				border: false,
                 rownumbers: true,
@@ -478,29 +473,83 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 singleSelect: true,
                 fitColumns: true,
                 striped: true,
-                autoSave: true,
                 idField: "id",
-
                 columns: [
                 	[{field: 'id', title: 'ID', width: 10,	sortable: true,	align: 'center', halign: 'center'},
                 		{field: 'seedId', title: '种子ID', width: 10,	sortable: true,	align: 'center', halign: 'center'},
-                		{field: 'growthStage', title: '生长阶段', width: 10,	sortable: true,	align: 'center', halign: 'center'},
-                		{field: 'growthName', title: '生长阶段标题', width: 10,	sortable: true,	align: 'center', halign: 'center'},
-                		{field: 'growthTime', title: '阶段生长时间', width: 10,	sortable: true,	align: 'center', halign: 'center'},
-                		{field: 'pestProbability', title: '生虫概率', width: 10,	sortable: true,	align: 'center', halign: 'center'},
-                		{field: 'width', title: '宽度', width: 10,	sortable: true,	align: 'center', halign: 'center'},
-                		{field: 'height', title: '高度', width: 10,	sortable: true,	align: 'center', halign: 'center'},
-                		{field: 'x', title: 'offsetX', width: 10,	sortable: true,	align: 'center', halign: 'center'},
-                		{field: 'y', title: 'offsetY', width: 10,	sortable: true,	align: 'center', halign: 'center'},
+                		{field: 'growthStage', title: '生长阶段', width: 10,	sortable: true,	align: 'center', halign: 'center',
+	                			editor:{
+	                				type: 'numberbox',
+	                				 options: {
+	                                     required: true,
+	                                     }
+	                			},
+                		},
+                		{field: 'growthName', title: '生长阶段标题', width: 10,	sortable: true,	align: 'center', halign: 'center',
+                				editor:{
+                    				type: 'textbox',
+                    				options: {
+	                                     required: true,
+	                                     }
+                    			},
+                    	},
+                		{field: 'growthTime', title: '阶段生长时间', width: 10,	sortable: true,	align: 'center', halign: 'center',
+                    			editor:{
+                    				type: 'numberbox',
+                    				options: {
+	                                     required: true,
+	                                     }
+                    			},		
+                		},
+                		{field: 'pestProbability', title: '生虫概率', width: 10,	sortable: true,	align: 'center', halign: 'center',
+	                			editor:{
+	                				type: 'numberbox',
+	                				options: {
+	                                     required: true,
+	                                     }
+	                			},	
+                		},
+                		{field: 'width', title: '宽度', width: 10,	sortable: true,	align: 'center', halign: 'center',
+	                			editor:{
+	                				type: 'numberbox',
+	                				options: {
+	                                     required: true,
+	                                     }
+	                			},	
+                		},
+                		{field: 'height', title: '高度', width: 10,	sortable: true,	align: 'center', halign: 'center',
+	                			editor:{
+	                				type: 'numberbox',
+	                				options: {
+	                                     required: true,
+	                                     }
+	                			},	
+                		},
+                		{field: 'x', title: 'offsetX', width: 10,	sortable: true,	align: 'center', halign: 'center',
+	                			editor:{
+	                				type: 'numberbox',
+	                				options: {
+	                                     required: true,
+	                                     }
+	                			},
+                		},
+                		{field: 'y', title: 'offsetY', width: 10,	sortable: true,	align: 'center', halign: 'center',
+	                			editor:{
+	                				type: 'numberbox',
+	                				options: {
+	                                     required: true,
+	                                     }
+	                			},	
+                		},
                 		{field: 'state', title: '作物状态', width: 10,	sortable: true,	align: 'center', halign: 'center',
                 			editor: {
                                 type: 'combobox',
                                 options: {
                                     required: true,
-                                    valueField: ' ',
+                                    valueField: 'statusId',
                                     textField: 'statusName',
                                     panelHeight: 'auto',
-   	                             	url:'<%=basePath%>/growth/getAllCropStatus',
+   	                             	url:'<%=basePath%>/growth/getAllCropStatus'
                                 },
    	                        },
    	                        
@@ -540,16 +589,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			})
 				
 		}
-		
-			
-		function updateActions(index){
+
+		/* function updateActions(index){
 			$('#seedManage').datagrid('updateRow',{
 				index: index,
 				row:{}
 			});
-		}
-			
-			
+		} */
+	
 		function doSeedSearch() {
 	        seedManageGrid.datagrid("load", {
 	            seedName: $('#seedSearch').val()
@@ -563,8 +610,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    $('#formSeedManage').form('clear');
 		    $('#formSeedManage').find("input[name='id']").val(0);
 		}
-		
-		
+	
 		function editRow() {
             var row = seedManageGrid.datagrid('getSelected');
             if (row) {
@@ -581,8 +627,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			seedManageGrid.edatagrid('cancelRow');
 			seedManageGrid.datagrid('reload');
 		}
-		
-		
+
 		function saveForm() {
             $('#formSeedManage').form('submit', {
                 url: '<%=basePath%>/seed/save',
@@ -625,8 +670,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 alert("请先选择一行数据，然后再尝试点击操作按钮！");
             }
 		}
-		
-		
+
 		function saveFormGrowth() {
             $('#formGrowthStage').form('submit', {
                 url: '<%=basePath%>/growth/save',
@@ -647,8 +691,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     });
                 }}
             )}
-		
-		
+
 		function moveImg(){
 			$('#positionDialog').dialog("open").dialog('setTitle', '编辑图片位置');
 			
@@ -689,8 +732,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    	
 	    	$("#positionDialog").dialog("close");
 	    }
-		
-		
+
 	</script>
 </body>
 </html>
