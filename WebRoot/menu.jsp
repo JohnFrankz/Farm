@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+   <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+   <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -27,23 +29,35 @@
         }
         
         #asset{
-        	position:absolute;
-        	width:120px;
-        	height:30px;
-        	top:30px;
-        	right:0;
-        	
+        	width:220px;
+        	height:20px;
+        	float:right;
+        	font-size:5px;
         	border-radius: 10px 10px;
-        	background-color:blue;
+        	background-color:#2d99d6;
+        	color:#FFFFFF;
         }
     </style>
 </head>
 <body class="bar">
-	<div style="position:relative; width:200px; height:60px; float:left; padding:5px 0 0 10px;">
-		<img src="avatar/zhangfei.jpg" style="width:50px; height:50px;">
-		<p style="float:right; color:white; line-height:20px; text-align:center; margin: 0;">zhugelaing </p>
-		
-		<div id="asset"></div>
+	<div style=" width:280px; height:55px; float:left; padding:5px 0 0 10px;">
+		<div style="float:left"><img style="width:50px; height: 50px;" src="../avatar/${user.avatar}"> </div>
+			<div style="float:right; width:230px; height:50px;">
+				<p style="color:yellow; font-size:25px; padding-left:20px; margin: 0; text-shadow: 0.1em 0.1em #333">
+					
+					<c:if test = "${user.id == null}">
+							 未知用户
+						</c:if>
+						  ${user.nickname}
+						
+				</p>
+				
+				<div id="asset">
+					<span style="padding-left:10px;">经验：${user.experience}</span>
+					<span style="color:yellow;">金币: ${user.money}</span>
+					<span style="color:pink;">积分：${user.points}</span> 
+				</div>
+			</div>
 	</div> 
 
 	<div style="float:right;" width="50%">

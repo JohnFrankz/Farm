@@ -13,6 +13,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		width:100%;
 		height:100%;
 	}
+	
+	.my-custom-icon {
+	  background-image: url(../images/用户.png);
+	  /* 设置图标的宽度、高度和其他样式属性 */
+	}
 </style>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -27,27 +32,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script type="text/javascript" src="<%=basePath%>ext/farm/helper.js?346t"></script>    
 </head>
 <body>
-	<div>
-		<div class="easyui-panel" title="用户选择" style="width:400px;">
+	<div style="width:400px; height:230px; position:absolute;  left:50%;  top:50%; margin:-115px 0 0 -200px;">
+		<div class="easyui-panel" title="用户选择" style="width:400px;" data-options="iconCls:'my-custom-icon'">
 			<div style="padding:10px 20px 20px 20px; text-align:center;">
 			    <form id="selectUser" method="post">
 			    	<div style="width:320px; border-bottom:2px solid #FFFFFF; padding:10px 20px 20px 20px;">
 					    
-					    <input label="当前用户：" class="easyui-combobox" name="" data-options="
+					    <input label="当前用户："  id="selectUserCombobox" class="easyui-combobox" name="" data-options="
 					    					width:300,
-											url: '',
+											url: '<%=basePath%>/user/list',
 											method: 'post',
-											valueField: 'value',
-											textField: 'text',
-											panelWidth: 350,
+											valueField: 'id',
+											textField: 'nickname',
+											panelWidth: 330,
 											panelHeight: 'auto',
 											formatter: formatItem,
-											data: [
-						                 {value: '1', text: '种子阶段'},
-						                 {value: '2', text: '生长阶段'},
-						                 {value: '3', text: '成熟阶段'},
-						                 {value: '4', text: '枯草期'}
-						               ]
+											
 										">
 										
 						</div>
@@ -56,7 +56,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								
 			    </form>
 			    <div style="text-align:right;padding:5px">
-			    	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">确认</a>
+			    	<a href="<%=basePath%>/menu.jsp" class="easyui-linkbutton" target="menu" onclick="submitForm()">确认</a>
 			    </div>
 		 	</div>
 		 </div>
@@ -65,21 +65,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <script>
 
-
-
-	$("body").css("height",$(window).height());
-	var params ={
-			id:'',
-			mode:'insert'
-	}; 
+	$("body").css("height",$(window).height()); 
 	
 	function submitForm(){
-		$('#selectUser').form('submit');
-	}
+    	var id=$("#selectUserCombobox").combobox("getValue");
+    	var result=$.ajax({
+			url : '<%=basePath%>user/login?id=' + id,
+			type : "post",
+			async : false,
+			data : {id:id}
+		});
+    	console.log(result);
+		$.messager.show({
+            title: "结果",
+            msg: result.responseJSON.msg
+        });
+    }
 	
 	function formatItem(row){
-			var s = '<span style="font-weight:bold">' + row.text + '</span><br/>' +
-					'<span style="color:#888">' + row.desc + '</span>';
+			var s ="<img style='width:20px; height: 20px;' src=../avatar/"+ row.avatar+">" 
+					+ "   " + '<span style="font-weight:bold">' + row.nickname + '</span>' + ' | 经验：' + row.experience + ' | 金币：' 
+					+ row.money +' | 积分：' + row.points ;
 			return s;
 		}
 </script>
