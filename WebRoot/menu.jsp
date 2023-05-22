@@ -2,6 +2,11 @@
     pageEncoding="UTF-8"%>
    <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+   
+   <%
+	String path = request.getContextPath();
+	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+	%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -41,10 +46,9 @@
 </head>
 <body class="bar">
 	<div style=" width:280px; height:55px; float:left; padding:5px 0 0 10px;">
-		<div style="float:left"><img style="width:50px; height: 50px;" src="../avatar/${user.avatar}"> </div>
+		<div style="float:left"><img style="width:50px; height: 50px;" src="<%=basePath%>/avatar/<c:if test = "${user.id == null}">default.png</c:if>${user.avatar}"> </div>
 			<div style="float:right; width:230px; height:50px;">
 				<p style="color:yellow; font-size:25px; padding-left:20px; margin: 0; text-shadow: 0.1em 0.1em #333">
-					
 					<c:if test = "${user.id == null}">
 							 未知用户
 						</c:if>
@@ -53,9 +57,9 @@
 				</p>
 				
 				<div id="asset">
-					<span style="padding-left:10px;">经验：${user.experience}</span>
-					<span style="color:yellow;">金币: ${user.money}</span>
-					<span style="color:pink;">积分：${user.points}</span> 
+					<span style="padding-left:10px;">经验：<c:if test = "${user.id == null}">0</c:if>${user.experience}</span>
+					<span style="color:yellow;">金币: <c:if test = "${user.id == null}">0</c:if> ${user.money}</span>
+					<span style="color:pink;">积分：<c:if test = "${user.id == null}">0</c:if>${user.points}</span> 
 				</div>
 			</div>
 	</div> 
