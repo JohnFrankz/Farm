@@ -48,6 +48,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        </div>
                 
         <script>
+        $("body").css("height",$(window).height()); 
+        
         var grid;
         var params = {
                 id: '',
@@ -71,6 +73,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 singleSelect: true,
                 fitColumns: true,
                 pagination: true,
+                pagePosition:'bottom',
+                pageSize:3,
+                pageList:[3,6,9],
                 striped: true,
                 idField: "id",
                 autoSave: false,
@@ -239,13 +244,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     }
                 },
             });
-            grid.edatagrid("getPager").pagination({
+/*             grid.edatagrid("getPager").pagination({
                 pageSize: 5,
                 pageList: [5, 10, 15, 20],
             	beforePageText: '第',
             	afterPageText: '页    共 {pages} 页',
             	displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',
-            });
+            }); */
 
         });
      
