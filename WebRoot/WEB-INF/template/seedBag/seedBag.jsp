@@ -32,16 +32,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script type="text/javascript" src="<%=basePath%>ext/farm/helper.js?346t"></script>    
 </head>
 <body>
-	
-	    <div id="seedShopContaineer">
-	        <table id="seedShopGrid"></table>
-	    </div>
-	
+    <div id="seedShopContaineer">
+        <table id="seedShopGrid"></table>
+    </div>
 </body>
+
+<style>
+	.buyButton {
+	    color: #333;
+	    background-color: #55cb86;
+	    border-radius: 3px;
+	    border: 2px solid #53d785 ;
+	    outline: none;
+	    font-size: 17px;
+	    text-align: center;
+	    cursor: pointer;
+	}
+</style>
 
 <script>
 
 	$("body").css("height",$(window).height()); 
+	 var frameset = parent.document.getElementsByTagName('frameset')[0];
+     frameset.rows = '60,*,180';
 	 parent.document.querySelector('#bottom').src = '<%=basePath%>/seed.jsp';
 	
 <%-- 	var landTypeList = {};
@@ -62,7 +75,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	var cardview = $.extend({}, $.fn.datagrid.defaults.view, {
 		renderRow: function(target, fields, frozen, rowIndex, rowData){
 			let imgUrl = '<%=basePath%>/images/crops/' + rowData["seedId"] + '/5.png';
-            let divStr = 
+            let main = 
             	'<div id="mainBox_' + rowData['seedId'] + '" style="width:22%; padding: 10px;border: 0;display: inline-block; float:left;">' +
 	                '<div style="width: 100%;height: 350px;border: gold 1px solid;border-collapse:collapse;">' +
 	                    '<div style=" width:100%;">' +
@@ -72,11 +85,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                            '<img style="width: 100%;height: 180px;" src="' + imgUrl + '" alt="种子图片">' + 
 	                    '</div>' +
                         '<div style="padding: 10px;text-align: center;">' +
-                            '<input type="button" value="我要购买" class="greenColorButton" onclick="purchaseSeed(' + rowData['seedId'] + ",\'" + rowData['seedName'] + '\')">' + 
+                            '<input type="button" value="我要购买" class="buyButton" onclick="purchaseSeed(' + rowData['seedId'] + ",\'" + rowData['seedName'] + '\')">' + 
                         '</div>'+ 
 	                '</div>' + 
 	            '</div>';
-            return $(divStr).prop('outerHTML');
+            return $(main).prop('outerHTML');
 		}
 	});
 	
@@ -85,7 +98,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$('#seedShopContaineer').dialog({
             title: '种子仓库',
             iconCls: 'icon-seedPurchase',
-            width: '80%',
+            width: '55%',
             height: '90%',
         });
 		
