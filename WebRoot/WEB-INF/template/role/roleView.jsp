@@ -8,6 +8,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+    <title>用户登录</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>ext/easyui/themes/green/easyui.css?t=34355">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>ext/easyui/themes/icon.css">
@@ -17,56 +18,309 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script type="text/javascript" src="<%=basePath%>ext/easyui/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="<%=basePath%>ext/easyui/plugins/jquery.edatagrid.js"></script>
     <script type="text/javascript" src="<%=basePath%>ext/easyui/locale/easyui-lang-zh_CN.js"></script>
-    <script type="text/javascript" src="<%=basePath%>ext/farm/helper.js?346t"></script>    
+    <script type="text/javascript" src="<%=basePath%>ext/farm/helper.js?346t"></script>
 </head>
 <body>
+
+<!-- <div id="p" class="easyui-panel"  style="width:100%;height:800px;padding:20px;"> -->
 <div id="controlBox">
 		<!-- iconCls：单纯图标 -->
-		<div style="margin-bottom:20px">
-            <input class="easyui-textbox" label="用户名:" labelPosition="left" style="width:100%;">
-        </div>
-			<div>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-ok" style="width:100%;height:32px">Register</a>
-        </div>
-            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" >查询</a>
-            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="addStu()">添加</a>
-            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" >取消</a>
-            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" >删除</a>
+			<span style="color:white">用户名:</span>
+            <input id="seatex" class="easyui-textbox" style="width:20%;"><!-- iconCls:'icon-search' -->
+            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search '" style="background:" onclick="searchRole()">查询</a>
+            <a href="#" class="easyui-linkbutton c2" data-options="iconCls:'icon-add '"    style="background:" onclick="addRole()">添加</a>
+            <a href="#" class="easyui-linkbutton c4" data-options="iconCls:'icon-remove'" style="background:" onclick="cancelRole()">取消</a>
+            <a href="#" class="easyui-linkbutton c5" data-options="iconCls:'icon-cancel'" style="background:" onclick="deleteRole()">删除</a>
         </div>
     	<table id="grid"></table>
-    	<!-- easyui-dialog : 产生对话框的div -->
-        <div id="formRoleContainer" class="easyui-dialog" style="width:280px;height:300px;padding:10px 10px" closed="true" buttons="#formStudentButtons">
-           <!--  novalidate 属性是一个布尔属性。
-                 novalidate 属性规定当提交表单时不对表单数据（输入）进行验证。 -->
-            <form id="formStudent" method="POST" novalidate>
-                <table class='tbledit'>
-                    <tr>
-                        <td>ID</td>
-                        <td><input name="id" required="true" class="w200" value="0" readonly="readonly"></td>
-                    </tr>
-                    <tr>
-                        <td>姓名：</td>
-                        <td><input name="name" required="true" class="easyui-validatebox w50"></td>
-                    </tr>
-                    <tr>
-                        <td>性别：</td>
-                        <td><input name="gender" required="true" class="easyui-combobox" panelHeight="auto"
-                                data-options="editable:false,  valueField:'value',  textField:'label', data: [{label: '男', value: 1}, {label: '女', value: 0}]">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>生日：</td>
-                        <td><input name="birth" required="true" class="easyui-datebox"></td>
-                    </tr>
-                    <tr>
-                        <td>身高：</td>
-                        <td><input name="height" required="true" class="easyui-numberbox " data-options="precision: 2">米</td>
-                    </tr>
-                </table>
-            </form>
+    	</div>
+        <div id="formFileContainer" class="easyui-dialog" data-options="noheader:true,closed:true" 
+             style="width:400px;height:100px;padding:3px 10px" buttons="#formFileButtons">
+                     
+             <form id="formUploadFile" method="post" action="" enctype="multipart/form-data">         
+    	        <span style="color:white">头像文件:</span> 
+    	     	<input id="file" class="easyui-filebox" name = "file"  data-options="prompt:'选择文件'  ,buttonText:'选择文件'" style="width:80%">    
+         	</form>
         </div>
-        <div id="formStudentButtons"> <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok"
-                onclick="saveForm()">保存</a> <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
-                onclick="javascript:$('#formStudentContainer').dialog('close')">取消</a></div>
+        <div id="formFileButtons"> 
+        	<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok"     onclick="submitUploadForm()">开始上传</a>
+         	<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#formFileContainer').dialog('close')">关闭窗口</a>
+       </div>
+                
+        <script>
+        var grid;
+        var params = {
+                id: '',
+                row: '',
+                index: '',
+            };
+        $(document).ready(function () {
+            grid = $('#grid').edatagrid({
+                title: '用户清单',
+                width: '100%',
+                height: 600,
+                method: 'post',
+                url: '<%=basePath%>user/getUser',
+                saveUrl: '<%=basePath%>user/save',
+                updateUrl: '<%=basePath%>user/save',
+                destroyUrl: '<%=basePath%>user/delete',
+                border: false,
+                rownumbers: true,
+                remoteSort: true,
+                nowrap: true,
+                singleSelect: true,
+                fitColumns: true,
+                pagination: true,
+                striped: true,
+                idField: "id",
+                autoSave: false,
+                autoRowHeight:true,
+                rowStyler: function(index,row){
+                    return 'height:80px';
+                    },
+                columns:
+                    [[{
+                        field: 'id',
+                        title: 'ID',
+                        align: 'center',
+                        halign: 'center',
+                        width: 50,
+                        sortable: true,
+                    }, {
+                        field: 'avatar',
+                        title: '头像',
+                        width: 100,
+                        align: 'center',
+                        halign: 'center',
+                        sortable: true,
+                        editor:{
+                        	type:'validatebox',
+                        	options:{
+                        		required:true
+                        		}
+                        },
+                        formatter: function(value,row) {
+                            if (value == null)
+                                value = "none.jpg";
+                            return '<div style="height:80px;">' + 
+                            		'<img src="<%=basePath%>/avatar/' + value + 
+                            		'"style="height:60px;margin-top:10px;width:100%"></div>';
+                        },
+                    }, {
+                        field: 'username',
+                        title: '用户名',
+                        width: 100,
+                        align: 'center',
+                        halign: 'center',
+                        sortable: true,
+/*                         formatter: function (value,
+                            row) {
+                            if (value == "1") {
+                                return '男';
+                            } else {
+                                return '女';
+                            }
+                        } */
+                        editor:{
+                        	type:'validatebox',
+                        	options:{
+                        		required:true
+                        		}
+                        }
+                    }, {
+                        field: 'nickname',
+                        title: '昵称',
+                        width: '200',
+                        sortable: true,
+                        align: 'center',
+                        halign: 'center',
+                        editor:{
+                        	type:'validatebox',
+                        	options:{
+                        		required:true
+                        		}
+                        }
+                    }, {
+                        field: 'experience',
+                        title: '经验值',
+                        width: '200',
+                        align: 'center',
+                        halign: 'center',
+                        sortable: true,
+                        formatter: function (value) {
+                            return '<div height=30px><img src="../images/userImages/jy.png" style="height:22px"><div style="margin-top:3px;height:20px;float:right;margin-left:-65px;margin-right:56px">' + value + '</div></div>';
+                        },
+                        editor:{
+                        	type:'validatebox',
+                        	options:{
+                        		required:true
+                        		}
+                        }
+                    }, {
+                    	field: 'points',
+                    	title: '积分',
+                    	width: 200,
+                    	sortable: true,
+                    	align: 'center',
+                        halign: 'center',
+                    	width:200,
+                    	formatter: function (value) {
+                            return '<div height=30px><img src="../images/userImages/jf.png" style="height:23px"><div style="margin-top:3px;height:20px;float:right;margin-left:-67px;margin-right:50px">' + value + '</div></div>';;
+                        },
+                    	editor:{
+                        	type:'validatebox',
+                        	options:{
+                        		required:true
+                        		}
+                        }
+                    }, {
+                    	field: 'money',
+                		title: '金币',
+                		sortable: true,
+                    	align: 'center',
+                        halign: 'center',
+                		width: 300,
+                		formatter: function (value) {
+                            return '<div height=30px><img src="../images/userImages/jb.png" style="height:20px"><div style="margin-top:2px;height:20px;float:right;margin-left:-32px;margin-right:20px">' + value + '</div></div>';;
+                        },
+                		editor:{
+                        	type:'validatebox',
+                        	options:{
+                        		required:true
+                        		}
+                        }
+             		}, {
+                        field: 'operate',
+                        title: '操作',
+                        width: '35%',
+                        align: 'center',
+                        halign: 'center',
+                        formatter: function (value, row) {
+                        	 return `<a href="#" class="easyui-linkbutton c3" onclick="upload()" style ="">上传头像</a>` +  '&nbsp&nbsp' +
+                        	 		`<a href="javascript:void(0)" class="easyui-linkbutton c4" onclick="savedata()">保存数据</a>`;
+                        }
+                    }]
+                ],
+                onLoadSuccess: function(){
+                    // $.parser.parse(); 全部解析 
+                    $.parser.parse($('.c3').parent()); //解析指定节点，传入指定节点的父节点
+                }, 
+                onSuccess: function(){
+                	$.parser.parse($('.c3').parent());
+                },
+                onDestroy: function(index, row){
+                    grid.edatagrid('reload')
+                },
+                onClickRow: function(index, field, value) {
+                     console.log("index:"+index +'field:'+field +'id:' + field.id);
+                     params.index = index;
+                     params.row = field;
+                },
+                onAfterEdit: function(){
+                	$.parser.parse($('.c3').parent());
+                },
+                onCancelEdit: function(){
+                	$.parser.parse($('.c3').parent());
+                },
+                onAdd:function(){
+                	$.parser.parse($('.c3').parent());
+                },
+                onEdit:function(){
+                	$.parser.parse($('.c3').parent());
+                },
+                destroyMsg: {
+                    norecord: {
+                        title: '警告',
+                        msg: '首先需要选中记录，然后在点击删除按钮'
+                    },
+                    confirm: {
+                        title: '确认',
+                        msg: '是否删除选中记录?'
+                    }
+                },
+            });
+            grid.edatagrid("getPager").pagination({
+                pageSize: 5,
+                pageList: [5, 10, 15, 20],
+            	beforePageText: '第',
+            	afterPageText: '页    共 {pages} 页',
+            	displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',
+            });
+
+        });
+     
+        function searchRole() {
+        	$("#grid").datagrid("load", {
+                userName: $('#seatex').val()
+            });
+        }
+        
+        function addRole(){
+        	var length = $('#grid').edatagrid('getRows').length + 1;
+        	$("#grid").edatagrid("addRow");
+        }
+        
+        function cancelRole(){
+        	$("#grid").edatagrid("cancelRow");
+        }
+        
+        function deleteRole(){
+        	$("#grid").edatagrid("destroyRow");
+        }
+        
+        function upload(){
+        	$("#formFileContainer").dialog('open');
+        }
+        
+        function savedata()
+        {
+        	$("#grid").edatagrid('saveRow');
+        }
+        
+        function submitUploadForm() {
+             var fileName = "";
+             fileName = $('#file').textbox('getText');
+             alert(fileName);
+             
+            $('#formUploadFile').form('submit', {
+            url: '<%=basePath%>file/avatarUpload',
+			type: 'post',  
+            onSubmit: function() {},
+            success: function(data) {
+            	console.log(data);
+            	var result = eval('(' + data + ')'); //变成js对象
+              	console.log(result.msg); 
+              	console.log(fileName);
+              	if(result.code==0){           		
+              		$("#grid").edatagrid("updateRow",{//更新字段
+  						index:params.index, //行索引
+  						row:{
+  							avatar:fileName//行中的头像字段
+	  						}
+	  					});             		
+		             $.messager.show({
+		                  title: "消息",
+		                  msg: "上传成功"
+		              });
+		             $.ajax({
+	            			url : "<%=basePath%>user/updateAvatar",
+	            			type : "post",
+	            			async : false,
+	            			data : {id:params.row.id,avatar:fileName}
+	            		});
+              		$("#grid").datagrid("beginEdit",params.index);
+              		$.parser.parse($('.c3').parent());
+              		$('#formFileContainer').dialog('close');
+              }
+              	else{
+              		$.messager.show({
+                          title: "消息",
+                          msg: "上传失败"
+                      });
+          }
+          }
+      });
+          }
+        </script>
 </body>
 </html>
