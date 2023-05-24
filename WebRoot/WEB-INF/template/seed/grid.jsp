@@ -673,11 +673,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 		function saveFormGrowth() {
             $('#formGrowthStage').form('submit', {
-                url: '<%=basePath%>/growth/save',
+                url: '<%=basePath%>/growth/save', 
                 onSubmit: function(param) {
                     //param.id = params.id;
                     //param.mode = params.mode; 
-                    return $(this).form('validate');
+                  	return $(this).form('validate');
                 },
                 success: function(result) {
                     var result = eval('(' + result + ')');
