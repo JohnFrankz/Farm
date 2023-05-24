@@ -30,7 +30,7 @@ public class UserController {
      */
     @RequestMapping("grid")
     public String grid() {
-        return "user/grid";
+        return "role/roleView";
     }
 
     /**
