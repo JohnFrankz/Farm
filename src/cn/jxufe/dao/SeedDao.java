@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SeedDao extends JpaRepository<Seed, Long> {
 	Page<Seed> findBySeedNameContaining(String seedName, Pageable pageable);
+	
+	Seed findBySeedId(int seedId);
 }
