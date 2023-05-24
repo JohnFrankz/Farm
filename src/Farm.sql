@@ -185,8 +185,8 @@ CREATE TABLE [dbo].[T_User] (
 
 INSERT INTO [dbo].[T_User] ([username], [nickname], [experience], [points], [money], [avatar])
 VALUES
-('zhaoyun', '赵云', 889, 62989, 7860, '123.jpg'),
-('guanyu', '关羽', 750, 54236, 6320, '456.jpg'),
-('liubei', '刘备', 920, 71459, 8960, '789.jpg'),
-('sunquan', '孙权', 620, 41975, 5480, '234.jpg'),
-('diaochan', '貂蝉', 480, 32541, 4320, '567.jpg');
+('zhaoyun', '赵云', 889, 62989, 7860, 'zhaoyun.jpg'),
+('guanyu', '关羽', 750, 54236, 6320, 'guanyu.jpg'),
+('liubei', '刘备', 920, 71459, 8960, 'liubei.jpg'),
+('sunquan', '孙权', 620, 41975, 5480, 'sunquan.jpg'),
+('diaochan', '貂蝉', 480, 32541, 4320, 'diaochan.jpg');

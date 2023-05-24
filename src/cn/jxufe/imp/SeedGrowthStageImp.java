@@ -9,17 +9,30 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * 关于种子生长阶段的服务层实现类
+ */
 @Service
 public class SeedGrowthStageImp implements SeedGrowthStageService {
 
     @Autowired
     private SeedGrowthStageDao stageDao;
 
+    /**
+     * 根据种子id查询某一种子的所有生长阶段
+     * @param seedId 种子id
+     * @return 返回该种子的所有生长阶段
+     */
     @Override
     public List<SeedGrowthStage> findBySeedId(int seedId) {
         return stageDao.findBySeedId(seedId);
     }
 
+    /**
+     * 保存种子生长阶段的修改或新增某一种子的生长阶段
+     * @param stage 种子生长阶段
+     * @return 返回保存结果
+     */
     @Override
     public Message save(SeedGrowthStage stage) {
         Message message=new Message();
@@ -34,6 +47,11 @@ public class SeedGrowthStageImp implements SeedGrowthStageService {
         return message;
     }
 
+    /**
+     * 删除种子生长阶段
+     * @param id 需要删除的生长阶段的id
+     * @return 返回删除结果
+     */
     @Override
     public Message delete(Long id) {
         Message message = new Message();

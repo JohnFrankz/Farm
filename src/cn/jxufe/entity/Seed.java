@@ -5,46 +5,64 @@ import javax.persistence.Table;
 
 import cn.jxufe.bean.EntityID;
 
+/**
+ * 种子实体类
+ */
 @Entity
 @Table(name = "T_Seed")
 public class Seed extends EntityID {
-	// 种子id 
+	/**
+	 * 种子id
+	 */
 	private int seedId;
 	
-	// 种子名称
+	/**
+	 * 种子名称
+	 */
 	private String seedName;
-	
-	// 作物季节
+	/**
+	 * 种子季节
+	 */
 	private int season;
-	
-	// 种子等级
+	/**
+	 * 种子等级
+	 */
 	private int seedLevel;
-	
-	// 种子类型
+	/**
+	 * 种子类型
+	 */
 	private int seedType;
-	
-	// 可获经验
+	/**
+	 * 种子经验
+	 */
 	private int experience;
-	
-	// 每季成熟所需时间 
+	/**
+	 * 种子成熟时间
+	 */
 	private int matureTime;
-	
-	// 可获收成
+	/**
+	 * 种子收获量
+	 */
 	private int harvest;
-	
-	// 种子采购价
+	/**
+	 * 种子购买价格
+	 */
 	private int purchasePrice;
-	
-	// 售价
+	/**
+	 * 种子出售价格
+	 */
 	private int salePrice;
-	
-	// 土地需求
+	/**
+	 * 种子所需土壤
+	 */
 	private int soil;
-	
-	// 可获积分
+	/**
+	 * 种子成熟后获得的积分
+	 */
 	private int points;
-	
-	// 提示
+	/**
+	 * 提示信息
+	 */
 	private String prompt;
 
 	public int getSeedId() {

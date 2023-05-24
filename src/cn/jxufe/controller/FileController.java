@@ -18,6 +18,13 @@ import java.io.IOException;
 @RequestMapping("file")
 public class FileController {
 
+    /**
+     * 处理文件上传，如果上传成功返回message(0, "上传成功")，否则返回message(1, "上传失败")
+     * @param file 上传的文件
+     * @param request 请求对象
+     * @return 上传结果
+     * @throws IOException
+     */
     @RequestMapping("avatarUpload")
     @ResponseBody
     public Message avatarUpload(MultipartFile file, HttpServletRequest request) throws IOException {

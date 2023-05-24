@@ -40,6 +40,11 @@ public class SeedController {
 	@Autowired
 	private SoilService soilService;
 
+
+	/**
+	 * 这是一个种子管理页面的跳转方法
+	 * @return 返回种子管理页面
+	 */
 	@RequestMapping("grid")
 	public String grid() {
 		return "seed/grid";
