@@ -190,3 +190,34 @@ VALUES
 ('liubei', '刘备', 920, 71459, 8960, '789.jpg'),
 ('sunquan', '孙权', 620, 41975, 5480, '234.jpg'),
 ('diaochan', '貂蝉', 480, 32541, 4320, '567.jpg');
+
+-- CREATE TABLE User_bag 
+CREATE TABLE [dbo].[T_UserBag] (
+  [id] bigint  IDENTITY(1,1) PRIMARY KEY NOT NULL,
+  [userName] varchar(255) COLLATE Chinese_PRC_CI_AS  NULL,
+  [seedId] int  NOT NULL,
+  [seedNum] int  NOT NULL,
+)
+
+INSERT INTO [dbo].[T_UserBag] ([userName], [seedId], [seedNum])
+VALUES
+('zhaoyun', 1, 5),
+('guanyu', 2, 3),
+('liubei', 3, 8),
+('sunquan', 4, 2),
+('diaochan', 5, 4),
+('zhaoyun', 6, 10),
+('guanyu', 7, 7),
+('liubei', 8, 4),
+('sunquan', 9, 6),
+('diaochan', 1, 3),
+('zhaoyun', 4, 2),
+('guanyu', 8, 9),
+('liubei', 5, 5),
+('sunquan', 6, 8),
+('diaochan', 6, 7),
+('zhaoyun', 3, 3),
+('guanyu', 3, 6),
+('liubei', 4, 4),
+('sunquan', 2, 5),
+('diaochan', 9, 2);
