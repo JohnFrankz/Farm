@@ -219,7 +219,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     grid.edatagrid('reload')
                 },
                 onClickRow: function(index, field, value) {
-                     console.log("index:"+index +'field:'+field +'id:' + field.id);
                      params.index = index;
                      params.row = field;
                 },
@@ -280,7 +279,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         	var selectRow = $('#grid').edatagrid('getSelected');
         	if (selectRow != null && selectRow.isNewRecord) {
         		isInsertNewRow = true;
-				var editors = $('#grid').edatagrid('getEditors', 3);
+        		var allRow = $('#grid').edatagrid('getRows');
+        		var newRowIndex = allRow.length - 1;
+				var editors = $('#grid').edatagrid('getEditors', newRowIndex);
 				for (var i = 0; i < editors.length; i++) {
 				  	var field = editors[i].field;
 				  	var value = editors[i].target.val();
@@ -292,13 +293,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         
         function savedata()
         {
-        	$("#grid").edatagrid('saveRow');
+        	var rows = $('#grid').edatagrid('getRows'); // 获取所有行数据
+        	for (var i = 0; i < rows.length; i++) {
+        	    $('#grid').edatagrid('endEdit', i); // 结束编辑状态，确保新增的行也会被保存
+        	}
+        	if (isInsertNewRow) {
+        		var rowIndex = $('#grid').edatagrid('getRowIndex', rows[rows.length - 1]); // 获取最后一行（新增行）的索引
+        	  	$('#grid').edatagrid('saveRow', rowIndex); 
+        	  	$.ajax({
+        	  	    url: '<%=basePath%>user/save',
+        	  	    type: 'POST',
+        	  	    data: rowData,
+        	  	    success: function(response) {
+        	  	      // 处理保存成功的逻辑
+        	  	    },
+        	  	    error: function() {
+        	  	      // 处理保存失败的逻辑
+        	  	    }
+        	  	  });
+        	} else {
+        		$('#grid').edatagrid('saveRow');
+        	}
         }
         
         function submitUploadForm() {
              var fileName = "";
              fileName = $('#file').textbox('getText');
-             alert(fileName);
             
             $('#formUploadFile').form('submit', {
             url: '<%=basePath%>file/avatarUpload',
@@ -307,12 +327,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            return $(this).form('validate');
 	        },
             success: function(data) {
-            	console.log(data);
             	var result = eval('(' + data + ')'); //变成js对象
                 var row = $('#grid').edatagrid('getSelected');
               	if(result.code==0){           		
               		if (isInsertNewRow) {
               			row = rowData;
+              			for (var i = 0; i < row.length; i++) {
+              			    $('#grid').datagrid('endEdit', i); // 结束编辑以确保数据同步
+              			    var index = $('#grid').datagrid('getRowIndex', row[i]);
+              			    $('#grid').datagrid('beginEdit', index); // 开始编辑以标记为已修改
+              			 }
               		}
               		row.avatar = fileName;
               		$("#grid").edatagrid("updateRow",{//更新字段
@@ -324,10 +348,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                  msg: "上传成功"
 		              });
 		             $.ajax({
-	            			url : "<%=basePath%>user/updateAvatar",
-	            			type : "post",
-	            			async : false,
-	            			data : {id:params.row.id,avatar:fileName}
+	            			url: "<%=basePath%>user/updateAvatar",
+	            			type: "post",
+	            			async: false,
+	            			data: {id:params.row.id,avatar:fileName}
 	            		});
               		$("#grid").datagrid("beginEdit",params.index);
               		$.parser.parse($('.c3').parent());
