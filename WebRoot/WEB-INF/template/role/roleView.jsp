@@ -50,6 +50,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script>
         $("body").css("height",$(window).height()); 
         
+        var rowData = {};
+        var isInsertNewRow = false;
         var grid;
         var params = {
                 id: '',
@@ -101,12 +103,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         editor:{
                         	type:'validatebox',
                         	options:{
-                        		required:true
+                        		
                         		}
                         },
                         formatter: function(value,row) {
-                            if (value == null)
-                                value = "none.jpg";
+                            if (value == null || value == "")
+                                value = "default.png";
                             return '<div style="height:80px;">' + 
                             		'<img src="<%=basePath%>/avatar/' + value + 
                             		'"style="height:60px;margin-top:10px;width:100%"></div>';
@@ -274,6 +276,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         }
         
         function upload(){
+        	isInsertNewRow = false;
+        	var selectRow = $('#grid').edatagrid('getSelected');
+        	if (selectRow != null && selectRow.isNewRecord) {
+        		isInsertNewRow = true;
+				var editors = $('#grid').edatagrid('getEditors', 3);
+				for (var i = 0; i < editors.length; i++) {
+				  	var field = editors[i].field;
+				  	var value = editors[i].target.val();
+				  	rowData[field] = value;
+				}
+        	}
         	$("#formFileContainer").dialog('open');
         }
         
@@ -286,23 +299,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              var fileName = "";
              fileName = $('#file').textbox('getText');
              alert(fileName);
-             
+            
             $('#formUploadFile').form('submit', {
             url: '<%=basePath%>file/avatarUpload',
 			type: 'post',  
-            onSubmit: function() {},
+			onSubmit: function (param) {
+	            return $(this).form('validate');
+	        },
             success: function(data) {
             	console.log(data);
             	var result = eval('(' + data + ')'); //变成js对象
-              	console.log(result.msg); 
-              	console.log(fileName);
+                var row = $('#grid').edatagrid('getSelected');
               	if(result.code==0){           		
+              		if (isInsertNewRow) {
+              			row = rowData;
+              		}
+              		row.avatar = fileName;
               		$("#grid").edatagrid("updateRow",{//更新字段
   						index:params.index, //行索引
-  						row:{
-  							avatar:fileName//行中的头像字段
-	  						}
-	  					});             		
+  						row: row
+	  				}); 		
 		             $.messager.show({
 		                  title: "消息",
 		                  msg: "上传成功"
