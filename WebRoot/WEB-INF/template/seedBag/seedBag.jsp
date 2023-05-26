@@ -14,9 +14,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		height:100%;
 	}
 	
-	.my-custom-icon {
-	  background-image: url(../images/用户.png);
+	.icon-seedBag {
+	  background-image: url(../images/icon-seedBag.png);
 	  /* 设置图标的宽度、高度和其他样式属性 */
+	}
+	
+	.buyButton {
+	    color: #FFFFFF;
+	    background-color: #55cb86;
+	    border-radius: 3px;
+	    border: 2px solid #53d785 ;
+	    outline: none;
+	    font-size: 17px;
+	    text-align: center;
+	    cursor: pointer;
 	}
 </style>
 <head>
@@ -37,25 +48,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </div>
 </body>
 
-<style>
-	.buyButton {
-	    color: #333;
-	    background-color: #55cb86;
-	    border-radius: 3px;
-	    border: 2px solid #53d785 ;
-	    outline: none;
-	    font-size: 17px;
-	    text-align: center;
-	    cursor: pointer;
-	}
-</style>
-
 <script>
 
 	$("body").css("height",$(window).height()); 
 	 var frameset = parent.document.getElementsByTagName('frameset')[0];
-     frameset.rows = '60,*,180';
+     frameset.rows = '60,*,200';
 	 parent.document.querySelector('#bottom').src = '<%=basePath%>/seed.jsp';
+	 
+	 
+	 var allSoil=["","黄土地","黑土地","红土地","金土地"];
+	 var allSeedType = ["","普通","高级","梦幻"];
 	
 <%-- 	var landTypeList = {};
     var seedTypeList = {};
@@ -74,22 +76,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
 	var cardview = $.extend({}, $.fn.datagrid.defaults.view, {
 		renderRow: function(target, fields, frozen, rowIndex, rowData){
-			let imgUrl = '<%=basePath%>/images/crops/' + rowData["seedId"] + '/5.png';
-            let main = 
-            	'<div id="mainBox_' + rowData['seedId'] + '" style="width:22%; padding: 10px;border: 0;display: inline-block; float:left;">' +
-	                '<div style="width: 100%;height: 350px;border: gold 1px solid;border-collapse:collapse;">' +
-	                    '<div style=" width:100%;">' +
-	                            '<p style="padding:10px; height: 80px;">"' + rowData['prompt'] + '</p>' +
-	                    '</div>' +
-	                    '<div id="mainBoxImg_' + rowData['seedId'] + '" style="">' + 
-	                            '<img style="width: 100%;height: 180px;" src="' + imgUrl + '" alt="种子图片">' + 
-	                    '</div>' +
-                        '<div style="padding: 10px;text-align: center;">' +
-                            '<input type="button" value="我要购买" class="buyButton" onclick="purchaseSeed(' + rowData['seedId'] + ",\'" + rowData['seedName'] + '\')">' + 
-                        '</div>'+ 
-	                '</div>' + 
-	            '</div>';
-            return $(main).prop('outerHTML');
+			var imgUrl = '<%=basePath%>/images/crops/' + rowData["seedId"] + '/5.png';
+			var main =	'<div id="mainBox_' + rowData['seedId'] + '" style="width:23%; padding: 5px;margin: 0 auto;display: inline-block; float:left; ">' +
+			                '<div style="width:100%; height: 260px; border: gold 2px outset; border-collapse:collapse;">' +
+			                    '<div style=" width:100%; ">' +
+			                            '<p style="padding:5px; height: 60px; margin:0;">"' + rowData['prompt'] + '</p>' +
+			                    '</div>' +
+			                    '<div id="mainBoxImg_' + rowData['seedId'] + '" style="text-align:center;">' + 
+			                            '<img style="width: 150px;height: 170px; margin-top:20px; " src="' + imgUrl + '" >' + 
+			                    '</div>' +
+			                '</div>' + 
+		                        '<div style="padding: 10px;text-align: center;">' +
+		                            '<input type="button" value="我要购买" class="buyButton" onclick="purchaseSeed(' + rowData['seedId'] + ",\'" + rowData['seedName'] + '\')">' + 
+		                        '</div>'+ 
+			            '</div>';
+		 return $(main).prop('outerHTML');
 		}
 	});
 	
@@ -97,9 +98,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	$(document).ready(function() {
 		$('#seedShopContaineer').dialog({
             title: '种子仓库',
-            iconCls: 'icon-seedPurchase',
-            width: '55%',
-            height: '90%',
+            iconCls: 'icon-seedBag',
+            width: '60%',
+            height: 430,
         });
 		
 	seedShopGrid = $('#seedShopGrid').datagrid({
@@ -111,26 +112,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         remoteSort: false,
         fit: true,
         fitColumns: true,
-        
         pagination:true,
         pagePosition:'bottom',
         pageSize:4,
         pageList:[1,2,3,4],
-        
+        onLoadSuccess: createTipTool,
         columns: [
         	[{field: 'id', title: 'ID', width: 0,	sortable: true,	align: 'center', halign: 'center'}, 
-        	 
         	 {field: 'seedName',title: '种子名称', width: '25%',	sortable: true,	align: 'center', halign: 'center',}, 
         	 {field: 'seedLevel', title: '种子等级', width: '25%', sortable: true, align: 'center', halign: 'center',}, 
         	 {field: 'seedType', title: '种子类型', width: '25%', sortable: true,	align: 'center', halign: 'center' ,
-        		 options: {
-                     required: true,
-                     valueField: 'typeId',
-                     textField: 'typeName',
-                     panelHeight: 'auto',
-                     url:'<%=basePath%>/seed/getAllSeedType'
-                 },
-              
 	             formatter: function(value, row) {
 	     	 		return $.ajax({
 	         		    url: '<%=basePath%>/seed/getSeedType?typeId=' + value,
@@ -139,14 +130,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	     		}
         	 }, 
         	 {field: 'soil', title: '土地类型', width: '25%', sortable: true, align: 'center', halign: 'center',
-        		 options: {
-                	 url:'<%=basePath%>/seed/getAllSoil' ,
-                     required: true,
-                     valueField: 'soilId',
-                     textField: 'soilName',
-                     panelHeight: 'auto'
-             
-                 },
+        		 
                 formatter: function(value, row) {
                 	 		return $.ajax({
                     		    url: '<%=basePath%>/seed/getSoilType?soilId=' + value,
@@ -166,6 +150,78 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         	]]
 	});
 	})
+	
+	
+	function createTipTool(o) {
+        if (o != null) {
+            onLoadSuccessObj = o;
+        }
+        var obj;
+        obj = onLoadSuccessObj;
+        //重现渲染tip-tool
+        var data = obj['rows'];
+        for (let i = 0; i < data.length; i++) {
+            let content = $('<div style="color: black;">')
+                .append('名称：' + data[i]['seedName']).append('<br>')
+                .append('级别：' + data[i]['seedLevel']).append('<br>')
+                .append('价格：' + data[i]['purchasePrice']).append('<br>')
+                .append('类别：' + allSeedType[data[i]['seedType']]).append('<br>')
+                .append('土地：' + allSoil[data[i]['soil']]).append('<br>')
+                .append('可收获季：' + data[i]['season']).append('<br>')
+                .append('成熟时间：' + data[i]['matureTime']).append('<br>')
+                .append('单季收获：' + data[i]['harvest']).append('<br>')
+                .append('经验收获：' + data[i]['experience']).append('<br>')
+                .append('单个果实可获金币：' + data[i]['salePrice']).append('<br>')
+                .append('积分收获：' + data[i]['points']).append('<br>')
+                .append('</div>');
+
+            $('#mainBoxImg_' + data[i]['seedId']).tooltip({
+                title: 'title',
+                trackMouse: true,
+                position: 'right',
+                content: content,
+                onShow: function () {
+                    $(this).tooltip('tip').css({
+                        backgroundColor: 'white',
+                        borderColor: 'gray', 
+                    });
+                }
+            });
+        }
+
+        
+    }
+	
+	function purchaseSeed(seedId, seedName) {
+		console.log(seedId);
+		console.log(seedName)
+		var currUserName = '${user.username}';
+        let message = '请输入您要购买的' + '<span style="color:gold;">' + seedName + '</span>' + '的数量';
+        $.messager.prompt('提示信息', message, function (number) {
+        	var url = '<%=basePath%>/store/buy?seedId=' + seedId + '&num=' + number + '&userName=' + currUserName;
+            //判断是否为正整数类型
+            if (/[1-9]\d*/.test(number)) {
+                request({fuck: "fuckyou"}, 'post', url, false, function (result) {
+                    if (result.code == 0) {
+                    	messageBox('消息', '种子购买成功');
+                        /*更新用户数据*/
+                        updateUserBoxData({
+                            userinfoMoney: result.data['money'],
+                        }, '<%=basePath%>')
+                        updateUserBoxView('<%=basePath%>');
+                        /*刷新页面*/
+                        parent.document.querySelector('#bottom').src = '<%=basePath%>/page/seedBagPage';
+                        parent.document.querySelector('#menu').src = '<%=basePath%>/menu.jsp';
+                        messageBox('消息', '种子购买成功');
+                    } else {
+                        messageBox('消息', '金钱不足');
+                    }
+                });
+            } else {
+                messageBox('消息', '请输入有效数字');
+            }
+        });
+    }
 
 	
 </script>
