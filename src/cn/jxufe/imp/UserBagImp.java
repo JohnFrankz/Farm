@@ -58,7 +58,7 @@ public class UserBagImp implements UserBagService {
         } else {
             userBag.setSeedNum(userBag.getSeedNum() + num);
         }
-
+        userBagDao.save(userBag);
         return MessageUtils.createSuccessMessage("购买成功");
     }
 }

@@ -58,27 +58,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 
 	 var allSoil=["","黄土地","黑土地","红土地","金土地"];
 	 var allSeedType = ["","普通","高级","梦幻"];
-	
-<%-- 	var landTypeList = {};
-    var seedTypeList = {};
-	
-	getRemoteData('<%=basePath%>/seed/getAllSoil', false, function (data) {
-        for (var i = 0; i < data.length; i++) {
-            landTypeList[data[i]['soil']] = data[i]['soilName'];
-        }
-    });
-    getRemoteData('<%=basePath%>/seed/getAllSeedType', false, function (data) {
-        for (var i = 0; i < data.length; i++) {
-            seedTypeList[data[i]['seed']] = data[i]['typeName'];
-        }
-    });
-     --%>
     
 	var cardview = $.extend({}, $.fn.datagrid.defaults.view, {
 		renderRow: function(target, fields, frozen, rowIndex, rowData){
 			var imgUrl = '<%=basePath%>/images/crops/' + rowData["seedId"] + '/5.png';
 			var main =	'<div id="mainBox_' + rowData['seedId'] + '" style="width:23%; padding: 5px;margin: 0 auto;display: inline-block; float:left; ">' +
-			                '<div style="width:100%; height: 260px; border: gold 2px outset; border-collapse:collapse;">' +
+			                '<div style="width:100%; height: 250px; border: 0.2rem outset yellow;  border-radius: 12px;border-collapse:collapse;">' +
 			                    '<div style=" width:100%; ">' +
 			                            '<p style="padding:5px; height: 60px; margin:0;">"' + rowData['prompt'] + '</p>' +
 			                    '</div>' +
@@ -103,7 +88,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             height: 430,
         });
 		
-	seedShopGrid = $('#seedShopGrid').datagrid({
+	seedShopGrid = $('#seedShopGrid').edatagrid({
 		view: cardview,
         singleSelect: 'true',
         url: '<%=basePath%>/seed/data',
@@ -158,7 +143,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         }
         var obj;
         obj = onLoadSuccessObj;
-        //重现渲染tip-tool
         var data = obj['rows'];
         for (let i = 0; i < data.length; i++) {
             let content = $('<div style="color: black;">')
@@ -176,7 +160,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 .append('</div>');
 
             $('#mainBoxImg_' + data[i]['seedId']).tooltip({
-                title: 'title',
                 trackMouse: true,
                 position: 'right',
                 content: content,
@@ -199,20 +182,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         let message = '请输入您要购买的' + '<span style="color:gold;">' + seedName + '</span>' + '的数量';
         $.messager.prompt('提示信息', message, function (number) {
         	var url = '<%=basePath%>/store/buy?seedId=' + seedId + '&num=' + number + '&userName=' + currUserName;
-            //判断是否为正整数类型
-            if (/[1-9]\d*/.test(number)) {
+            if (/^[1-9]\d*/.test(number)) {
                 request({fuck: "fuckyou"}, 'post', url, false, function (result) {
                     if (result.code == 0) {
-                    	messageBox('消息', '种子购买成功');
-                        /*更新用户数据*/
-                        updateUserBoxData({
-                            userinfoMoney: result.data['money'],
-                        }, '<%=basePath%>')
-                        updateUserBoxView('<%=basePath%>');
-                        /*刷新页面*/
-                        parent.document.querySelector('#bottom').src = '<%=basePath%>/page/seedBagPage';
+                        parent.document.querySelector('#bottom').src = '<%=basePath%>/seed.jsp';
                         parent.document.querySelector('#menu').src = '<%=basePath%>/menu.jsp';
-                        messageBox('消息', '种子购买成功');
+                        messageBox('消息', '种子购买成功'); 
                     } else {
                         messageBox('消息', '金钱不足');
                     }

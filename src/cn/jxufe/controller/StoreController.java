@@ -1,14 +1,19 @@
 package cn.jxufe.controller;
 
 import cn.jxufe.bean.Message;
+import cn.jxufe.entity.User;
 import cn.jxufe.entity.UserBag;
 import cn.jxufe.service.UserBagService;
+import cn.jxufe.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 /**
  *  这是一个种子商店的控制器， 用于处理种子商店的相关请求。
@@ -19,6 +24,8 @@ public class StoreController {
 
     @Autowired
     private UserBagService userBagService;
+    @Autowired
+    private UserService userService;
 
     /**
      * 这是一个种子商店的首页
@@ -49,8 +56,11 @@ public class StoreController {
      */
     @RequestMapping("buy")
     @ResponseBody
-    public Message buySeed(String userName, int seedId, int num) {
-        return userBagService.buySeed(userName, seedId, num);
+    public Message buySeed(HttpSession session, String userName, int seedId, int num) {
+    	Message message = userBagService.buySeed(userName, seedId, num);
+    	User user =  userService.findByUsername(userName);
+    	session.setAttribute("user", user);
+        return message;
     }
 
 }

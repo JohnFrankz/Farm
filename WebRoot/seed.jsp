@@ -67,6 +67,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		height:100%;
 		justify-content: center;
 		align-items: center;
+		cursor: pointer;
 	}
 	
 
@@ -113,46 +114,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			
 			var url = '<%=basePath%>/store/userBag?userName=' + userName;
 			console.log(url)
-		    //初始化数据
+			
 		    request({}, 'post',url, true, function (result) {
 		    	console.log(url)
 		    	console.log(result);
-/* 		        if (result.code == 0) {
- */		            /* var data = result.data;
-						console.log(data); */
-						console.log(result.length);
-		            for (let i = 0; i < result.length; i++) {
-		                let seedId = result[i]['seedId'];
+				console.log(result.length);
+		            for (var i = 0; i < result.length; i++) {
+		                var seedId = result[i]['seedId'];
 		                console.log(seedId)
 		                var imgUrl ='../images/crops/' + seedId + '/5.png';
 		                var $seedNum = $('<div class="seedNum" style="">' + result[i]['seedNum'] + '</div>');
-		                var $img = $('<img style="display:block; margin-left: auto;margin-right: auto;width:160px; height:170px;" class="cropImg" data-cropId="' + seedId + '" src="' + imgUrl + '" >');
+		                var $img = $('<img style="display:block; margin-left: auto;margin-right: auto;width:160px; height:170px;" class="seedImg" data-cropId="' + seedId + '" src="' + imgUrl + '" >');
 		                var $seedImgBox = $('<div class="seedImgBox"></div>');
 		                $seedImgBox.append($seedNum);
 		                $seedImgBox.append($img);
 		                $seedBagImg.append($seedImgBox);
 		                
-		            }
-/* 		          }
- */		        
+		            }	        
 		    })
 			
 		    seedBagImg.style.width = (itemWidth + itemMargin) * visibleItems - itemMargin + 'px';
 			
 		    $left.click(function () {
-		        //判断是否存在滚动条
 		        if ($seedBagImg[0].scrollWidth > $seedBagImg[0].clientWidth || $seedBagImg[0].offsetWidth > $seedBagImg[0].clientWidth) {
-		            //滚动条左移
-		            let width = $('.cropImg').outerWidth() * visibleItems;
+		            var width = $('.seedImg').outerWidth();
 		            $seedBagImg.animate({scrollLeft: '-=' + width});
 		        }
 
 		    });
 		    $right.click(function () {
-		        // 判断是否存在滚动条
 		        if ($seedBagImg[0].scrollWidth > $seedBagImg[0].clientWidth || $seedBagImg[0].offsetWidth > $seedBagImg[0].clientWidth) {
-		            //滚动条右移
-		            let width = $('.cropImg').outerWidth() * visibleItems;
+		            var width = $('.seedImg').outerWidth();
 		            $seedBagImg.animate({scrollLeft: '+=' + width});
 		        }
 		    });

@@ -65,7 +65,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <script>
 
-	$("body").css("height",$(window).height()); 
+		window.onload = function() {
+			var frameset = parent.document.getElementsByTagName('frameset')[0];
+		     frameset.rows = '60,*,50';
+		    parent.document.querySelector('#bottom').src = '<%=basePath%>/tools.jsp';
+		    $("body").css("height",$(window).height());
+		}
 	
 	function submitForm(){
     	var id=$("#selectUserCombobox").combobox("getValue");

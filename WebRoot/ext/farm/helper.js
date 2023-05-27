@@ -21,7 +21,6 @@ function messageBox(title, msg) {
 }
 
 function request(object,method,methodURL, async, successFunction){	
-	console.log("yes, is me")
 	$.ajax({
         cache: true,
         type: method,
