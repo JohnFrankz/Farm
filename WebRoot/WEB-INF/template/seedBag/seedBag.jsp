@@ -68,7 +68,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			                            '<p style="padding:5px; height: 60px; margin:0;">"' + rowData['prompt'] + '</p>' +
 			                    '</div>' +
 			                    '<div id="mainBoxImg_' + rowData['seedId'] + '" style="text-align:center;">' + 
-			                            '<img style="width: 150px;height: 170px; margin-top:20px; " src="' + imgUrl + '" >' + 
+			                            '<img style="width: 150px;height: 170px; margin-top:10px; " src="' + imgUrl + '" >' + 
 			                    '</div>' +
 			                '</div>' + 
 		                        '<div style="padding: 10px;text-align: center;">' +
@@ -103,7 +103,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         pageList:[1,2,3,4],
         onLoadSuccess: createTipTool,
         columns: [
-        	[{field: 'id', title: 'ID', width: 0,	sortable: true,	align: 'center', halign: 'center'}, 
+        	[{field: 'id', title: 'ID', width: 0, hidden: true, sortable: true,	align: 'center', halign: 'center'}, 
         	 {field: 'seedName',title: '种子名称', width: '25%',	sortable: true,	align: 'center', halign: 'center',}, 
         	 {field: 'seedLevel', title: '种子等级', width: '25%', sortable: true, align: 'center', halign: 'center',}, 
         	 {field: 'seedType', title: '种子类型', width: '25%', sortable: true,	align: 'center', halign: 'center' ,
