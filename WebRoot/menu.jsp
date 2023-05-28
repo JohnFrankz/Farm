@@ -69,7 +69,7 @@
 		<a href="seed/grid" target="workspace"><img class="menu shadow" src="images/seedManager.png" width="50px"></a>
 		<a href="user/loginPage" target="workspace"><img class="menu shadow" src="images/farmer.png" width="50px"></a>
 		<a href="store/index" target="workspace"><img class="menu shadow" src="images/shop.png" width="50px"></a>
-		<a href="seed/grid" target="workspace"><img class="menu shadow" src="images/a.png" width="50px"></a>
+		<a href="user/grid" target="workspace"><img class="menu shadow" src="images/a.png" width="50px"></a>
 		<a href="seed/grid" target="workspace"><img class="menu shadow" src="images/seedManager.png" width="50px"></a>
 	<div>
 </body>

@@ -5,9 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-<<<<<<< HEAD
-import java.util.List;
-
 /**
  * 用于操作用户的Dao层
  */
