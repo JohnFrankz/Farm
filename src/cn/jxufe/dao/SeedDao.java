@@ -17,4 +17,6 @@ public interface SeedDao extends JpaRepository<Seed, Long> {
 	 * @return 返回种子
 	 */
 	Page<Seed> findBySeedNameContaining(String seedName, Pageable pageable);
+	
+	Seed findBySeedId(int seedId);
 }

@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
    <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+   <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
    
    <%
 	String path = request.getContextPath();
@@ -58,7 +59,7 @@
 				
 				<div id="asset">
 					<span style="padding-left:10px;">经验：<c:if test = "${user.id == null}">0</c:if>${user.experience}</span>
-					<span style="color:yellow;">金币: <c:if test = "${user.id == null}">0</c:if> ${user.money}</span>
+					<span style="color:yellow;">金币: <c:if test = "${user.id == null}">0</c:if><fmt:formatNumber value="${user.money}" pattern="###" /> </span>
 					<span style="color:pink;">积分：<c:if test = "${user.id == null}">0</c:if>${user.points}</span> 
 				</div>
 			</div>
@@ -67,8 +68,8 @@
 	<div style="float:right;" width="50%">
 		<a href="seed/grid" target="workspace"><img class="menu shadow" src="images/seedManager.png" width="50px"></a>
 		<a href="user/loginPage" target="workspace"><img class="menu shadow" src="images/farmer.png" width="50px"></a>
-		<a href="seed/grid" target="workspace"><img class="menu shadow" src="images/shop.png" width="50px"></a>
-		<a href="user/grid" target="workspace"><img class="menu shadow" src="images/a.png" width="50px"></a>
+		<a href="store/index" target="workspace"><img class="menu shadow" src="images/shop.png" width="50px"></a>
+		<a href="seed/grid" target="workspace"><img class="menu shadow" src="images/a.png" width="50px"></a>
 		<a href="seed/grid" target="workspace"><img class="menu shadow" src="images/seedManager.png" width="50px"></a>
 	<div>
 </body>

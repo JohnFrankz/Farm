@@ -17,6 +17,8 @@ public interface UserService{
      * @return 返回用户
      */
     User findById(Long id);
+    
+    User findByUsername(String username);
 
     /**
      * 查询所有用户

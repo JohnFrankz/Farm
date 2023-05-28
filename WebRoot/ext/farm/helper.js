@@ -13,7 +13,14 @@ function fromCode2Caption(code, arrayList) {
 	return "";
 }
 
-function request(object,method,methodURL,successFunction){	
+function messageBox(title, msg) {
+    $.messager.show({
+        title: title,
+        msg: msg
+    });
+}
+
+function request(object,method,methodURL, async, successFunction){	
 	$.ajax({
         cache: true,
         type: method,
@@ -24,6 +31,7 @@ function request(object,method,methodURL,successFunction){
         error: function(XMLHttpRequest, textStatus, errorThrown) {
         	 alert(XMLHttpRequest.status+"\r\n"+XMLHttpRequest.readyState+"\r\n"+textStatus);
         },
+        async: async,
         success: successFunction
     });			
  } 

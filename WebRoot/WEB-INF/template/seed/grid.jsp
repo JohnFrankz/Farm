@@ -222,7 +222,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
 	<script>
 	
-	 $("body").css("height",$(window).height());
+
+	window.onload = function() {
+		var frameset = parent.document.getElementsByTagName('frameset')[0];
+	     frameset.rows = '60,*,50';
+	    parent.document.querySelector('#bottom').src = '<%=basePath%>/tools.jsp';
+	    $("body").css("height",$(window).height());
+	}
+	
 		var params ={
 				id:'',
 				mode:'insert'
@@ -233,7 +240,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			seedManageGrid = $('#seedManage').edatagrid({
 				title: '种子清单',
 				width:'100%',
-				height:800,
+				height:560,
 				method:'post',
 				url:'<%=basePath%>/seed/data',
 				saveUrl: '<%=basePath%>/seed/save',
@@ -391,7 +398,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 		 					return Number(value) + '分';
 	 		 				} 	 
                 	 }, 
-                	 {field: 'prompt',	title: '提示信息', width: 30,	sortable: true,	align: 'center', halign: 'center',
+                	 {field: 'prompt',	title: '提示信息', width: 40,	sortable: true,	align: 'center', halign: 'center',
                 		 editor: {
                              type: 'textbox',
                              options: {

@@ -147,4 +147,9 @@ public class UserImp implements UserService {
         }
         return message;
     }
+
+	@Override
+	public User findByUsername(String username) {
+		return userDao.findByUsername(username);
+	}
 }
