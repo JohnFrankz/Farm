@@ -7,7 +7,17 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * 处理文件操作相关的工具类
+ */
 public class FileUtils {
+    /**
+     * 处理文件上传，如果上传成功返回message(0, "上传成功")，否则返回message(1, "上传失败")
+     * @param file 上传的文件
+     * @param request 请求对象
+     * @return 上传结果
+     * @throws IOException
+     */
     public static Message avatarUpload(MultipartFile file, HttpServletRequest request) {
         Message message = new Message();
         if (file.isEmpty()) {

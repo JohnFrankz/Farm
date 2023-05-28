@@ -5,20 +5,35 @@ import cn.jxufe.bean.EntityID;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ * 用户实体类
+ */
 @Entity
 @Table(name = "T_User")
 public class User extends EntityID {
-    // 用户名
+    /**
+     * 用户名
+     */
     private String username;
-    // 昵称
+    /**
+     * 昵称
+     */
     private String nickname;
-    // 用户经验
+    /**
+     * 用户拥有的经验
+     */
     private int experience;
-    // 积分
+    /**
+     * 用户已获得的积分
+     */
     private int points;
-    // 金币
+    /**
+     * 用户拥有的金钱
+     */
     private float money;
-    // 头像
+    /**
+     * 用户头像
+     */
     private String avatar;
 
     public String getUsername() {

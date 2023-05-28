@@ -5,29 +5,51 @@ import cn.jxufe.bean.EntityID;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ * 种子生长阶段实体类
+ */
 @Entity
 @Table(name = "T_SeedGrowthStage")
 public class SeedGrowthStage extends EntityID {
+    /**
+     * 种子id
+     */
     private int seedId;
-
-    // 种子生长阶段
+    /**
+     * 生长阶段id
+     */
     private int growthStage;
-
-    // 生长阶段标题
+    /**
+     * 生长阶段名称
+     */
     private String growthName;
-
-    // 阶段生长时间
+    /**
+     * 生长阶段所需时间
+     */
     private int growthTime;
-
-    // 害虫概率
+    /**
+     * 生长阶段虫害概率
+     */
     private float pestProbability;
-
+    /**
+     * 生长阶段图片宽度
+     */
     private int width;
+    /**
+     * 生长阶段图片高度
+     */
     private int height;
+    /**
+     * 生长阶段图片x坐标
+     */
     private int x;
+    /**
+     * 生长阶段图片y坐标
+     */
     private int y;
-
-    // 作物状态
+    /**
+     * 作物状态
+     */
     private int state;
 
     public int getSeedId() {

@@ -12,22 +12,39 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * 关于用户的服务层实现类
+ */
 @Service
 public class UserImp implements UserService {
 
     @Autowired
     private UserDao userDao;
 
+    /**
+     * 根据用户id查询用户
+     * @param id 用户id
+     * @return 返回用户
+     */
     @Override
     public User findById(Long id) {
         return userDao.findOne(id);
     }
 
+    /**
+     * 查询所有用户
+     * @return 返回所有用户
+     */
     @Override
     public List<User> findAllUser() {
         return userDao.findAll();
     }
 
+    /**
+     * 用户登录, 根据用户id查询用户, 如果用户存在则登录成功, 否则登录失败
+     * @param id 用户id
+     * @return 返回登录结果
+     */
     @Override
     public Message login(Long id) {
         Message message = new Message();
@@ -42,6 +59,11 @@ public class UserImp implements UserService {
         return message;
     }
     
+    /**
+     * 查询所有用户
+     * @param pageable 分页参数
+     * @return 返回分页后的用户数据以EasyUIData的形式封装
+     */
     @Override
     public EasyUIData<User> findAll(Pageable pageable) {
         Page<User> page = userDao.findAll(pageable);
@@ -51,6 +73,12 @@ public class UserImp implements UserService {
         return easyUIData;
     }
 
+    /**
+     * 根据用户名查询用户
+     * @param username 用户名
+     * @param pageable 分页参数
+     * @return 返回分页后的用户数据以EasyUIData的形式封装
+     */
     @Override
     public EasyUIData<User> findUser(String username, Pageable pageable) {
         Page<User> page = userDao.findByUsernameContaining(username, pageable);
@@ -60,6 +88,11 @@ public class UserImp implements UserService {
         return easyUIData;
     }
 
+    /**
+     * 保存用户的修改或新增用户
+     * @param user 用户
+     * @return 返回保存结果
+     */
     @Override
     public Message save(User user) {
         Message message = new Message();
@@ -74,6 +107,11 @@ public class UserImp implements UserService {
         return message;
     }
 
+    /**
+     * 删除用户
+     * @param id 需要删除的用户的id
+     * @return 返回删除结果
+     */
     @Override
     public Message delete(Long id) {
         Message message = new Message();
@@ -88,6 +126,12 @@ public class UserImp implements UserService {
         return message;
     }
 
+    /**
+     * 更新用户头像
+     * @param id 用户id
+     * @param avatar 用户头像
+     * @return 返回更新结果
+     */
     @Override
     public Message updateAvatar(Long id, String avatar) {
     	Message message = new Message();

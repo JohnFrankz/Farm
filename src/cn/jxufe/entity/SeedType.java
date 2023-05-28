@@ -5,10 +5,19 @@ import cn.jxufe.bean.EntityID;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ * 种子类型实体类
+ */
 @Entity
 @Table(name = "T_SeedType")
 public class SeedType extends EntityID {
+    /**
+     * 种子类型id
+     */
     private int typeId;
+    /**
+     * 种子类型名称
+     */
     private String typeName;
 
     @Override

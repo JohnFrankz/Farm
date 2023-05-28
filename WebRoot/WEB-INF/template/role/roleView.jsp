@@ -50,6 +50,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script>
         $("body").css("height",$(window).height()); 
         
+        var rowData = {};
+        var isInsertNewRow = false;
         var grid;
         var params = {
                 id: '',
@@ -101,12 +103,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         editor:{
                         	type:'validatebox',
                         	options:{
-                        		required:true
+                        		
                         		}
                         },
                         formatter: function(value,row) {
-                            if (value == null)
-                                value = "none.jpg";
+                            if (value == null || value == "")
+                                value = "default.png";
                             return '<div style="height:80px;">' + 
                             		'<img src="<%=basePath%>/avatar/' + value + 
                             		'"style="height:60px;margin-top:10px;width:100%"></div>';
@@ -217,7 +219,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     grid.edatagrid('reload')
                 },
                 onClickRow: function(index, field, value) {
-                     console.log("index:"+index +'field:'+field +'id:' + field.id);
                      params.index = index;
                      params.row = field;
                 },
@@ -274,44 +275,83 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         }
         
         function upload(){
+        	isInsertNewRow = false;
+        	var selectRow = $('#grid').edatagrid('getSelected');
+        	if (selectRow != null && selectRow.isNewRecord) {
+        		isInsertNewRow = true;
+        		var allRow = $('#grid').edatagrid('getRows');
+        		var newRowIndex = allRow.length - 1;
+				var editors = $('#grid').edatagrid('getEditors', newRowIndex);
+				for (var i = 0; i < editors.length; i++) {
+				  	var field = editors[i].field;
+				  	var value = editors[i].target.val();
+				  	rowData[field] = value;
+				}
+        	}
         	$("#formFileContainer").dialog('open');
         }
         
         function savedata()
         {
-        	$("#grid").edatagrid('saveRow');
+        	var rows = $('#grid').edatagrid('getRows'); // 获取所有行数据
+        	for (var i = 0; i < rows.length; i++) {
+        	    $('#grid').edatagrid('endEdit', i); // 结束编辑状态，确保新增的行也会被保存
+        	}
+        	if (isInsertNewRow) {
+        		var rowIndex = $('#grid').edatagrid('getRowIndex', rows[rows.length - 1]); // 获取最后一行（新增行）的索引
+        	  	$('#grid').edatagrid('saveRow', rowIndex); 
+        	  	$.ajax({
+        	  	    url: '<%=basePath%>user/save',
+        	  	    type: 'POST',
+        	  	    data: rowData,
+        	  	    success: function(response) {
+        	  	      // 处理保存成功的逻辑
+        	  	    },
+        	  	    error: function() {
+        	  	      // 处理保存失败的逻辑
+        	  	    }
+        	  	  });
+        	} else {
+        		$('#grid').edatagrid('saveRow');
+        	}
         }
         
         function submitUploadForm() {
              var fileName = "";
              fileName = $('#file').textbox('getText');
-             alert(fileName);
-             
+            
             $('#formUploadFile').form('submit', {
             url: '<%=basePath%>file/avatarUpload',
 			type: 'post',  
-            onSubmit: function() {},
+			onSubmit: function (param) {
+	            return $(this).form('validate');
+	        },
             success: function(data) {
-            	console.log(data);
             	var result = eval('(' + data + ')'); //变成js对象
-              	console.log(result.msg); 
-              	console.log(fileName);
+                var row = $('#grid').edatagrid('getSelected');
               	if(result.code==0){           		
+              		if (isInsertNewRow) {
+              			row = rowData;
+              			for (var i = 0; i < row.length; i++) {
+              			    $('#grid').datagrid('endEdit', i); // 结束编辑以确保数据同步
+              			    var index = $('#grid').datagrid('getRowIndex', row[i]);
+              			    $('#grid').datagrid('beginEdit', index); // 开始编辑以标记为已修改
+              			 }
+              		}
+              		row.avatar = fileName;
               		$("#grid").edatagrid("updateRow",{//更新字段
   						index:params.index, //行索引
-  						row:{
-  							avatar:fileName//行中的头像字段
-	  						}
-	  					});             		
+  						row: row
+	  				}); 		
 		             $.messager.show({
 		                  title: "消息",
 		                  msg: "上传成功"
 		              });
 		             $.ajax({
-	            			url : "<%=basePath%>user/updateAvatar",
-	            			type : "post",
-	            			async : false,
-	            			data : {id:params.row.id,avatar:fileName}
+	            			url: "<%=basePath%>user/updateAvatar",
+	            			type: "post",
+	            			async: false,
+	            			data: {id:params.row.id,avatar:fileName}
 	            		});
               		$("#grid").datagrid("beginEdit",params.index);
               		$.parser.parse($('.c3').parent());

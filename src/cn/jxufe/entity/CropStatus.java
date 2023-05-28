@@ -5,10 +5,20 @@ import cn.jxufe.bean.EntityID;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ * 作物状态实体类
+ */
 @Entity
 @Table(name = "T_CropStatus")
 public class CropStatus extends EntityID {
+    /**
+     * 作物状态id
+     */
     private int statusId;
+
+    /**
+     * 作物状态名称
+     */
     private String statusName;
 
     @Override
