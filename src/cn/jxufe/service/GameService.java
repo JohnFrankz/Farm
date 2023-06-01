@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface GameService {
     List<FarmLandStatus> getLandStatus(String username);
+
+    void gameStart();
 }

@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface FarmLandStatusDao extends JpaRepository<FarmLandStatus, Long> {
     List<FarmLandStatus> findByUsername(String username);
+
+    List<FarmLandStatus> findByIsCropAndCropStatusLessThan(int isCrop, int cropStatus);
 }
