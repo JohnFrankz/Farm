@@ -6,14 +6,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.util.ArrayList;
 
 public class FarmWebsocketHandler extends TextWebSocketHandler {
-    public ArrayList<WebSocketSession> sessions = new ArrayList<>();
-    private Logger logger = LoggerFactory.getLogger(WebSocketSession.class);
+    public static final ArrayList<WebSocketSession> sessions = new ArrayList<>();
+    private static final Logger logger = LoggerFactory.getLogger(WebSocketHandler.class);
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
@@ -30,7 +31,7 @@ public class FarmWebsocketHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         sessions.add(session);
         User user = (User) session.getHandshakeAttributes().get(GameConfig.__DEFAULT_USER_NAME_SESSION);
-        logger.info("用户: " + "已连接");
+        logger.info("用户: " + user.getUsername() + "已连接");
     }
 
     /**
@@ -92,6 +93,7 @@ public class FarmWebsocketHandler extends TextWebSocketHandler {
             if (user != null && user.getUsername().equals(username)) {
                 try {
                     session.sendMessage(message);
+                    logger.debug("发送消息给用户: " + username + "，消息内容: " + message.getPayload());
                 } catch (Exception e) {
                     logger.error("发送消息出错", e);
                 }

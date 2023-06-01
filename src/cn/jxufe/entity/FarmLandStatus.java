@@ -24,6 +24,8 @@ public class FarmLandStatus extends EntityID {
     private int cropId;
     /** 作物状态 */
     private int cropStatus;
+    /** 该作物状态下已经生长的时间 */
+    private int currentStateHasGrownTime;
     /** 当前状态已经生长的时间 */
     private Date stateEndTime;
     /** 是否生虫 */
@@ -44,6 +46,7 @@ public class FarmLandStatus extends EntityID {
                 ", isCrop=" + isCrop +
                 ", cropId=" + cropId +
                 ", cropStatus=" + cropStatus +
+                ", currentStateHasGrownTime=" + currentStateHasGrownTime +
                 ", stateEndTime=" + stateEndTime +
                 ", isInsect=" + isInsect +
                 ", isWithered=" + isWithered +
@@ -98,6 +101,14 @@ public class FarmLandStatus extends EntityID {
 
     public void setCropStatus(int cropStatus) {
         this.cropStatus = cropStatus;
+    }
+
+    public int getCurrentStateHasGrownTime() {
+        return currentStateHasGrownTime;
+    }
+
+    public void setCurrentStateHasGrownTime(int currentStateHasGrownTime) {
+        this.currentStateHasGrownTime = currentStateHasGrownTime;
     }
 
     public Date getStateEndTime() {
