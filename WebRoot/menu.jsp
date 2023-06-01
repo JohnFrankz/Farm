@@ -66,7 +66,7 @@
 	</div> 
 
 	<div style="float:right;" width="50%">
-		<a href="seed/grid" target="workspace"><img class="menu shadow" src="images/seedManager.png" width="50px"></a>
+		<a href="game/index" target="workspace"><img class="menu shadow" src="images/plant.ico" width="50px"></a>
 		<a href="user/loginPage" target="workspace"><img class="menu shadow" src="images/farmer.png" width="50px"></a>
 		<a href="store/index" target="workspace"><img class="menu shadow" src="images/shop.png" width="50px"></a>
 		<a href="user/grid" target="workspace"><img class="menu shadow" src="images/a.png" width="50px"></a>

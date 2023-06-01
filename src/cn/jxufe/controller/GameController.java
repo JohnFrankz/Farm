@@ -21,7 +21,7 @@ public class GameController {
 
     @RequestMapping("/index")
     public String index() {
-        return "game";
+        return "cropsGrow/grid";
     }
 
     @RequestMapping("/landStatus")

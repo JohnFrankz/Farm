@@ -24,7 +24,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script type="text/javascript" src="<%=basePath%>ext/farm/helper.js"></script>
     <script type="text/javascript" src="<%=basePath%>ext/farm/imgPosition.js"></script>
 </head>
+
+<style>
+	body{
+		background:url(../images/farmSpace.jpg);
+		background-size:100% 100%;
+    	background-repeat:no-repeat;
+	}
+</style>
 <body>
 
 </body>
+
+<script>
+window.onload = function() {
+	var frameset = parent.document.getElementsByTagName('frameset')[0];
+	     frameset.rows = '60,*,50';
+	    parent.document.querySelector('#bottom').src = '<%=basePath%>/tools.jsp';
+	    $("body").css("height",$(window).height());
+	}
+</script>
 </html>
