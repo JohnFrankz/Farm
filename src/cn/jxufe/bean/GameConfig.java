@@ -52,4 +52,7 @@ public class GameConfig {
     public static final int __CLEAN_DEAD_LEAVES_ADD_EXP = 5;
     /** 清除枯草增加的积分 */
     public static final int __CLEAN_DEAD_LEAVES_ADD_POINTS = 5;
+
+    /** 土地的数量 */
+    public static final int __LAND_AMOUNT = 24;
 }
