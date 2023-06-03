@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.socket.TextMessage;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 @Service
 public class GameImp implements GameService {
@@ -33,9 +30,47 @@ public class GameImp implements GameService {
     @Autowired
     private UserDao userDao;
 
+    /**
+     * 获取土地状态列表。
+     * 返回指定用户的土地状态列表，固定为24个土地，根据索引补全缺失的土地。
+     * 如果数据库中查出的土地状态不足24个，则根据土地索引补全数据，并保存到数据库中。
+     *
+     * @param username 用户名
+     * @return 土地状态列表，固定为24个土地
+     */
     @Override
     public List<FarmLandStatus> getLandStatus(String username) {
-        return farmLandStatusDao.findByUsername(username);
+        List<FarmLandStatus> landStatusList = farmLandStatusDao.findByUsername(username);
+        List<FarmLandStatus> completeLandStatusList = new ArrayList<>(GameConfig.__LAND_AMOUNT);
+        Map<Integer, FarmLandStatus> existingIndices = new HashMap<>();
+        List<FarmLandStatus> newLandStatusList = new ArrayList<>();
+
+        if (landStatusList.size() == GameConfig.__LAND_AMOUNT) {
+            return landStatusList;
+        }
+
+        for (FarmLandStatus landStatus : landStatusList) {
+            existingIndices.put(landStatus.getLandIndex(), landStatus);
+        }
+        for (int i = 0; i < GameConfig.__LAND_AMOUNT; i++) {
+            if (existingIndices.containsKey(i)) {
+                completeLandStatusList.add(existingIndices.get(i));
+            } else {
+                FarmLandStatus landStatus = new FarmLandStatus();
+                landStatus.setUsername(username);
+                landStatus.setLandIndex(i);
+                landStatus.setLandType(i / GameConfig.__AMOUNT_OF_EACH_LAND_TYPE + 1);
+                landStatus.setIsCrop(GameConfig.__LAND_UNPLANTED_CODE);
+                completeLandStatusList.add(landStatus);
+                newLandStatusList.add(landStatus);
+            }
+        }
+
+        if (!newLandStatusList.isEmpty()) {
+            farmLandStatusDao.save(newLandStatusList);
+        }
+
+        return completeLandStatusList;
     }
 
     @Override
