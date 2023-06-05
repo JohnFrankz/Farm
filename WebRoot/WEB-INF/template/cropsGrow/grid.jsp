@@ -68,11 +68,69 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             position: absolute;
             clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
         }
+        
+        #seedBagContaineer{
+		width: max-content;
+		height:100%;
+		margin-left: auto;
+		margin-right: auto; 
+		display:flex; 
+		
+	}
+	
+	#seedBagImg{
+		display:flex;
+		overflow-x: hidden;
+        overflow-y: hidden;
+		/* width:1010px;
+		margin-left: auto;
+		margin-right: auto; */
+	}
+	
+	.seedNum{
+		width:30px;
+		color:#FFFFFF;
+		background-color:red;
+		border-radius:250px;
+		text-align:center;
+		margin-left: auto;
+		margin-right: auto;
+		margin-bottom:10px;
+		margin-top:10px;
+	}
+	
+	.seedImgBox{
+		flex: 0 0 200px;
+		height:100%;
+		margin-right: 10px;
+		/* padding:0 20px; 
+		float:left;
+		flex-direction:column;
+		justify-content:center; */
+	}
+	
+	.arrow{
+		display:flex; 
+		width:40px;
+		height:100%;
+		justify-content: center;
+		align-items: center;
+		cursor: pointer;
+	}
+        
 </style>
 <body>
 	<div id="containeer">
 	    <div id="land"></div>
-	    <div id="seedBag"></div>
+	    	<div id="seedBagContaineer">
+		    	<div id="left" class="arrow">
+		    		<img src="../images/left.png">
+		    	</div>
+		    	<div id="seedBagImg" style=""></div>
+		    	<div id="right" class="arrow">
+		    		<img src="../images/left.png" style="transform: rotate(180deg);">
+		    	</div>
+    		</div>
 	</div>
 </body>
 
@@ -82,7 +140,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    frameset.rows = '60,*,50';
 	    parent.document.querySelector('#bottom').src = '<%=basePath%>/tools.jsp';
 	    $("body").css("height",$(window).height());
+	};
+	
+	class Land {
+	    i;//前端土地标识
+	    j;//前端土地标识
+
+	    cropId;
+	    cropStatus
+	    currentStateHasGrownTime;
+	    isCrop;
+	    isInsect;
+	    isMature;
+	    isWithered;
+	    landIndex;
+	    landType;
+	    output;
+	    stateEndTime;
+	    username;
 	}
+	
+	
+	var landIndex;
+	var landMap = new Map()
 	
 	var landWidth = 120;
 	var landHeight = 60;
@@ -91,44 +171,147 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	var paddingY = 55;
 	
 	$(function () {
-		$('#seedBag').dialog({
-	        title: '种子收纳袋',
-	        width: '900',
-	        height: 240,
-	        inline: true,
-	        modal: true,
-	        closed: 'true',
-	    });
+		
+		initWebSocket();
 		
 		var num = 0;
 		var $land = $('#land');
+		
 		
 		var url = '<%=basePath%>/game/landStatus';
 		 request({}, 'post', url, false, function (result) {
 			 console.log(result);
 			 for (var i = 0; i<4; i++){
 				 for (var j = 0; j<6; j++, num++){
+					 var currLand = result[num];
+					 $land.append(landButton(i,j,currLand));
+					 $land.append(addLandImg(i,j,currLand));
+					 addSeedData(i,j, currLand);
+					 /* if (currLand.isCrop == 0) {
+						 continue;
+					 }  */
+					 
+					 <%-- var url2 = '<%=basePath%>/growth/gridData?seedId=' + currLand.seedId;
+					 request({}, 'post', url2, false, function (result2) {
+						 console.log(result2);
+						 
+					 }); --%>
 					 
 					 
-					 console.log(result[num].landType)
-					 $land.append(landButton(i,j,result));
-					 $land.append(addLandImg(i,j,result,num));
+					 if(currLand.isCrop == 1){
+						 $land.append(initCropImg(i,j,currLand));
+					 }
+					 
+					 
+					
 					 
 				 }
 			 }
 		 })
+		 
+		 
+		 
+		 $(document).on('click', '.clickBox', function () {
+			 /* console.log(landMap); */
+			 console.log(this.getAttribute('data-landIndex'))
+		     var land = landMap.get(parseInt(this.getAttribute('data-landIndex')));
+			 	console.log(land);
+		        console.log(land.landIndex)
+		        //土地没有作物
+		        if (land.isCrop == 0) {
+		            plantCrop(land);
+		        } else {
+		            //作物生虫
+		            if (land.isInsect == 1) {
+		                killWorm(land.landId);
+		            } else {
+		                if (land.isMature == 1) {
+		                    //作物成熟
+		                    harvest(land.landId);
+		                } else if (land.isWithered == 1) {
+		                    //作物枯萎
+		                    cleanGrass(land.landId);
+		                }
+		            }
+		        }
+		    });
+		 
+		$(document).on('click','.seedImg', function(){
+			
+			var seedBagLandIndex =parseInt(landIndex);
+			console.log(seedBagLandIndex)
+			var seedId = this.getAttribute('data-cropId');
+			console.log(seedId)
+			var url = '<%=basePath%>/game/plant?landIndex=' + seedBagLandIndex + '&seedId=' + seedId;
+			request({},'post',url,true,function(result){
+				if(result.code == 0){
+					console.log(result);
+					console.log(seedBagLandIndex);
+					
+					updateData(seedBagLandIndex);
+					messageBox('消息',result.msg);
+					
+	                $('#seedBagContaineer').dialog('close');
+
+				}
+				else{
+					messageBox('消息',result.msg);
+				}
+				
+			})
+		})
+		
+		initTip();
 	})
 	
-	
-	
-	
-	function addLandImg(i,j,result,num){
-		/* let url = basePath + '/images/land/' + result.landType + '.png' */
-		var url = '../images/land.png'
+	function initWebSocket(){
+		let Websocket = new WebSocket("ws://127.0.0.1:8080/farm/action");
 
-	    //根据land的landTypeCode生成相应的土地类型
-	    var $landImg = $('<img  class="land" id="land_' + result[num].landType + '" src="' + url + '" alt="土地">');
-		$landImg.css({
+		Websocket.onopen = function(e) {
+		  console.log("[open] Connection established");
+		  console.log("Sending to server");
+		  socket.send("My name is John");
+		};
+
+		Websocket.onmessage = function(event) {
+			/* console.log(`[message] Data received from server: ${event.data}`); */
+			/* console.log(event); */
+			console.log(event)
+			var dataMessage = event.data;
+			dataMessage = dataMessage.substring(16);
+			console.log(event.data);
+			console.log(dataMessage);
+			var socketMessag = JSON.parse(event.data);
+			
+			console.log(typeof socketMessag);
+			console.log(socketMessag);
+			console.log("hahahah   " + event.data); 
+			
+			
+		};
+
+		Websocket.onclose = function(event) {
+		  if (event.wasClean) {
+			  console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+		  } else {
+		    // 例如服务器进程被杀死或网络中断
+		    // 在这种情况下，event.code 通常为 1006
+		    console.log('[close] Connection died');
+		  }
+		};
+
+		Websocket.onerror = function(error) {
+			console.log("[error]", error.message);
+		};
+	}
+	
+	
+	
+	
+	function addLandImg(i,j,currLand){
+		var landImgUrl = '../images/land/' + currLand.landType + '.png'
+	   	var $landImg = $('<img data-landType="' + currLand.landType + '" class="land" id="land_' + currLand.landIndex + '" src="' + landImgUrl + '" alt="土地">');
+   		$landImg.css({
 	        width: landWidth + 'px',
 	        height: landHeight + 'px',
 	        left: adjustX(i, j) + 'px',
@@ -138,8 +321,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		return $landImg;
 	}
 	
-	function landButton(i, j, result) {
-	    var $landButton = $('<div class="clickBox" id="clickBox_' + result.landId + '">');
+	function landButton(i, j, currLand) {
+	    var $landButton = $('<div data-landType="' + currLand.landType + '" data-landIndex="' + currLand.landIndex + '" class="clickBox" id="clickBox_' + currLand.landIndex + '">');
 	    $landButton.css({
 	        width: landWidth + 'px',
 	        height: landHeight + 'px',
@@ -151,6 +334,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    return $landButton;
 	}
 	
+	function addSeedData(i, j, result) {
+	    let land = new Land();
+	    land.i = i;
+	    land.j = j;
+
+	    land.landIndex = result.landIndex;
+	    /* console.log(land.landIndex); */
+	    
+
+	    land.stateEndTime = result.stateEndTime;
+	    land.isInsect = result.isInsect;
+	    land.output = result.output;
+	    land.isMature = result.isMature;
+	    
+	    land.cropStatus = result.cropStatus;
+	    land.isCrop = result.isCrop;
+	    land.isWithered = result.isWithered;
+	   
+	    land.currentStateHasGrownTime = result.currentStateHasGrownTime;
+
+	    land.cropId = result.cropId;
+	    land.landType = result.landType;
+		land.username = result.username;
+		
+		/* console.log(land); */
+
+	    landMap.set(land.landIndex, land);
+	    /* console.log(landMap); */
+	}
+	
+	
 	function adjustX(i, j) {
 	    return (j * (landWidth + paddingX));
 	}
@@ -158,6 +372,190 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function adjustY(i, j) {
 	    return (i * (landHeight + paddingY));
 	}
+	
+	
+	function initCropImg(i,j,currLand){
+		if (currLand.cropStatus == 6 || currLand.cropStatus == 0) {
+	        //枯草期或者种子阶段
+	        url = '../images/crops/basic/' + currLand.cropStatus + '.png';
+	    } else {
+	        //正常生长阶段
+	        url = '../images/crops/' + currLand.cropId + '/' + currLand.cropStatus + '.png';
+	    }
+		
+		var $crop = $('<img data-cropId="' + currLand.cropId + '" data-nowCropGrowStage="' + currLand.cropStatus+ '" class="crop" id="crop_' + currLand.landIndex+ '" src="' + url + '" >');
+	
+	    /* if (cropGrow != null) {
+	        picOffsetX = cropGrow['picOffsetX'];
+	        picOffsetY = cropGrow['picOffsetY'];
+	        picWidth = cropGrow['picWidth'];
+	        picHeight = cropGrow['picHeight'];
+	    } */
+
+	    $crop.css({
+	        width: 80 + 'px',
+	        height: 80 + 'px',
+	        left: adjustX(i, j) + 20  + 'px', 
+	        top: adjustY(i, j) + -15+ 'px', 
+	        zIndex: 10
+	    });
+	    
+	    return $crop;
+	}
+	
+	$('#seedBagContaineer').dialog({
+        title: '种子收纳袋',
+        width: '930',
+        height: 260,
+        closed: 'true',
+        modal: true,
+    });
+	
+	function plantCrop(land) {
+		
+		
+		landIndex = land.landIndex;
+		/* var landType = land.landType;
+		console.log("landtypd = " + landType) */
+	    /*
+	    soundPlantCrop.play(); */
+	   
+	    let $seedBagWindow = $('#seedBagContaineer');
+	    $seedBagWindow.dialog('open');
+	    
+	    var seedBagBox = $('#seedBagContaineer');
+	    var $left = $('#left');
+	    var $right = $('#right');
+	    var $seedBagImg = $('#seedBagImg');
+	    var itemWidth = 200;
+	    var itemMargin = 10;
+	    var visibleItems = 4;
+		var userName = '${user.username}';
+		
+		var url = '<%=basePath%>/store/userBag?userName=' + userName;
+		console.log(url)
+		
+	    request({}, 'post',url, true, function (result) {
+	    	/* console.log(url)
+	    	console.log(result);
+			console.log(result.length); */
+	            for (var i = 0; i < result.length; i++) {
+	            	/* console.log(result) */
+	                var seedId = result[i]['seedId'];
+	                /* var seedLandType = result[i]['landType'];
+	                console.log("seedLandtype = " + seedLandType) */
+	               /*  console.log(seedId) */
+	                var imgUrl ='../images/crops/' + seedId + '/5.png';
+	                var $seedNum = $('<div class="seedNum" style="">' + result[i]['seedNum'] + '</div>');
+	                var $img = $('<img style="display:block; margin-left: auto;margin-right: auto;width:160px; height:170px;" class="seedImg" data-cropId="' + seedId + '" src="' + imgUrl + '" >');
+	                var $seedImgBox = $('<div class="seedImgBox"></div>');
+	                $seedImgBox.append($seedNum);
+	                $seedImgBox.append($img);
+	                $seedBagImg.append($seedImgBox);
+	                
+	            }	        
+	    })
+		
+	    seedBagImg.style.width = (itemWidth + itemMargin) * visibleItems - itemMargin + 'px';
+		
+	    $left.click(function () {
+	        if ($seedBagImg[0].scrollWidth > $seedBagImg[0].clientWidth || $seedBagImg[0].offsetWidth > $seedBagImg[0].clientWidth) {
+	            var width = $('.seedImg').outerWidth();
+	            $seedBagImg.animate({scrollLeft: '-=' + width});
+	        }
+
+	    });	
+	    $right.click(function () {
+	        if ($seedBagImg[0].scrollWidth > $seedBagImg[0].clientWidth || $seedBagImg[0].offsetWidth > $seedBagImg[0].clientWidth) {
+	            var width = $('.seedImg').outerWidth();
+	            $seedBagImg.animate({scrollLeft: '+=' + width});
+	        }
+	    });
+	}
+	
+	
+	function updateData(landIndex){
+		var land = landMap.get(landIndex);
+		console.log(land);
+	}
+	
+	function getSeedName(seedId){
+		var url = '<%=basePath%>/seed/data?rows=100';
+		
+		
+		request({}, 'post',url, true, function (result) {
+			/* if result.seedId == seedId{
+				re
+			} */
+			console.log("res = ",result);
+			console.log(result.rows);
+			
+		})
+	}
+	
+	
+	function initTip() {
+	    $('.clickBox').tooltip({
+	        trackMouse: true,
+	        position: 'right',
+	        showDelay: 1000,
+	        onShow: function () {
+	            //根据land类动态刷新提示信息
+	            var land = landMap.get(parseInt(this.getAttribute('data-landIndex')));
+	            /* let land = landMap.get(parseInt(this.dataset.landIndex)); */
+	            console.log('seedName' + land.cropId);
+	            
+	            var seedName = getSeedName(land.cropId);
+	            
+	            
+	            let cropState = land['cropState'];
+	            let output = land['output'];
+	            let stateEndTime = land['stateEndTime'];
+	            let $content = $('<div style="color: black;font-weight: bold;"></div>')
+	            if (cropName != null && cropName != undefined) {
+	                $content.append('名称：' + seedName);
+	                $content.append('<br>');
+	            } else {
+	                $content.append('名称：未知');
+	                $content.append('<br>');
+	            }
+	            if (cropState != null && cropState != undefined) {
+	                $content.append('状态：' + cropState);
+	                $content.append('<br>');
+	            } else {
+	                $content.append('名称：未知');
+	                $content.append('<br>');
+	            }
+	            if (output != null && output != undefined) {
+	                $content.append('产量：' + output);
+	                $content.append('<br>');
+	            } else {
+	                $content.append('名称：未知');
+	                $content.append('<br>');
+	            }
+	            if (stateEndTime != null && stateEndTime != undefined) {
+	                if (!isNaN(stateEndTime)) {
+	                    $content.append('时间：' + formatDate(stateEndTime));
+	                    $content.append('<br>');
+	                } else {
+	                    $content.append('时间：' + formatDate(stateEndTime.time));
+	                    $content.append('<br>');
+	                }
+	            } else {
+	                $content.append('名称：未知');
+	                $content.append('<br>');
+	            }
+	            $(this).tooltip({
+	                content: $content
+	            });
+	            $(this).tooltip('tip').css({
+	                backgroundColor: 'white',
+	                borderColor: 'gray',
+	            });
+	        }
+	    });
+	}
+
 	
 </script>
 </html>
