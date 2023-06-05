@@ -88,4 +88,9 @@ public class SeedImp implements SeedService {
         }
         return message;
     }
+    
+    @Override
+    public Seed findBySeedId(int seedId) {
+        return seedDao.findBySeedId(seedId);
+    }
 }

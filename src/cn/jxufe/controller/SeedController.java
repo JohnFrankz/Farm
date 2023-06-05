@@ -139,4 +139,13 @@ public class SeedController {
 	public List<Soil> getAllSoilType() {
 		return soilService.findAll();
 	}
+	
+	/**
+	 * 这是一个获取种子信息的API
+	 * @param seedId  种子id
+	 * @return 返回种子信息
+	 */
+	public Seed getSeed(int seedId) {
+		return seedService.findBySeedId(seedId);
+	}
 }

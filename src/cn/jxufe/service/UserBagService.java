@@ -9,4 +9,6 @@ public interface UserBagService {
     List<UserBag> findUserBagByUserName(String userName);
 
     Message buySeed(String userName, int seedId, int num);
+
+    List<UserBag> getSeedCanPlant(String userName, int soil);
 }

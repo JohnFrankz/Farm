@@ -8,11 +8,13 @@ import cn.jxufe.entity.*;
 import cn.jxufe.service.GameService;
 import cn.jxufe.utils.MessageUtils;
 import cn.jxufe.websocket.FarmWebsocketHandler;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.socket.TextMessage;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -133,7 +135,7 @@ public class GameImp implements GameService {
     @Override
     @Transactional
     public Message plantCrop(String username, int landIndex, int seedId) {
-        if (landIndex >= GameConfig.__LAND_MAX_INDEX) {
+        if (landIndex > GameConfig.__LAND_MAX_INDEX) {
             return MessageUtils.createErrorMessage("土地索引超出范围");
         }
         FarmLandStatus land = farmLandStatusDao.findByUsernameAndLandIndex(username, landIndex);
@@ -370,7 +372,14 @@ public class GameImp implements GameService {
      */
     private void sendCropStatusUpdateMessage(FarmLandStatus farmLandStatus) {
         String landOwner = farmLandStatus.getUsername();
-        farmWebsocketHandler.sendMessageToUser(landOwner,
-                new TextMessage(new WebsocketMessage(1, farmLandStatus).toString()));
+        ObjectMapper objectMapper = new ObjectMapper();
+        String farmLandStatusJson = null;
+        try {
+            farmLandStatusJson = objectMapper.writeValueAsString(farmLandStatus);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        farmWebsocketHandler.sendMessageToUser(landOwner, new TextMessage(farmLandStatusJson));
+    
     }
 }

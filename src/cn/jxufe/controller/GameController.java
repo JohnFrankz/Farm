@@ -14,6 +14,7 @@ import cn.jxufe.bean.Message;
 import cn.jxufe.entity.FarmLandStatus;
 import cn.jxufe.entity.User;
 import cn.jxufe.service.GameService;
+import cn.jxufe.service.UserBagService;
 
 @Controller
 @RequestMapping("/game")
@@ -21,6 +22,8 @@ public class GameController {
 
     @Autowired
     private GameService gameService;
+    @Autowired
+    private UserBagService userBagService;
 
     @RequestMapping("/index")
     public String index() {
@@ -86,5 +89,16 @@ public class GameController {
     public Message killBug(HttpSession session, int landIndex) {
         User currUser = (User) session.getAttribute(GameConfig.__DEFAULT_USER_NAME_SESSION);
         return gameService.killBug(currUser.getUsername(), landIndex);
+    }
+    
+    /**
+     * 获取用户对应于某一土地类型的种子
+     *
+     */
+    @RequestMapping("/getSeeds")
+    @ResponseBody
+    public List<?> getSeeds(HttpSession session, int landType) {
+        User currUser = (User) session.getAttribute(GameConfig.__DEFAULT_USER_NAME_SESSION);
+        return userBagService.getSeedCanPlant(currUser.getUsername(), landType);
     }
 }
