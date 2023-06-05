@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -60,5 +61,22 @@ public class UserBagImp implements UserBagService {
         }
         userBagDao.save(userBag);
         return MessageUtils.createSuccessMessage("购买成功");
+    }
+    
+    @Override
+    public List<UserBag> getSeedCanPlant(String userName, int soil) {
+        List<UserBag> allSeed = userBagDao.findByUserName(userName);
+        List<UserBag> seedCanPlant = new ArrayList<>();
+
+        for (UserBag userBag : allSeed) {
+            Seed seed = seedDao.findBySeedId(userBag.getSeedId());
+            if (seed == null) {
+                continue;
+            }
+            if (seed.getSoil() == soil) {
+                seedCanPlant.add(userBag);
+            }
+        }
+        return seedCanPlant;
     }
 }

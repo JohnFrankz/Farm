@@ -34,4 +34,6 @@ public interface SeedService {
 	 * @return 返回删除结果
 	 */
 	Message delete(Long id);
+
+	Seed findBySeedId(int seedId);	
 }
