@@ -24,10 +24,14 @@ public class FarmLandStatus extends EntityID {
     private int cropId;
     /** 作物状态 */
     private int cropStatus;
+    /** 当前生长阶段 */
+    private int currentStage;
     /** 该作物状态下已经生长的时间 */
     private int currentStateHasGrownTime;
     /** 当前状态已经生长的时间 */
     private Date stateEndTime;
+    /** 当前季度 */
+    private int currentSeason;
     /** 是否生虫 */
     private int isInsect;
     /** 是否枯萎 */
@@ -46,8 +50,10 @@ public class FarmLandStatus extends EntityID {
                 ", isCrop=" + isCrop +
                 ", cropId=" + cropId +
                 ", cropStatus=" + cropStatus +
+                ", currentStage=" + currentStage +
                 ", currentStateHasGrownTime=" + currentStateHasGrownTime +
                 ", stateEndTime=" + stateEndTime +
+                ", currentSeason=" + currentSeason +
                 ", isInsect=" + isInsect +
                 ", isWithered=" + isWithered +
                 ", isMature=" + isMature +
@@ -149,5 +155,21 @@ public class FarmLandStatus extends EntityID {
 
     public void setOutput(int output) {
         this.output = output;
+    }
+    
+    public int getCurrentStage() {
+        return currentStage;
+    }
+
+    public void setCurrentStage(int currentStage) {
+        this.currentStage = currentStage;
+    }
+
+    public int getCurrentSeason() {
+        return currentSeason;
+    }
+
+    public void setCurrentSeason(int currentSeason) {
+        this.currentSeason = currentSeason;
     }
 }

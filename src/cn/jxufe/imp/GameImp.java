@@ -110,7 +110,7 @@ public class GameImp implements GameService {
         if (land.getIsCrop() == GameConfig.__LAND_UNPLANTED_CODE) {
             return MessageUtils.createErrorMessage("土地未种植");
         }
-        if (land.getCropStatus() <= GameConfig.__CROP_MATURITY_CODE ||
+        if (land.getCropStatus() <= GameConfig.__CROP_MATURITY_STATUS_CODE ||
             land.getIsWithered() != GameConfig.__LAND_HAS_WITHERED_CODE) {
             return MessageUtils.createErrorMessage("无需清除枯叶");
         }
@@ -119,6 +119,25 @@ public class GameImp implements GameService {
         user.setPoints(user.getPoints() + GameConfig.__CLEAN_DEAD_LEAVES_ADD_POINTS);
         land.setIsCrop(GameConfig.__LAND_UNPLANTED_CODE);
         userDao.save(user);
+        
+        Seed seed = seedDao.findBySeedId(land.getCropId());
+        int season = seed.getSeason();
+        if (land.getCurrentSeason() == season) {
+            land.setIsCrop(GameConfig.__LAND_UNPLANTED_CODE);
+        } else {
+            SeedGrowthStage seedStage = seedGrowthStageDao.findBySeedIdAndGrowthStage(land.getCropId(),
+                    GameConfig.__CROP_SEED_STATUS_CODE);
+            land.setCurrentSeason(land.getCurrentSeason() + 1);
+            land.setCropStatus(GameConfig.__CROP_SEED_STATUS_CODE);
+            land.setCurrentStage(GameConfig.__CROP_SEED_STAGE_CODE);
+            land.setCurrentStateHasGrownTime(0);
+            land.setStateEndTime(new Date(new Date().getTime() + seedStage.getGrowthTime() * 1000));
+            land.setIsInsect(GameConfig.__LAND_NO_INSECT_CODE);
+            land.setOutput(seed.getHarvest());
+        }
+
+        sendCropStatusUpdateMessage(land);
+        
         farmLandStatusDao.save(land);
         return MessageUtils.createSuccessMessage("清除枯叶成功\n经验+" + GameConfig.__CLEAN_DEAD_LEAVES_ADD_EXP +
                                                     "\n积分+" + GameConfig.__CLEAN_DEAD_LEAVES_ADD_POINTS);
@@ -145,7 +164,7 @@ public class GameImp implements GameService {
             return MessageUtils.createErrorMessage("土地已种植");
         }
         Seed seed = seedDao.findBySeedId(seedId);
-        SeedGrowthStage seedStage = seedGrowthStageDao.findBySeedIdAndGrowthStage(seedId, GameConfig.__CROP_SEED_CODE);
+        SeedGrowthStage seedStage = seedGrowthStageDao.findBySeedIdAndGrowthStage(seedId, GameConfig.__CROP_SEED_STATUS_CODE);
         UserBag userBag = userBagDao.findByUserNameAndSeedId(username, seedId);
         if (seed == null || seedStage == null) {
             return MessageUtils.createErrorMessage("种子不存在");
@@ -162,9 +181,11 @@ public class GameImp implements GameService {
         land.setLandType(landIndex / GameConfig.__AMOUNT_OF_EACH_LAND_TYPE + 1);
         land.setIsCrop(GameConfig.__LAND_PLANTED_CODE);
         land.setCropId(seedId);
-        land.setCropStatus(GameConfig.__CROP_SEED_CODE);
+        land.setCropStatus(GameConfig.__CROP_SEED_STATUS_CODE);
+        land.setCurrentStage(GameConfig.__CROP_GROWTH_STAGE_CODE);
         land.setCurrentStateHasGrownTime(0);
         land.setStateEndTime(new Date(new Date().getTime() + seedStage.getGrowthTime() * 1000));
+        land.setCurrentSeason(1);
         land.setIsInsect(GameConfig.__LAND_NO_INSECT_CODE);
         land.setIsWithered(GameConfig.__LAND_NO_WITHERED_CODE);
         land.setIsMature(GameConfig.__LAND_NO_MATURE_CODE);
@@ -207,7 +228,7 @@ public class GameImp implements GameService {
             return MessageUtils.createErrorMessage("土地未播种");
         } else if (land.getIsCrop() == GameConfig.__LAND_UNPLANTED_CODE) {
             return MessageUtils.createErrorMessage("土地未种植");
-        } else if (land.getCropStatus() != GameConfig.__CROP_MATURITY_CODE
+        } else if (land.getCropStatus() != GameConfig.__CROP_MATURITY_STATUS_CODE
                    || land.getIsMature() != GameConfig.__LAND_HAS_MATURE_CODE) {
             return MessageUtils.createErrorMessage("作物未成熟");
         }
@@ -217,7 +238,8 @@ public class GameImp implements GameService {
         user.setPoints(user.getPoints() + seed.getPoints());
         user.setMoney(user.getMoney() + seed.getSalePrice() * land.getOutput());
         land.setIsWithered(GameConfig.__LAND_HAS_WITHERED_CODE);
-        land.setCropStatus(GameConfig.__CROP_DRY_CODE);
+        land.setCurrentStage(GameConfig.__CROP_DRY_STAGE_CODE);
+        land.setCropStatus(GameConfig.__CROP_DRY_STATUS_CODE);
 
         sendCropStatusUpdateMessage(land);
         userDao.save(user);
@@ -279,7 +301,7 @@ public class GameImp implements GameService {
     public void checkCropStatus() {
         System.out.println("检查农作物状态");
         List<FarmLandStatus> farmLandNeedUpdate = farmLandStatusDao.findByIsCropAndCropStatusLessThan(
-                GameConfig.__LAND_PLANTED_CODE, GameConfig.__CROP_MATURITY_CODE);
+                GameConfig.__LAND_PLANTED_CODE, GameConfig.__CROP_MATURITY_STATUS_CODE);
         if (farmLandNeedUpdate.size() == 0) {
             System.out.println("没有需要更新的农田状态");
             return;
@@ -313,9 +335,10 @@ public class GameImp implements GameService {
      * @param now 当前时间
      */
     private void updateCropStatus(FarmLandStatus farmLandStatus, Date now) {
+    	int currentState = farmLandStatus.getCurrentStage();
         int cropStatus = farmLandStatus.getCropStatus();
         SeedGrowthStage currStage = seedGrowthStageDao
-                .findBySeedIdAndGrowthStage(farmLandStatus.getCropId(), cropStatus);
+                .findBySeedIdAndGrowthStage(farmLandStatus.getCropId(), currentState);
         Long currStageGrowthEndTime = farmLandStatus.getStateEndTime().getTime();
         float pestProbability = currStage.getPestProbability();
 
@@ -324,23 +347,37 @@ public class GameImp implements GameService {
         }
 
         if (isCurrentStageFinished(currStageGrowthEndTime, now)) {
-            int nextCropStatus = cropStatus + 1;
+            updateCropStatusAndStage(farmLandStatus);
+
+            int nextStageId = currentState + 1;
             SeedGrowthStage nextStage = seedGrowthStageDao.findBySeedIdAndGrowthStage(
-                    farmLandStatus.getCropId(), nextCropStatus);
+                    farmLandStatus.getCropId(), nextStageId);
             int nextStageGrowthTime = nextStage.getGrowthTime();
 
-            farmLandStatus.setCropStatus(nextCropStatus);
             farmLandStatus.setStateEndTime(new Date(nextStageGrowthTime * 1000 + currStageGrowthEndTime));
             farmLandStatus.setCurrentStateHasGrownTime(0);
             if (farmLandStatus.getIsInsect() == GameConfig.__LAND_HAS_INSECT_CODE) {
                 __reduceCropOutput(farmLandStatus);
             }
-            if (nextCropStatus == GameConfig.__CROP_MATURITY_CODE) {
+            if (nextStageId == GameConfig.__CROP_MATURITY_STAGE_CODE) {
                 farmLandStatus.setIsMature(GameConfig.__LAND_HAS_MATURE_CODE);
             }
         }
         farmLandStatus.setCurrentStateHasGrownTime(
                 farmLandStatus.getCurrentStateHasGrownTime() + GameConfig.__LAND_STATUS_CHECK_INTERVAL);
+    }
+    
+    private void updateCropStatusAndStage(FarmLandStatus farmLandStatus) {
+        int currentStage = farmLandStatus.getCurrentStage();
+        int nextStageId = currentStage + 1;
+
+        if (currentStage == GameConfig.__CROP_SEED_STAGE_CODE) {
+            farmLandStatus.setCropStatus(GameConfig.__CROP_GROWTH_STATUS_CODE);
+        } else if (currentStage == GameConfig.__CROP_FLOWERING_STAGE_CODE) {
+            farmLandStatus.setCropStatus(GameConfig.__CROP_MATURITY_STATUS_CODE);
+        }
+
+        farmLandStatus.setCurrentStage(nextStageId);
     }
 
     /**
