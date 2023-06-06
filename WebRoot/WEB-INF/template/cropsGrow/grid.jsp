@@ -248,7 +248,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					console.log(result);
 					console.log(seedBagLandIndex);
 					
-					updateData(seedBagLandIndex);
+					
 					messageBox('消息',result.msg);
 					
 	                $('#seedBagContaineer').dialog('close');
@@ -259,38 +259,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}
 				
 			})
-		})
+		}) 
 		
 		initTip();
 	})
 	
 	function initWebSocket(){
-		let Websocket = new WebSocket("ws://127.0.0.1:8080/farm/action");
+		let socket = new WebSocket("ws://127.0.0.1:8080/farm/action");
 
-		Websocket.onopen = function(e) {
+		socket.onopen = function(e) {
 		  console.log("[open] Connection established");
 		  console.log("Sending to server");
 		  socket.send("My name is John");
 		};
 
-		Websocket.onmessage = function(event) {
+		socket.onmessage = function(event) {
 			/* console.log(`[message] Data received from server: ${event.data}`); */
 			/* console.log(event); */
 			console.log(event)
-			var dataMessage = event.data;
-			dataMessage = dataMessage.substring(16);
-			console.log(event.data);
-			console.log(dataMessage);
-			var socketMessag = JSON.parse(event.data);
-			
-			console.log(typeof socketMessag);
-			console.log(socketMessag);
-			console.log("hahahah   " + event.data); 
-			
-			
+			/* var data = event.data; */
+
+			var data = JSON.parse(event.data);
+			/* console.log("jjjj"+data); */
+		/* 	console.log("hahahah   " + data); */
+/* 			console.log("afdsaf" + data.landIndex)
+ */			updateData(data);	
 		};
 
-		Websocket.onclose = function(event) {
+		socket.onclose = function(event) {
 		  if (event.wasClean) {
 			  console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
 		  } else {
@@ -300,7 +296,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  }
 		};
 
-		Websocket.onerror = function(error) {
+		socket.onerror = function(error) {
 			console.log("[error]", error.message);
 		};
 	}
@@ -415,8 +411,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		
 		
 		landIndex = land.landIndex;
-		/* var landType = land.landType;
-		console.log("landtypd = " + landType) */
+		var landType = land.landType;
+		console.log("landtypd = " + landType) 
 	    /*
 	    soundPlantCrop.play(); */
 	   
@@ -432,8 +428,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    var visibleItems = 4;
 		var userName = '${user.username}';
 		
-		var url = '<%=basePath%>/store/userBag?userName=' + userName;
+		var url = '<%=basePath%>/game/getSeeds?landType=' + landType;
 		console.log(url)
+		
+		document.getElementById('seedBagImg').innerHTML = '';
 		
 	    request({}, 'post',url, true, function (result) {
 	    	/* console.log(url)
@@ -449,6 +447,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                var $seedNum = $('<div class="seedNum" style="">' + result[i]['seedNum'] + '</div>');
 	                var $img = $('<img style="display:block; margin-left: auto;margin-right: auto;width:160px; height:170px;" class="seedImg" data-cropId="' + seedId + '" src="' + imgUrl + '" >');
 	                var $seedImgBox = $('<div class="seedImgBox"></div>');
+	                
 	                $seedImgBox.append($seedNum);
 	                $seedImgBox.append($img);
 	                $seedBagImg.append($seedImgBox);
@@ -474,24 +473,58 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	}
 	
 	
-	function updateData(landIndex){
-		var land = landMap.get(landIndex);
-		console.log(land);
+	function updateData(data){
+		console.log("vava"+data)
+		console.log("gaga" + data.cropId)
+		updateCropImg(data);
+		/* var land = landMap.get(landIndex);
+		console.log(land); */
 	}
 	
-	function getSeedName(seedId){
-		var url = '<%=basePath%>/seed/data?rows=100';
-		
-		
-		request({}, 'post',url, true, function (result) {
-			/* if result.seedId == seedId{
-				re
-			} */
-			console.log("res = ",result);
-			console.log(result.rows);
-			
-		})
+	function updateCropImg(data){
+		let $crop = $('#crop_' + data.landIndex);
+		console.log("dsaf" + data.landIndex)
+	    if (data.isCrop == 0) {
+	        if ($crop[0]) {
+	            $crop.remove();
+	        }
+	    } else {
+	        let url;
+	        //更新作物图片
+	        if (data.nowCropGrowStage == 6 || land.nowCropGrowStage == 0) {
+	            //枯草期或者种子阶段
+	            url = basePath + '/ext/images/crops/basic/' + land.nowCropGrowStage + '.png';
+	        } else {
+	            //正常生长阶段
+	            url = basePath + '/ext/images/crops/' + land.cropId + '/' + land.nowCropGrowStage + '.png';
+	        }
+	    }
 	}
+	
+	function getSeedName(seedId) {
+	    var seedName = null;
+	    $.ajax({
+	        url: '<%=basePath%>/seed/getSeedData?seedId=' + seedId,
+	        async: false,
+	        success: function(response) {
+	            seedName = response.seedName;
+	        }
+	    });
+	    return seedName;
+	}
+	
+	function getCropState(cropStatus){
+		var cropState = null;
+			$.ajax({
+	 		    url: '<%=basePath%>/growth/getCropStatus?statusId=' + cropStatus,
+	 		    async : false,
+	 		   	success: function(response) {
+		            cropState = response.statusName;
+	 		   		}
+			  	});
+			console.log(cropState);
+			return cropState; 
+		}
 	
 	
 	function initTip() {
@@ -500,62 +533,74 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        position: 'right',
 	        showDelay: 1000,
 	        onShow: function () {
-	            //根据land类动态刷新提示信息
+	            
 	            var land = landMap.get(parseInt(this.getAttribute('data-landIndex')));
-	            /* let land = landMap.get(parseInt(this.dataset.landIndex)); */
 	            console.log('seedName' + land.cropId);
+	            if (land.isCrop == 1){
 	            
-	            var seedName = getSeedName(land.cropId);
-	            
-	            
-	            let cropState = land['cropState'];
-	            let output = land['output'];
-	            let stateEndTime = land['stateEndTime'];
-	            let $content = $('<div style="color: black;font-weight: bold;"></div>')
-	            if (cropName != null && cropName != undefined) {
-	                $content.append('名称：' + seedName);
-	                $content.append('<br>');
-	            } else {
-	                $content.append('名称：未知');
-	                $content.append('<br>');
-	            }
-	            if (cropState != null && cropState != undefined) {
-	                $content.append('状态：' + cropState);
-	                $content.append('<br>');
-	            } else {
-	                $content.append('名称：未知');
-	                $content.append('<br>');
-	            }
-	            if (output != null && output != undefined) {
-	                $content.append('产量：' + output);
-	                $content.append('<br>');
-	            } else {
-	                $content.append('名称：未知');
-	                $content.append('<br>');
-	            }
-	            if (stateEndTime != null && stateEndTime != undefined) {
-	                if (!isNaN(stateEndTime)) {
-	                    $content.append('时间：' + formatDate(stateEndTime));
-	                    $content.append('<br>');
-	                } else {
-	                    $content.append('时间：' + formatDate(stateEndTime.time));
-	                    $content.append('<br>');
-	                }
-	            } else {
-	                $content.append('名称：未知');
-	                $content.append('<br>');
-	            }
-	            $(this).tooltip({
-	                content: $content
-	            });
-	            $(this).tooltip('tip').css({
-	                backgroundColor: 'white',
-	                borderColor: 'gray',
-	            });
+		            var seedName = getSeedName(land.cropId);
+		            var cropState = getCropState(land.cropStatus)
+		            console.log(seedName);
+		            console.log(cropState);
+	
+		            var output = land.output;
+		            var stateEndTime = land.stateEndTime;
+		            var $tip = $('<div style="color: black;"></div>')
+		            
+		            $tip.append('名称：' + seedName + '<br>');
+		            $tip.append('状态：' + cropState + '<br>');
+		            $tip.append('产量：' + output + '<br>');
+		            $tip.append('时间：' + formatDate(stateEndTime) + '<br>');
+	
+		            $(this).tooltip({
+		                content: $tip
+		            });
+		            $(this).tooltip('tip').css({
+		                backgroundColor: 'white',
+		                borderColor: 'black',
+		            });
+		        }
 	        }
 	    });
 	}
-
 	
+	function formatDate(time) {
+	    let date = new Date(time);
+	    let YY = date.getFullYear();
+	    let MM = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+	    let DD = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+	    let hh = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+	    let mm = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+	    let ss = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+	    // 这里修改返回时间的格式
+	    return YY + "-" + MM + "-" + DD + " " + hh + ":" + mm + ":" + ss;
+	}
+
+	function plant() {
+		$(document).on('click','.seedImg', function(){
+			
+			var seedBagLandIndex =parseInt(landIndex);
+			console.log(seedBagLandIndex)
+			var seedId = this.getAttribute('data-cropId');
+			console.log(seedId)
+			var url = '<%=basePath%>/game/plant?landIndex=' + seedBagLandIndex + '&seedId=' + seedId;
+			request({},'post',url,true,function(result){
+				if(result.code == 0){
+					console.log(result);
+					console.log(seedBagLandIndex);
+					console.log("vava"+data)
+					updateData(data);
+					messageBox('消息',result.msg);
+					
+	                $('#seedBagContaineer').dialog('close');
+
+				}
+				else{
+					messageBox('消息',result.msg);
+				}
+				
+			})
+		})
+	}
 </script>
 </html>
