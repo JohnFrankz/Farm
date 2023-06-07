@@ -65,4 +65,9 @@ public class SeedGrowthStageImp implements SeedGrowthStageService {
         }
         return message;
     }
+
+	@Override
+	public SeedGrowthStage getSeedGrowthStage(int seedId, int growthStage) {
+		return stageDao.findBySeedIdAndGrowthStage(seedId, growthStage);
+	}
 }
