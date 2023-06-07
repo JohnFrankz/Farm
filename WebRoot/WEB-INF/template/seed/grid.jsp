@@ -165,7 +165,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					
 					<tr>
 						<td>生虫概率：</td>
-						<td><input name="pestProbability" required="true" class="easyui-numberbox w50"></td>
+						<td><input name="pestProbability" required="true" class="easyui-numberbox w50" data-options="precision: 1"></td>
 					</tr>
 					
 					<tr>
@@ -512,6 +512,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                			editor:{
 	                				type: 'numberbox',
 	                				options: {
+	                					precision: 1,
 	                                     required: true,
 	                                     }
 	                			},	
