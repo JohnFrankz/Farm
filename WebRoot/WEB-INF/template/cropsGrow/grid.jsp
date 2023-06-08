@@ -229,13 +229,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$(document).on('mouseenter', '.clickBox', function () {
 			 var land = landMap.get(parseInt(this.getAttribute('data-landIndex')));	       
 	        if (land.isCrop == 0) {
-	        	 $('.clickBox').css("cursor", "url(../cursor/glove.png),16,16,default");
+	        	 $('.clickBox').css("cursor", "url(../cursor/spade.cur),default");
 	        } else if (land.currentStage == 6 && land.isWithered == 1 ) {
-	        	 $('.clickBox').css("cursor", "url(../cursor/glove(1).cur),default");
+	        	 $('.clickBox').css("cursor", "url(../cursor/spade.cur),default");
 	        } else if (land.isInsect == 1) {
-	        	 $('.clickBox').css("cursor", "url(../cursor/glove.cur),default");
+	        	 $('.clickBox').css("cursor", "url(../cursor/killWorm.cur),default");
+	        } else if(land.currentStage != 5 && land.currentStage != 5){
+	        	 $('.clickBox').css("cursor", "url(../cursor/waitGrow.cur),default");
 	        } else if (land.currentStage == 5  && land.isMature == 1) {
-	        	 $('.clickBox').css("cursor", "url(../cursor/glove.cur),default");
+	        	 $('.clickBox').css("cursor", "url(../cursor/harvest.cur),default");
 	        }
 	        
 	    });
