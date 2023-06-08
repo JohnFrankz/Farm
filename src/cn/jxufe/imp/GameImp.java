@@ -308,6 +308,9 @@ public class GameImp implements GameService {
 
         Date now = new Date();
         for (FarmLandStatus farmLandStatus : farmLandNeedUpdate) {
+        	if (!isCurrentStageFinished(farmLandStatus.getStateEndTime().getTime(), now)) {
+        		continue;
+        	}
             updateCropStatus(farmLandStatus, now);
             farmLandStatusDao.save(farmLandStatus);
             sendCropStatusUpdateMessage(farmLandStatus);
@@ -341,28 +344,24 @@ public class GameImp implements GameService {
         Long currStageGrowthEndTime = farmLandStatus.getStateEndTime().getTime();
         float pestProbability = currStage.getPestProbability();
 
+		updateCropStatusAndStage(farmLandStatus);
+		int nextStageId = currentState + 1;
+		SeedGrowthStage nextStage = seedGrowthStageDao.findBySeedIdAndGrowthStage(
+				farmLandStatus.getCropId(), nextStageId);
+		int nextStageGrowthTime = nextStage.getGrowthTime();
+
+		farmLandStatus.setStateEndTime(new Date(nextStageGrowthTime * 1000 + currStageGrowthEndTime));
+		farmLandStatus.setCurrentStateHasGrownTime(0);
+		if (farmLandStatus.getIsInsect() == GameConfig.__LAND_HAS_INSECT_CODE) {
+			__reduceCropOutput(farmLandStatus);
+		}
+		if (nextStageId == GameConfig.__CROP_MATURITY_STAGE_CODE) {
+			farmLandStatus.setIsMature(GameConfig.__LAND_HAS_MATURE_CODE);
+		}
         if (Math.random() < pestProbability && isCropTimeLongEnough(currStageGrowthEndTime, now)) {
             farmLandStatus.setIsInsect(GameConfig.__LAND_HAS_INSECT_CODE);
         }
 
-        if (isCurrentStageFinished(currStageGrowthEndTime, now)) {
-            updateCropStatusAndStage(farmLandStatus);
-
-            int nextStageId = currentState + 1;
-            SeedGrowthStage nextStage = seedGrowthStageDao.findBySeedIdAndGrowthStage(
-                    farmLandStatus.getCropId(), nextStageId);
-            int nextStageGrowthTime = nextStage.getGrowthTime();
-
-            farmLandStatus.setStateEndTime(new Date(nextStageGrowthTime * 1000 + currStageGrowthEndTime));
-            farmLandStatus.setCurrentStateHasGrownTime(0);
-            if (farmLandStatus.getIsInsect() == GameConfig.__LAND_HAS_INSECT_CODE) {
-                __reduceCropOutput(farmLandStatus);
-            }
-            if (nextStageId == GameConfig.__CROP_MATURITY_STAGE_CODE) {
-                farmLandStatus.setIsMature(GameConfig.__LAND_HAS_MATURE_CODE);
-            }
-        }
-        System.out.print("fuckyou!!!!!!!!!!!!!!");
         farmLandStatus.setCurrentStateHasGrownTime(
                 farmLandStatus.getCurrentStateHasGrownTime() + GameConfig.__LAND_STATUS_CHECK_INTERVAL);
     }
