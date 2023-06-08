@@ -30,6 +30,7 @@ public class UserController {
 
     /**
      * 跳转到用户列表页面
+     * 
      * @return 用户列表页面
      */
     @RequestMapping("grid")
@@ -41,6 +42,7 @@ public class UserController {
      * 获取用户列表
      * - 如果username不为空，则根据username模糊查询
      * - 如果username为空，则查询所有用户
+     * 
      * @param request 分页请求
      * @param userName 用户名
      * @return 用户列表
@@ -66,6 +68,7 @@ public class UserController {
     /**
      * 如果user.id不为空，则更新用户信息
      * 如果user.id为空，则添加用户
+     * 
      * @param user 用户信息
      * @return 返回保存结果
      */
@@ -77,6 +80,7 @@ public class UserController {
 
     /**
      * 根据id删除用户
+     * 
      * @param id 用户id
      * @return 返回删除结果
      */
@@ -88,6 +92,7 @@ public class UserController {
 
     /**
      * 更新用户头像
+     * 
      * @param id 用户id
      * @param avatar 用户头像文件名
      */
@@ -100,6 +105,7 @@ public class UserController {
 
     /**
      * 跳转到登录页面
+     * 
      * @return 登录页面
      */
     @RequestMapping("/loginPage")
@@ -109,6 +115,7 @@ public class UserController {
 
     /**
      * 列出所有用户，不接受分页请求
+     * 
      * @return 所有用户
      */
     @RequestMapping("/list")
@@ -120,6 +127,7 @@ public class UserController {
     /**
      * 从登录请求中获取用户信息，用于登录
      * 并将用户信息存入session
+     * 
      * @param session 会话
      * @param id 用户id
      * @return 返回登录结果

@@ -19,6 +19,7 @@ public class CropStatusImp implements CropStatusService {
 
     /**
      * 根据状态id查询作物状态
+     * 
      * @param statusId 状态id
      * @return 返回作物状态
      */
@@ -29,6 +30,7 @@ public class CropStatusImp implements CropStatusService {
 
     /**
      * 查询所有作物状态
+     * 
      * @return 返回所有作物状态
      */
     @Override

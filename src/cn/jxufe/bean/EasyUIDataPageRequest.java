@@ -1,5 +1,8 @@
 package cn.jxufe.bean;
 
+/**
+ * EasyUIDataPageRequest类用于封装EasyUI表格分页请求的参数。
+ */
 public class EasyUIDataPageRequest {
 	private int page = 1;
 	private int rows = 1;

@@ -16,6 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * UserBagImp 类是 UserBagService 接口的实现类，用于处理用户背包相关的操作。
+ */
 @Service
 public class UserBagImp implements UserBagService {
 
@@ -26,11 +29,25 @@ public class UserBagImp implements UserBagService {
     @Autowired
     private SeedDao seedDao;
 
+    /**
+     * 根据用户名查询用户背包中的物品列表。
+     *
+     * @param userName 用户名
+     * @return 用户背包中的物品列表
+     */
     @Override
     public List<UserBag> findUserBagByUserName(String userName) {
         return userBagDao.findByUserName(userName);
     }
 
+    /**
+     * 购买种子。
+     *
+     * @param userName 用户名
+     * @param seedId   种子ID
+     * @param num      购买数量
+     * @return 操作结果消息
+     */
     @Transactional
     @Override
     public Message buySeed(String userName, int seedId, int num) {
@@ -63,6 +80,13 @@ public class UserBagImp implements UserBagService {
         return MessageUtils.createSuccessMessage("购买成功");
     }
     
+    /**
+     * 获取可种植的种子列表。
+     *
+     * @param userName 用户名
+     * @param soil     土壤类型
+     * @return 可种植的种子列表
+     */
     @Override
     public List<UserBag> getSeedCanPlant(String userName, int soil) {
         List<UserBag> allSeed = userBagDao.findByUserName(userName);

@@ -12,10 +12,20 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.util.ArrayList;
 
+/**
+ * FarmWebsocketHandler 类是处理 WebSocket 请求的处理程序。
+ */
 public class FarmWebsocketHandler extends TextWebSocketHandler {
     public static final ArrayList<WebSocketSession> sessions = new ArrayList<>();
     private static final Logger logger = LoggerFactory.getLogger(WebSocketHandler.class);
 
+    /**
+     * 处理收到的文本消息。
+     *
+     * @param session WebSocket 会话
+     * @param message 接收到的文本消息
+     * @throws Exception 处理异常
+     */
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
@@ -24,6 +34,7 @@ public class FarmWebsocketHandler extends TextWebSocketHandler {
 
     /**
      * 在连接建立后，将session添加到sessions中
+     * 
      * @param session
      * @throws Exception
      */
@@ -36,6 +47,7 @@ public class FarmWebsocketHandler extends TextWebSocketHandler {
 
     /**
      * 连接关闭后，移除session
+     * 
      * @param session 会话
      * @param status 状态
      * @throws Exception 异常
@@ -49,6 +61,7 @@ public class FarmWebsocketHandler extends TextWebSocketHandler {
 
     /**
      * 发生传输错误时，关闭连接，移除session
+     * 
      * @param session 会话
      * @param exception 异常
      * @throws Exception 异常
@@ -65,6 +78,7 @@ public class FarmWebsocketHandler extends TextWebSocketHandler {
 
     /**
      * 给所有在线用户发送消息
+     * 
      * @param message 消息
      */
     public void sendMessageToAll(TextMessage message) {
@@ -81,6 +95,7 @@ public class FarmWebsocketHandler extends TextWebSocketHandler {
 
     /**
      * 给指定用户发送消息
+     * 
      * @param username 需要发送消息的用户
      * @param message 消息
      */

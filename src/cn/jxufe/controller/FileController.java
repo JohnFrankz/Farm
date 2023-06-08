@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * 处理文件操作相关的控制器
+ * FileController类是处理文件操作相关的控制器。
  */
 @Controller
 @RequestMapping("file")

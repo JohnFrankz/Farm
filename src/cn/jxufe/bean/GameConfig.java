@@ -2,6 +2,9 @@ package cn.jxufe.bean;
 
 import java.util.Random;
 
+/**
+ * GameConfig类用于存储游戏配置信息。
+ */
 public class GameConfig {
     /** session中存放用户的key */
     public static final String __DEFAULT_USER_NAME_SESSION = "user";

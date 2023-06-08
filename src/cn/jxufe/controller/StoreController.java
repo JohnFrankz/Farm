@@ -29,6 +29,7 @@ public class StoreController {
 
     /**
      * 这是一个种子商店的首页
+     * 
      * @return 返回种子商店的首页
      */
     @RequestMapping("index")
@@ -38,6 +39,7 @@ public class StoreController {
 
     /**
      * 获取用户种子背包，用于显示用户已经购买的种子
+     * 
      * @param userName 用户名
      * @return 返回用户所有已购买的种子
      */
@@ -49,6 +51,7 @@ public class StoreController {
 
     /**
      * 购买种子的API
+     * 
      * @param userName 需要购买种子的用户名
      * @param seedId 购买的种子的ID
      * @param num 购买的数量

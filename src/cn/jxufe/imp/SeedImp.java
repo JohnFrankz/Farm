@@ -22,6 +22,7 @@ public class SeedImp implements SeedService {
 
     /**
      * 查询所有种子信息
+     * 
      * @param pageable 分页请求
      * @return 返回种子信息以EasyUIData的形式封装
      */
@@ -37,6 +38,7 @@ public class SeedImp implements SeedService {
 
     /**
      * 根据种子名称查询种子信息
+     * 
      * @param seedName 种子名称
      * @param pageable 分页请求
      * @return 返回种子信息以EasyUIData的形式封装
@@ -53,6 +55,7 @@ public class SeedImp implements SeedService {
 
     /**
      * 保存种子的修改或新增种子
+     * 
      * @param seed 种子
      * @return 返回保存结果
      */
@@ -72,6 +75,7 @@ public class SeedImp implements SeedService {
 
     /**
      * 删除种子
+     * 
      * @param id 需要删除的种子的id
      * @return 返回删除结果
      */
@@ -89,6 +93,12 @@ public class SeedImp implements SeedService {
         return message;
     }
     
+    /**
+     * 根据种子id查询种子
+     * 
+     * @param seedId 种子id
+     * @return 返回种子
+     */
     @Override
     public Seed findBySeedId(int seedId) {
         return seedDao.findBySeedId(seedId);

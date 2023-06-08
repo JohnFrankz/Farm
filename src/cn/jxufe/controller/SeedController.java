@@ -43,6 +43,7 @@ public class SeedController {
 
 	/**
 	 * 这是一个种子管理页面的跳转方法
+	 * 
 	 * @return 返回种子管理页面
 	 */
 	@RequestMapping("grid")
@@ -52,6 +53,7 @@ public class SeedController {
 
 	/**
 	 * 这是获取所有信息的API
+	 * 
 	 * @param pageRequest 分页请求
 	 * @param seedName 种子名称，如果为空则查询所有种子信息，否则根据种子名称查询
 	 * @return 返回种子信息
@@ -76,6 +78,7 @@ public class SeedController {
 
 	/**
 	 * 这是一个保存种子信息的API
+	 * 
 	 * @param seed 需要保存的种子信息
 	 * @return 返回保存结果
 	 */
@@ -87,6 +90,7 @@ public class SeedController {
 
 	/**
 	 * 这是一个删除种子信息的API
+	 * 
 	 * @param request http请求，用于获取需要删除的种子id
 	 * @return 返回删除结果
 	 */
@@ -100,6 +104,7 @@ public class SeedController {
 
 	/**
 	 * 这是一个获取种子类型的API
+	 * 
 	 * @param typeId   种子类型id
 	 * @return 返回所有种子类型
 	 */
@@ -111,6 +116,7 @@ public class SeedController {
 
 	/**
 	 * 这是一个获取所有种子类型的API
+	 * 
 	 * @return 返回所有种子类型
 	 */
 	@RequestMapping(value = "getAllSeedType")
@@ -121,6 +127,7 @@ public class SeedController {
 
 	/**
 	 * 这是一个获取种子所需土地类型的API
+	 * 
 	 * @param soilId   种子所需土地类型id
 	 * @return 返回所有土地类型
 	 */
@@ -132,6 +139,7 @@ public class SeedController {
 	
 	/**
 	 * 这是一个获取所有土地类型的API
+	 * 
 	 * @return 返回所有土地类型
 	 */
 	@RequestMapping(value = "getAllSoil")
@@ -142,6 +150,7 @@ public class SeedController {
 	
 	/**
 	 * 这是一个获取种子信息的API
+	 * 
 	 * @param seedId  种子id
 	 * @return 返回种子信息
 	 */

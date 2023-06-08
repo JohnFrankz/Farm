@@ -22,6 +22,7 @@ public class SoilImp implements SoilService {
 
     /**
      * 根据土壤id查询土壤
+     * 
      * @param soilId 土壤id
      * @return 返回土壤
      */
@@ -32,6 +33,7 @@ public class SoilImp implements SoilService {
 
     /**
      * 查询所有土壤
+     * 
      * @return 返回所有土壤
      */
     @Override

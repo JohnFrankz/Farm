@@ -5,6 +5,9 @@ import cn.jxufe.bean.EntityID;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ * 用户种子背包实体类
+ */
 @Entity
 @Table(name = "T_UserBag")
 public class UserBag extends EntityID {

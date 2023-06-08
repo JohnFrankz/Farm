@@ -23,6 +23,7 @@ public class UserImp implements UserService {
 
     /**
      * 根据用户id查询用户
+     * 
      * @param id 用户id
      * @return 返回用户
      */
@@ -33,6 +34,7 @@ public class UserImp implements UserService {
 
     /**
      * 查询所有用户
+     * 
      * @return 返回所有用户
      */
     @Override
@@ -42,6 +44,7 @@ public class UserImp implements UserService {
 
     /**
      * 用户登录, 根据用户id查询用户, 如果用户存在则登录成功, 否则登录失败
+     * 
      * @param id 用户id
      * @return 返回登录结果
      */
@@ -61,6 +64,7 @@ public class UserImp implements UserService {
     
     /**
      * 查询所有用户
+     * 
      * @param pageable 分页参数
      * @return 返回分页后的用户数据以EasyUIData的形式封装
      */
@@ -75,6 +79,7 @@ public class UserImp implements UserService {
 
     /**
      * 根据用户名查询用户
+     * 
      * @param username 用户名
      * @param pageable 分页参数
      * @return 返回分页后的用户数据以EasyUIData的形式封装
@@ -90,6 +95,7 @@ public class UserImp implements UserService {
 
     /**
      * 保存用户的修改或新增用户
+     * 
      * @param user 用户
      * @return 返回保存结果
      */
@@ -109,6 +115,7 @@ public class UserImp implements UserService {
 
     /**
      * 删除用户
+     * 
      * @param id 需要删除的用户的id
      * @return 返回删除结果
      */
@@ -128,6 +135,7 @@ public class UserImp implements UserService {
 
     /**
      * 更新用户头像
+     * 
      * @param id 用户id
      * @param avatar 用户头像
      * @return 返回更新结果
@@ -148,6 +156,12 @@ public class UserImp implements UserService {
         return message;
     }
 
+    /**
+     * 根据用户名查询用户
+     * 
+     * @param username 用户名
+     * @return 返回用户
+     */
 	@Override
 	public User findByUsername(String username) {
 		return userDao.findByUsername(username);

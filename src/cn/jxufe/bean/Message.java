@@ -1,5 +1,8 @@
 package cn.jxufe.bean;
 
+/**
+ * Message类用于表示通用的消息对象。
+ */
 public class Message {
 	private int code;
 	private String msg;

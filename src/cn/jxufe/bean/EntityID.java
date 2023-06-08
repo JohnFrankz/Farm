@@ -8,6 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+/**
+ * EntityID类是一个抽象基类，用于表示带有自动生成ID的实体对象。
+ */
 @MappedSuperclass
 public class EntityID implements Serializable{
 	protected static final long serialVersionUID = 1L;

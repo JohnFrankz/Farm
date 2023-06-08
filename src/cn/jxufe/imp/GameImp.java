@@ -17,6 +17,10 @@ import org.springframework.web.socket.TextMessage;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * GameImp类是GameService的实现类。
+ * 用于处理游戏相关的业务逻辑。
+ */
 @Service
 public class GameImp implements GameService {
     @Autowired
@@ -75,6 +79,11 @@ public class GameImp implements GameService {
         return completeLandStatusList;
     }
 
+    /**
+     * 游戏开始。
+     * 启动一个定时器，每隔一段时间检查一次农田状态。
+     * 检查农田状态的方法是checkCropStatus()。
+     */
     @Override
     public void gameStart() {
         new Timer().schedule(new TimerTask() {
@@ -85,12 +94,14 @@ public class GameImp implements GameService {
             }
         }, 0, GameConfig.__LAND_STATUS_CHECK_INTERVAL * 1000);
     }
+
     /**
      * 清除农田上的枯叶。
      * 如果指定农田不存在，返回错误消息。
      * 如果指定农田未种植作物，返回错误消息。
      * 如果指定农田作物的状态处于成熟阶段或成熟阶段之后，表示无需清除枯叶，返回错误消息。
      * 清除枯叶后，将农田的作物状态设置为未种植状态，并保存到数据库中。
+     * 
      * @param username 用户名
      * @param landIndex 农田索引
      * @return 操作结果消息，成功返回成功消息，失败返回错误消息
@@ -144,12 +155,12 @@ public class GameImp implements GameService {
     }
 
     /**
-         * 在指定土地上种植作物。
+     * 在农田上种植作物。
      *
      * @param username  用户名
      * @param landIndex 土地索引
      * @param seedId    种子ID
-     * @return 消息对象，包含种植结果信息
+     * @return 操作结果的消息对象
      */
     @Override
     @Transactional
@@ -250,13 +261,14 @@ public class GameImp implements GameService {
     }
 
     /**
-          * 杀虫。
-          * 如果指定用户不存在，返回错误消息。
-          * 如果指定农田不存在，返回错误消息。
-          * 如果指定农田未种植作物，返回错误消息。
-          * 如果指定农田没有虫害，返回错误消息。
-          * 完成杀虫后，更新用户的经验、积分和金币，并将农田的虫害状态设置为无虫害。
-          *同时向用户发送作物状态更新的消息。
+     * 杀虫。
+     * 如果指定用户不存在，返回错误消息。
+     * 如果指定农田不存在，返回错误消息。
+     * 如果指定农田未种植作物，返回错误消息。
+     * 如果指定农田没有虫害，返回错误消息。
+     * 完成杀虫后，更新用户的经验、积分和金币，并将农田的虫害状态设置为无虫害。
+     * 同时向用户发送作物状态更新的消息。
+     * 
      * @param username 用户名
      * @param landIndex 农田索引
      * @return 操作结果消息，成功返回成功消息，失败返回错误消息
@@ -293,10 +305,10 @@ public class GameImp implements GameService {
 
 
     /**
-         * 检查农作物状态，更新需要更新的农田状态。
-         * 如果作物的当前状态已经成熟或者超过成熟状态，则不做任何操作。
-         * 如果作物的当前状态尚未成熟，根据时间判断是否进入下一个生长阶段，并处理虫害和收获减产。
-         * 更新后的农田状态将保存到数据库，并发送更新消息给相关用户。
+     * 检查农作物状态，更新需要更新的农田状态。
+     * 如果作物的当前状态已经成熟或者超过成熟状态，则不做任何操作。
+     * 如果作物的当前状态尚未成熟，根据时间判断是否进入下一个生长阶段，并处理虫害和收获减产。
+     * 更新后的农田状态将保存到数据库，并发送更新消息给相关用户。
      */
     public void checkCropStatus() {
         System.out.println("检查农作物状态");
@@ -319,8 +331,9 @@ public class GameImp implements GameService {
     }
 
     /**
-         * 减少农作物产量。
-         * 根据设定的减产值和农田状态的当前产量，计算减产后的产量值。
+     * 减少农作物产量。
+     * 根据设定的减产值和农田状态的当前产量，计算减产后的产量值。
+     * 
      * @param farmLandStatus 农田状态对象
      */
     private static void __reduceCropOutput(FarmLandStatus farmLandStatus) {
@@ -330,10 +343,11 @@ public class GameImp implements GameService {
     }
 
     /**
-         * 更新农作物的状态。
-         * 根据当前农作物状态、当前时间和成长阶段信息，判断是否需要更新农作物的状态，
-         * 包括进入下一个生长阶段、处理虫害和收获减产等操作。
-         * 更新后的状态将保存到农田状态对象中。
+     * 更新农作物的状态。
+     * 根据当前农作物状态、当前时间和成长阶段信息，判断是否需要更新农作物的状态，
+     * 包括进入下一个生长阶段、处理虫害和收获减产等操作。
+     * 更新后的状态将保存到农田状态对象中。
+     * 
      * @param farmLandStatus 农田状态对象
      * @param now 当前时间
      */
@@ -366,6 +380,11 @@ public class GameImp implements GameService {
                 farmLandStatus.getCurrentStateHasGrownTime() + GameConfig.__LAND_STATUS_CHECK_INTERVAL);
     }
     
+    /**
+     * 更新作物的状态和生长阶段。
+     *
+     * @param farmLandStatus 农田状态对象
+     */
     private void updateCropStatusAndStage(FarmLandStatus farmLandStatus) {
         int currentStage = farmLandStatus.getCurrentStage();
         int nextStageId = currentStage + 1;
@@ -380,8 +399,9 @@ public class GameImp implements GameService {
     }
 
     /**
-         * 检查作物是否已生长足够长的时间。
-         * 用于判断是否应该出现虫害。
+     * 检查作物是否已生长足够长的时间。
+     * 用于判断是否应该出现虫害。
+     * 
      * @param currStageGrowthEndTime 当前生长阶段结束时间
      * @param now 当前时间
      * @return 是否已生长足够长的时间
@@ -391,8 +411,8 @@ public class GameImp implements GameService {
     }
 
     /**
-         * 检查当前生长阶段是否已完成。
-         * 根据当前时间与当前生长阶段的结束时间进行比较，判断是否已完成该阶段。
+     * 检查当前生长阶段是否已完成。
+     * 根据当前时间与当前生长阶段的结束时间进行比较，判断是否已完成该阶段。
      * @param currStageGrowthEndTime 当前生长阶段结束时间
      * @param now 当前时间
      * @return 当前阶段是否已完成
@@ -402,8 +422,8 @@ public class GameImp implements GameService {
     }
 
     /**
-         * 发送农田状态更新消息给农田的所有者。
-         * 将更新后的农田状态对象封装成消息对象发送给对应的用户。
+     * 发送农田状态更新消息给农田的所有者。
+     * 将更新后的农田状态对象封装成消息对象发送给对应的用户。
      * @param farmLandStatus 农田状态对象
      */
     private void sendCropStatusUpdateMessage(FarmLandStatus farmLandStatus) {

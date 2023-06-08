@@ -19,6 +19,7 @@ public class SeedTypeImp implements SeedTypeService {
 
     /**
      * 根据种子类型id查询种子类型
+     * 
      * @param seedId 种子类型id
      * @return 返回种子类型
      */
@@ -29,6 +30,7 @@ public class SeedTypeImp implements SeedTypeService {
 
     /**
      * 查询所有种子类型
+     * 
      * @return 返回所有种子类型
      */
     @Override

@@ -11,6 +11,7 @@ import java.util.List;
 public interface SeedGrowthStageDao extends JpaRepository<SeedGrowthStage, Long> {
     /**
      * 根据种子id查询某一种子的所有生长阶段
+     * 
      * @param seedId 种子id
      * @return 返回该种子的所有生长阶段
      */
@@ -18,6 +19,7 @@ public interface SeedGrowthStageDao extends JpaRepository<SeedGrowthStage, Long>
 
     /**
      * 根据种子id和生长阶段查询种子生长阶段
+     * 
      * @param seedId 种子id
      * @param growthStage 生长阶段
      * @return 返回种子生长阶段

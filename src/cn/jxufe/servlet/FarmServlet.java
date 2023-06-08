@@ -7,11 +7,19 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+/**
+ * FarmServlet 是一个 HttpServlet，用于启动农场游戏服务。
+ */
 public class FarmServlet extends HttpServlet {
 
     @Autowired
     private GameService gameService;
 
+    /**
+     * 初始化方法，在Servlet启动时调用。
+     *
+     * @throws ServletException Servlet异常
+     */
     @Override
     public void init() throws ServletException {
         super.init();
