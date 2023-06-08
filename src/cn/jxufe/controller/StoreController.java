@@ -52,6 +52,7 @@ public class StoreController {
     /**
      * 购买种子的API
      * 
+     * @param session 当前用户会话
      * @param userName 需要购买种子的用户名
      * @param seedId 购买的种子的ID
      * @param num 购买的数量

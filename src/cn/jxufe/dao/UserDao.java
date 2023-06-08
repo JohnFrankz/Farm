@@ -13,6 +13,7 @@ public interface UserDao extends JpaRepository<User, Long> {
      * 根据用户名查询用户, 并分页, 支持模糊查询
      * 
      * @param username 用户名
+     * @param pageable 分页信息
      * @return 返回用户
      */
     Page<User> findByUsernameContaining(String username, Pageable pageable);

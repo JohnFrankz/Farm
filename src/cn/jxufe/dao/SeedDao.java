@@ -15,6 +15,7 @@ public interface SeedDao extends JpaRepository<Seed, Long> {
 	 * 如果种子名称不为空, 则根据种子名称进行模糊查询
 	 * 
 	 * @param seedName 种子名称或者种子名称的一部分
+	 * @param pageable 分页信息
 	 * @return 返回种子
 	 */
 	Page<Seed> findBySeedNameContaining(String seedName, Pageable pageable);

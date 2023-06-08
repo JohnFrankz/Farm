@@ -35,8 +35,8 @@ public class FarmWebsocketHandler extends TextWebSocketHandler {
     /**
      * 在连接建立后，将session添加到sessions中
      * 
-     * @param session
-     * @throws Exception
+     * @param session 会话
+     * @throws Exception 处理异常
      */
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {

@@ -16,7 +16,6 @@ public class FileUtils {
      * @param file 上传的文件
      * @param request 请求对象
      * @return 上传结果
-     * @throws IOException
      */
     public static Message avatarUpload(MultipartFile file, HttpServletRequest request) {
         Message message = new Message();

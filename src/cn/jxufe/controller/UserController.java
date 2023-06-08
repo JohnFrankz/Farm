@@ -95,6 +95,7 @@ public class UserController {
      * 
      * @param id 用户id
      * @param avatar 用户头像文件名
+     * @return 返回更新结果
      */
     @RequestMapping("/updateAvatar")
     @ResponseBody
