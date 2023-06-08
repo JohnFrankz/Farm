@@ -10,6 +10,7 @@ import java.util.List;
 public interface CropStatusService {
     /**
      * 根据状态id查询作物状态的接口方法
+     * 
      * @param statusId 状态id
      * @return 返回作物状态
      */
@@ -17,6 +18,7 @@ public interface CropStatusService {
 
     /**
      * 查询所有作物状态的接口方法
+     * 
      * @return 返回所有作物状态
      */
     List<CropStatus> findAll();

@@ -33,6 +33,7 @@ public class GrowthStageController {
     
     /**
      * 这是一个获取种子生长阶段的API
+     * 
      * @param seedId 种子id
      * @return 返回种子的生长阶段
      */
@@ -44,6 +45,7 @@ public class GrowthStageController {
 
     /**
      * 这是一个保存种子生长阶段的API
+     * 
      * @param stage 种子生长阶段
      * @return 返回保存结果
      */
@@ -55,6 +57,7 @@ public class GrowthStageController {
 
     /**
      * 这是一个删除种子生长阶段的API
+     * 
      * @param id 需要删除的生长阶段的id
      * @return 返回删除结果
      */
@@ -66,6 +69,7 @@ public class GrowthStageController {
     
     /**
      * 这是获取作物状态的API
+     * 
      * @param statusId 作物状态id
      * @return 返回对应的作物状态
      */
@@ -77,6 +81,7 @@ public class GrowthStageController {
 
     /**
      * 这是获取所有作物状态的API
+     * 
      * @return 返回所有作物状态
      */
     @RequestMapping(value = "getAllCropStatus")

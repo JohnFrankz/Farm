@@ -2,6 +2,9 @@ package cn.jxufe.bean;
 
 import cn.jxufe.entity.FarmLandStatus;
 
+/**
+ * WebsocketMessage类用于表示WebSocket消息对象。
+ */
 public class WebsocketMessage {
     private int code;
     private FarmLandStatus farmLandStatus;

@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * 处理文件操作相关的控制器
+ * FileController类是处理文件操作相关的控制器。
  */
 @Controller
 @RequestMapping("file")
@@ -23,7 +23,7 @@ public class FileController {
      * @param file 上传的文件
      * @param request 请求对象
      * @return 上传结果
-     * @throws IOException
+     * @throws IOException 处理异常
      */
     @RequestMapping("avatarUpload")
     @ResponseBody

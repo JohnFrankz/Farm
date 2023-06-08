@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface CropStatusDao extends JpaRepository<CropStatus, Long> {
     /**
      * 根据状态id查询作物状态
+     * 
      * @param statusId 状态id
      * @return 返回作物状态
      */

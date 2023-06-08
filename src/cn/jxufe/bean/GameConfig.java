@@ -2,6 +2,9 @@ package cn.jxufe.bean;
 
 import java.util.Random;
 
+/**
+ * GameConfig类用于存储游戏配置信息。
+ */
 public class GameConfig {
     /** session中存放用户的key */
     public static final String __DEFAULT_USER_NAME_SESSION = "user";
@@ -34,7 +37,12 @@ public class GameConfig {
     public static final int __LAND_UNPLANTED_CODE = 0;
     /** 表示土地已种植的code */
     public static final int __LAND_PLANTED_CODE = 1;
-    /** 表示因为害虫而减少的作物产量 */
+    
+    /** 
+     * 表示因为害虫而减少的作物产量 
+     * 
+     * @return 产量减少的数量
+     */
     public static int __PEST_REDUCE_OUTPUT() {
         return new Random().nextInt(2) + 1;
     }

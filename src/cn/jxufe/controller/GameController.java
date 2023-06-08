@@ -17,6 +17,9 @@ import cn.jxufe.service.GameService;
 import cn.jxufe.service.UserBagService;
 import cn.jxufe.service.UserService;
 
+/**
+ * 处理农场相关操作的控制器
+ */
 @Controller
 @RequestMapping("/game")
 public class GameController {
@@ -28,11 +31,22 @@ public class GameController {
     @Autowired
     private UserService userService;
 
+    /**
+     * 跳转到游戏页面
+     * 
+     * @return 游戏页面对应的视图
+     */
     @RequestMapping("/index")
     public String index() {
         return "cropsGrow/grid";
     }
 
+    /**
+     * 获取某一用户的土地状态
+     * 
+     * @param session 当前用户会话
+     * @return 土地状态列表
+     */
     @RequestMapping("/landStatus")
     @ResponseBody
     public List<FarmLandStatus> getLandStatus(HttpSession session) {
@@ -44,9 +58,10 @@ public class GameController {
 
     /**
      * 清除枯草
+     * 
      * @param session 当前用户会话
      * @param landIndex 土地索引
-     * @return
+     * @return 清除结果
      */
     @RequestMapping("/cleanDeadLeaves")
     @ResponseBody
@@ -61,10 +76,11 @@ public class GameController {
 
     /**
      * 种植作物
+     * 
      * @param session 当前用户会话
      * @param landIndex 土地索引
      * @param seedId 种子id
-     * @return
+     * @return 种植结果
      */
     @RequestMapping("/plant")
     @ResponseBody
@@ -75,8 +91,10 @@ public class GameController {
 
     /**
      * 收获作物
+     * 
      * @param session 当前用户会话
      * @param landIndex 土地索引
+     * @return 收获结果
      */
     @RequestMapping("/harvest")
     @ResponseBody
@@ -90,8 +108,10 @@ public class GameController {
 
     /**
      * 除虫
+     * 
      * @param session 当前用户会话
      * @param landIndex 土地索引
+     * @return 除虫结果
      */
     @RequestMapping("/killBug")
     @ResponseBody
@@ -104,8 +124,11 @@ public class GameController {
     }
     
     /**
-     * 获取用户对应于某一土地类型的种子
-     *
+     * 获取用户拥有的种子
+     * 
+     * @param session 当前用户会话
+     * @param landType 土地类型
+     * @return 种子列表
      */
     @RequestMapping("/getSeeds")
     @ResponseBody

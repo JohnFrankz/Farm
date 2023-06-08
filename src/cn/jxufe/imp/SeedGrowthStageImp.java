@@ -20,6 +20,7 @@ public class SeedGrowthStageImp implements SeedGrowthStageService {
 
     /**
      * 根据种子id查询某一种子的所有生长阶段
+     * 
      * @param seedId 种子id
      * @return 返回该种子的所有生长阶段
      */
@@ -30,6 +31,7 @@ public class SeedGrowthStageImp implements SeedGrowthStageService {
 
     /**
      * 保存种子生长阶段的修改或新增某一种子的生长阶段
+     * 
      * @param stage 种子生长阶段
      * @return 返回保存结果
      */
@@ -49,6 +51,7 @@ public class SeedGrowthStageImp implements SeedGrowthStageService {
 
     /**
      * 删除种子生长阶段
+     * 
      * @param id 需要删除的生长阶段的id
      * @return 返回删除结果
      */
