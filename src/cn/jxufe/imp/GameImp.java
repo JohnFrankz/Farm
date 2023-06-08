@@ -117,7 +117,6 @@ public class GameImp implements GameService {
 
         user.setExperience(user.getExperience() + GameConfig.__CLEAN_DEAD_LEAVES_ADD_EXP);
         user.setPoints(user.getPoints() + GameConfig.__CLEAN_DEAD_LEAVES_ADD_POINTS);
-        land.setIsCrop(GameConfig.__LAND_UNPLANTED_CODE);
         userDao.save(user);
         
         Seed seed = seedDao.findBySeedId(land.getCropId());
@@ -215,7 +214,7 @@ public class GameImp implements GameService {
     @Override
     @Transactional
     public Message harvest(String username, int landIndex) {
-        if (landIndex >= GameConfig.__LAND_MAX_INDEX) {
+        if (landIndex > GameConfig.__LAND_MAX_INDEX) {
             return MessageUtils.createErrorMessage("土地不存在");
         }
         User user = userDao.findByUsername(username);
