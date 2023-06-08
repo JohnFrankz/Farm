@@ -225,6 +225,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			})
 		}) 
 		landTip();
+		
+		$(document).on('mouseenter', '.clickBox', function () {
+			 var land = landMap.get(parseInt(this.getAttribute('data-landIndex')));	       
+	        if (land.isCrop == 0) {
+	        	 $('.clickBox').css("cursor", "url(../cursor/glove.png),16,16,default");
+	        } else if (land.currentStage == 6 && land.isWithered == 1 ) {
+	        	 $('.clickBox').css("cursor", "url(../cursor/glove(1).cur),default");
+	        } else if (land.isInsect == 1) {
+	        	 $('.clickBox').css("cursor", "url(../cursor/glove.cur),default");
+	        } else if (land.currentStage == 5  && land.isMature == 1) {
+	        	 $('.clickBox').css("cursor", "url(../cursor/glove.cur),default");
+	        }
+	        
+	    });
+
+	    
 	})
 	
 	function initWebSocket(){
@@ -238,6 +254,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			console.log(event)
 			var data = JSON.parse(event.data);
 			updateData(data);	
+			console.log("update land ", data);
 		};
 		socket.onclose = function(event) {
 		  if (event.wasClean) {
@@ -410,10 +427,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                
 	                var content = $('<div style="color: black;">')
 	                    .append('名称：' + seedData.seedName).append('<br>')
-	                    .append('单季产量：' + seedData.harvest).append('<br>')
-	                    .append('果实单价：' + seedData.purchasePrice ).append('<br>')
-	                    .append('季数：' + seedData.season).append('<br>')
-	                    .append('土地要求：' + seedData.soil ).append('<br>')
+	                    .append('单季产量：' + seedData.harvest + "个果实").append('<br>')
+	                    .append('果实单价：' + seedData.purchasePrice + "金币" ).append('<br>')
+	                    .append('季数：' + seedData.season + "季作物").append('<br>');
+	                var soilCode = seedData.soil;
+	                var tudi = soilCode == 1 ? "黄" : soilCode == 2 ? "红" :
+	                	soilCode == 3 ? "黑" : "金";
+	                content.append('土地要求：' + tudi + "土地" ).append('<br>')
 		               
 	                    $('#cropImg_' + seedId).tooltip({
 	                        trackMouse: true,
@@ -529,9 +549,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		var i = Math.floor((data.landIndex) / 6) ;
     	var j = (data.landIndex ) % 6;
 		var $insect = $('#insect_' + data.landIndex);
-	    //没有虫害删除有虫害添加
+		console.log("$insect[0]",$insect);
 	    if (data.isInsect == 0) {
 	        if ($insect[0]) {
+	        	
 	            $insect.remove();
 	        }
 	    } else {
@@ -630,24 +651,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	function harvest(landIndex) {
  		var harvest = $('#harvest')[0];
  		var url = '<%=basePath%>/game/harvest?landIndex=' + landIndex;
- 		request({}, 'post', url, true, function (result) { 
+ 		request({}, 'post', url, false, function (result) { 
  			console.log('harvest', result);
  			if (result.code == 0 ) {      
- 				messageBox('消息', result.msg);            /*彩蛋*/           
+ 				messageBox('消息', result.msg);         
  				harvest.play();
  			} else {
 	 				mistake.play();     
 	 				messageBox('消息', '收获失败');    
 	 			}   
  			});
+ 		  parent.document.querySelector('#menu').src = '<%=basePath%>/menu.jsp';
  		}
  	
  	function cleanDeadLeaves(landIndex) {
  		var cleanLand = $('#cleanLand')[0];
  		var url = '<%=basePath%>/game/cleanDeadLeaves?landIndex=' + landIndex;
- 	    request({}, 'post', url, true, function (result) {
- 	        //重置前端数据
- 	        landIndex = new Land();
+ 	    request({}, 'post', url, false, function (result) {
  	        if (result.code == 0) {
  	            messageBox('消息', result.msg);
  	            cleanLand.play();
@@ -656,12 +676,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	            messageBox('消息', '除草失败');
  	        }
  	    });
+ 	   parent.document.querySelector('#menu').src = '<%=basePath%>/menu.jsp';
  	}
  	
  	function killBug(landIndex){
  		var killBug = $('#killworm')[0];
  		var url = '<%=basePath%>/game/killBug?landIndex=' + landIndex;
- 		request({},'post',url,true,function(result){
+ 		request({},'post',url,false,function(result){
  			if(result.code == 0){
  				messageBox ('消息',result.msg);
  				killBug.play();
@@ -670,6 +691,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  				messageBox('消息',result.msg);
  			}
  		})
+ 		  parent.document.querySelector('#menu').src = '<%=basePath%>/menu.jsp';
  	}
  	
 </script>
