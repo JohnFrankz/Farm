@@ -203,30 +203,6 @@ CREATE TABLE [dbo].[T_UserBag] (
   [seedNum] int  NOT NULL,
 )
 
-INSERT INTO [dbo].[T_UserBag] ([userName], [seedId], [seedNum])
-VALUES
-('zhaoyun', 1, 5),
-('guanyu', 2, 3),
-('liubei', 3, 8),
-('sunquan', 4, 2),
-('diaochan', 5, 4),
-('zhaoyun', 6, 10),
-('guanyu', 7, 7),
-('liubei', 8, 4),
-('sunquan', 9, 6),
-('diaochan', 1, 3),
-('zhaoyun', 4, 2),
-('guanyu', 8, 9),
-('liubei', 5, 5),
-('sunquan', 6, 8),
-('diaochan', 6, 7),
-('zhaoyun', 3, 3),
-('guanyu', 3, 6),
-('liubei', 4, 4),
-('sunquan', 2, 5),
-('diaochan', 9, 2);
-
-
 CREATE TABLE [dbo].[T_FarmLandStatus] (
   [id] int  IDENTITY(1,1) PRIMARY KEY NOT NULL,
   [username] nvarchar(50) COLLATE Chinese_PRC_CI_AS  NULL,
@@ -244,16 +220,3 @@ CREATE TABLE [dbo].[T_FarmLandStatus] (
   [isMature] int  NULL,
   [output] int  NULL,
 )
-
-INSERT INTO [dbo].[T_FarmLandStatus] ([username], [landIndex], [landType], [isCrop], [cropId], [cropStatus], [currentStage], [currentStateHasGrownTime], [stateEndTime], [currentSeason], [isInsect], [isWithered], [isMature], [output])
-VALUES
-('zhaoyun', 1, 1, 1, 1, 1, 0, 0, '2023-05-28 08:00:00', 1, 0, 0, 1, 50),
-('zhaoyun', 2, 2, 1, 2, 2, 0, 0, '2023-05-29 10:00:00', 1, 1, 0, 0, 23),
-('zhaoyun', 3, 1, 1, 3, 1, 0, 0, '2023-05-30 12:00:00', 1, 0, 1, 1, 60),
-('zhaoyun', 4, 2, 0, 4, 3, 0, 0, '2023-05-30 12:00:00', 1, 0, 0, 1, 10),
-('zhaoyun', 5, 1, 0, 5, 2, 0, 0, '2023-05-30 12:00:00', 1, 0, 0, 1, 10),
-('zhaoyun', 6, 2, 1, 4, 2, 0, 0, '2023-06-01 14:00:00', 1, 1, 1, 0, 10),
-('zhaoyun', 7, 1, 1, 5, 1, 0, 0, '2023-06-02 16:00:00', 1, 0, 0, 1, 70),
-('zhaoyun', 8, 2, 0, 7, 1, 0, 0, '2023-05-30 12:00:00', 1, 0, 0, 1, 10),
-('zhaoyun', 9, 1, 1, 6, 2, 0, 0, '2023-06-03 18:00:00', 1, 1, 0, 0, 10),
-('zhaoyun', 10, 2, 1, 1, 1, 0, 0, '2023-06-04 20:00:00', 1, 0, 0, 1, 80);
