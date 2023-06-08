@@ -707,7 +707,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			if ($('#growthStage2').val() == 0){
 				imgUrl = "../images/crops/basic/0.png";
 			}else if($('#growthStage2').val() == 6){
-				imgUrl="../images/crops/basic/9.png";
+				imgUrl="../images/crops/basic/6.png";
 			}else{
 				imgUrl="../images/crops/" + $("#seedId").val() + "/"+ $('#growthStage2').val() +".png";
 			}
