@@ -130,7 +130,7 @@
 	<!-- 配置WebSocket -->
 	<bean class="cn.jxufe.websocket.FarmWebsocketHandler" id="websocket"/>
 	<websocket:handlers>
-		<websocket:mapping path="/farm/action"  handler="websocket"/>
+		<websocket:mapping path="/action"  handler="websocket"/>
 		<websocket:handshake-interceptors>
 			<bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
 		</websocket:handshake-interceptors>
