@@ -1,0 +1,11 @@
+cn.jxufe.bean
+cn.jxufe.controller
+cn.jxufe.dao
+cn.jxufe.entity
+cn.jxufe.imp
+cn.jxufe.service
+cn.jxufe.servlet
+cn.jxufe.system.db
+cn.jxufe.system.jpa
+cn.jxufe.utils
+cn.jxufe.websocket
