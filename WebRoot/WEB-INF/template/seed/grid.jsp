@@ -258,8 +258,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 //分页
                 pagination:true,
                 pagePosition:'bottom',
-                pageSize:3,
-                pageList:[3,6,9],
+                pageSize:5,
+                pageList:[3,5,9],
                 columns: [
                 	[{field: 'id',		title: 'ID', width: 10,	sortable: true,	align: 'center', halign: 'center'}, 
                 	 {field: 'seedId',	title: '种子ID', width: 20,	sortable: true,	align: 'center', halign: 'center',
