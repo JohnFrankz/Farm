@@ -4,6 +4,7 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <html>
+<link rel="icon" type="image/x-icon" href="<%=basePath%>/images/plant.ico">
 <head>
     <base href="<%=basePath%>">
     <title>我的农场</title>
