@@ -169,7 +169,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		var $land = $('#land');
 		var url = '<%=basePath%>/game/landStatus';
 		 request({}, 'post', url, false, function (result) {
-			 console.log(result);
 			 for (var i = 0; i<4; i++){
 				 for (var j = 0; j<6; j++, num++){
 					 var currLand = result[num];
@@ -187,11 +186,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		 })
  
 		 $(document).on('click', '.clickBox', function () {
-			 /* console.log(landMap); */
-			 console.log(this.getAttribute('data-landIndex'))
 		     var land = landMap.get(parseInt(this.getAttribute('data-landIndex')));
-			 	console.log('land',land);
-		        console.log(land.landIndex)
 		        if (land.isCrop == 0) {
 		            plantCrop(land);
 		        } else if (land.currentStage == 6 && land.isWithered == 1 ) {
@@ -206,14 +201,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$(document).on('click','.seedImg', function(){
 			var hasPlanted = $('#hasPlanted')[0];	
 			var seedBagLandIndex =parseInt(landIndex);
-			console.log(seedBagLandIndex)
 			var seedId = this.getAttribute('data-cropId');
-			console.log(seedId)
 			var url = '<%=basePath%>/game/plant?landIndex=' + seedBagLandIndex + '&seedId=' + seedId;
 			request({},'post',url,true,function(result){
 				if(result.code == 0){
-					console.log(result);
-					console.log(seedBagLandIndex);
 					hasPlanted.play();
 					messageBox('消息',result.msg);
 	                $('#seedBagContaineer').dialog('close');
@@ -229,15 +220,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$(document).on('mouseenter', '.clickBox', function () {
 			 var land = landMap.get(parseInt(this.getAttribute('data-landIndex')));	       
 	        if (land.isCrop == 0) {
-	        	 $('.clickBox').css("cursor", "url(../cursor/spade.cur),default");
+	        	 $('.clickBox').css("cursor", "url(../cursor/plant3.cur),default");
 	        } else if (land.currentStage == 6 && land.isWithered == 1 ) {
-	        	 $('.clickBox').css("cursor", "url(../cursor/spade.cur),default");
+	        	 $('.clickBox').css("cursor", "url(../cursor/clean.cur),default");
 	        } else if (land.isInsect == 1) {
-	        	 $('.clickBox').css("cursor", "url(../cursor/killWorm.cur),default");
+	        	 $('.clickBox').css("cursor", "url(../cursor/killBug.cur),default");
 	        } else if(land.currentStage != 5 && land.currentStage != 5){
-	        	 $('.clickBox').css("cursor", "url(../cursor/waitGrow.cur),default");
+	        	 $('.clickBox').css("cursor", "url(../cursor/wait.cur), default");
 	        } else if (land.currentStage == 5  && land.isMature == 1) {
-	        	 $('.clickBox').css("cursor", "url(../cursor/harvest.cur),default");
+	        	 $('.clickBox').css("cursor", "url(../cursor/glove.cur),default");
 	        }
 	        
 	    });
@@ -253,10 +244,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  socket.send("My name is John");
 		};
 		socket.onmessage = function(event) {
-			console.log(event)
 			var data = JSON.parse(event.data);
 			updateData(data);	
-			console.log("update land ", data);
 		};
 		socket.onclose = function(event) {
 		  if (event.wasClean) {
@@ -334,10 +323,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    land.landType = result.landType;
 		land.username = result.username;
 		
-		/* console.log(land); */
 
 	    landMap.set(land.landIndex, land);
-	    /* console.log(landMap); */
 	}
 	
 	
@@ -389,10 +376,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function plantCrop(land) {
 		landIndex = land.landIndex;
 		var landType = land.landType;
-		console.log("landtypd = " + landType) 
 	   	var plant = $('#plant')[0];
 	    plant.play(); 
-	    let $seedBagWindow = $('#seedBagContaineer');
+	    var $seedBagWindow = $('#seedBagContaineer');
 	    $seedBagWindow.dialog('open');
 	    
 	    var seedBagBox = $('#seedBagContaineer');
@@ -419,13 +405,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                $seedBagImg.append($seedImgBox);
 	                
 	        	    var seedId = $img.attr('data-cropId');
-	                console.log('seedId' + seedId);
 	                
 	                var seedData = $.ajax({
 	         		    url: '<%=basePath%>/seed/getSeedData?seedId=' +seedId,
 	         		    async : false,
 	        		  	}).responseJSON;
-	                console.log('seedData ', seedData);
 	                
 	                var content = $('<div style="color: black;">')
 	                    .append('名称：' + seedData.seedName).append('<br>')
@@ -433,8 +417,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                    .append('果实单价：' + seedData.purchasePrice + "金币" ).append('<br>')
 	                    .append('季数：' + seedData.season + "季作物").append('<br>');
 	                var soilCode = seedData.soil;
-	                var tudi = soilCode == 1 ? "黄" : soilCode == 2 ? "红" :
-	                	soilCode == 3 ? "黑" : "金";
+	                var tudi = soilCode == 1 ? "红" : soilCode == 2 ? "黑" :
+	                	soilCode == 3 ? "金" : "紫";
 	                content.append('土地要求：' + tudi + "土地" ).append('<br>')
 		               
 	                    $('#cropImg_' + seedId).tooltip({
@@ -474,12 +458,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 	function updateData(data){
 		var land = landMap.get(data.landIndex);
-
 		updateCropImg(data);
 		updateInsect(data);
-		/* var land = landMap.get(landIndex);
-		console.log(land); */
-		
 		land.landIndex = data.landIndex;
 		land.isInsect = data.isInsect;
 		land.cropStatus = data.cropStatus;
@@ -493,8 +473,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		land.output = data.output;
 		land.landType = data.landType;
 		land.currentStateHasGrownTime = data.currentStateHasGrownTime
-		
-		
 		landMap.set(land.landIndex,land);
 	}
 	
@@ -503,12 +481,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		    url: '<%=basePath%>/growth/getStage?seedId=' + data.cropId + '&growthStage=' + data.currentStage,
  		    async : false,
 		  	}).responseJSON;
-		
-		console.log('growthStage',growthStage)
-		
-		console.log("data ",data);
 		var $crop = $('#crop_' + data.landIndex);
-		console.log("dsaf" + data.landIndex)
 	    if (data.isCrop == 0) {
 	        if ($crop[0]) {
 	            $crop.remove();
@@ -551,7 +524,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		var i = Math.floor((data.landIndex) / 6) ;
     	var j = (data.landIndex ) % 6;
 		var $insect = $('#insect_' + data.landIndex);
-		console.log("$insect[0]",$insect);
 	    if (data.isInsect == 0) {
 	        if ($insect[0]) {
 	        	
@@ -594,26 +566,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		            cropState = response.statusName;
 	 		   		}
 			  	});
-			console.log(cropState);
 			return cropState; 
 		}
 	
 	
 	function landTip() {
 	    $('.clickBox').tooltip({
-	        trackMouse: true,
-	        position: 'right',
-	        showDelay: 1000,
+	        trackMouse: false,
+	        position: 'left',
+	        showDelay: 1500,
 	        onShow: function () {
 	            var land = landMap.get(parseInt(this.getAttribute('data-landIndex')));
-	            console.log('seedName' + land.cropId);
 	            if (land.isCrop == 1){
-	            
 		            var seedName = getSeedName(land.cropId);
 		            var cropState = getCropState(land.cropStatus)
 		            /* console.log(seedName);
 		            console.log(cropState); */
-	
 		            var output = land.output;
 		            var stateEndTime = land.stateEndTime;
 		            var $tip = $('<div style="color: black;"></div>')
@@ -644,17 +612,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    let hh = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
 	    let mm = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
 	    let ss = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
-	    // 这里修改返回时间的格式
 	    return YY + "-" + MM + "-" + DD + " " + hh + ":" + mm + ":" + ss;
 	}
 
-	
-	
  	function harvest(landIndex) {
  		var harvest = $('#harvest')[0];
  		var url = '<%=basePath%>/game/harvest?landIndex=' + landIndex;
  		request({}, 'post', url, false, function (result) { 
- 			console.log('harvest', result);
  			if (result.code == 0 ) {      
  				messageBox('消息', result.msg);         
  				harvest.play();
