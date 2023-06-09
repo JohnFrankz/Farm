@@ -58,9 +58,9 @@
 				</p>
 				
 				<div id="asset">
-					<span style="padding-left:10px;">经验：<c:if test = "${user.id == null}">0</c:if>${user.experience}</span>
-					<span style="color:yellow;">金币: <c:if test = "${user.id == null}">0</c:if><fmt:formatNumber value="${user.money}" pattern="###" /> </span>
-					<span style="color:pink;">积分：<c:if test = "${user.id == null}">0</c:if>${user.points}</span> 
+					<span style="padding-left:10px; font-size:13px;">经验：<c:if test = "${user.id == null}">0</c:if>${user.experience}</span>
+					<span style="color:yellow; font-size:13px;">金币: <c:if test = "${user.id == null}">0</c:if><fmt:formatNumber value="${user.money}" pattern="###" /> </span>
+					<span style="color:pink; font-size:13px;">积分：<c:if test = "${user.id == null}">0</c:if>${user.points}</span> 
 				</div>
 			</div>
 	</div> 
