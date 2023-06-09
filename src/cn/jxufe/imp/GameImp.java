@@ -302,6 +302,41 @@ public class GameImp implements GameService {
                                                 "</br>金币+" + GameConfig.__KILL_BUG_ADD_MONEY);
     }
 
+    /**
+     * 除草。
+     * 如果指定用户不存在，返回错误消息。
+     * 如果指定农田不存在，返回错误消息。
+     * 如果指定农田未种植作物，返回错误消息。
+     * 如果指定农田没有杂草，返回错误消息。
+     * 完成除草后，更新用户的经验、积分和金币，并将农田的杂草状态设置为无杂草。
+     * 同时向用户发送作物状态更新的消息。
+     * 
+     * @param username 用户名
+     * @param landIndex 农田索引
+     * @return 操作结果消息，成功返回成功消息，失败返回错误消息
+     */
+    @Override
+    public Message removeCrop(String username, int landIndex) {
+        User user = userDao.findByUsername(username);
+        if (user == null) {
+            return MessageUtils.createErrorMessage("用户不存在");
+        }
+        if (landIndex > GameConfig.__LAND_MAX_INDEX) {
+            return MessageUtils.createErrorMessage("土地超出范围");
+        }
+        FarmLandStatus land = farmLandStatusDao.findByUsernameAndLandIndex(username, landIndex);
+        if (land == null) {
+            return MessageUtils.createErrorMessage("土地不存在");
+        }
+        if (land.getIsCrop() == GameConfig.__LAND_UNPLANTED_CODE) {
+            return MessageUtils.createErrorMessage("土地未种植");
+        }
+        land.setIsCrop(GameConfig.__LAND_UNPLANTED_CODE);
+        farmLandStatusDao.save(land);
+
+        sendCropStatusUpdateMessage(land);
+        return MessageUtils.createSuccessMessage("移除作物成功");
+    }
 
     /**
      * 检查农作物状态，更新需要更新的农田状态。
