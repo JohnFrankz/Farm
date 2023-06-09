@@ -59,5 +59,14 @@ public interface GameService {
      * @return 操作结果消息
      */
     Message killBug(String username, int landIndex);
+    
+    /**
+     * 除草
+     * 
+     * @param username 用户名
+     * @param landIndex 土地索引
+     * @return 除草结果
+     */
+    Message removeCrop(String username, int landIndex);
 }
 

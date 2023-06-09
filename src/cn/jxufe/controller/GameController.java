@@ -124,4 +124,17 @@ public class GameController {
         User currUser = (User) session.getAttribute(GameConfig.__DEFAULT_USER_NAME_SESSION);
         return userBagService.getSeedCanPlant(currUser.getUsername(), landType);
     }
+    
+    /**
+     * 铲除作物
+     * @param session 当前用户会话
+     * @param landIndex 土地索引
+     * @return 铲除结果
+     */
+    @RequestMapping("/removeCrop")
+    @ResponseBody
+    public Message removeCrop(HttpSession session, int landIndex) {
+        User currUser = (User) session.getAttribute(GameConfig.__DEFAULT_USER_NAME_SESSION);
+        return gameService.removeCrop(currUser.getUsername(), landIndex);
+    }
 }
