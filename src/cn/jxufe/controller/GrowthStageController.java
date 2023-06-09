@@ -25,6 +25,12 @@ public class GrowthStageController {
     @Autowired
     private CropStatusService cropStatusService;
     
+    @RequestMapping(value="getStage")
+    @ResponseBody
+    public SeedGrowthStage getStage(int seedId, int growthStage){
+        return stageService.getSeedGrowthStage(seedId, growthStage);
+    }
+    
     /**
      * 这是一个获取种子生长阶段的API
      * 
@@ -83,4 +89,6 @@ public class GrowthStageController {
     public List<CropStatus> getAllCropStatus() {
         return cropStatusService.findAll();
     }
+    
+    
 }

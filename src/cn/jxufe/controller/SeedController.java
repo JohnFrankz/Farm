@@ -154,6 +154,8 @@ public class SeedController {
 	 * @param seedId  种子id
 	 * @return 返回种子信息
 	 */
+	@RequestMapping(value = "getSeedData")
+	@ResponseBody
 	public Seed getSeed(int seedId) {
 		return seedService.findBySeedId(seedId);
 	}

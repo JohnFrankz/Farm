@@ -15,6 +15,7 @@ import cn.jxufe.entity.FarmLandStatus;
 import cn.jxufe.entity.User;
 import cn.jxufe.service.GameService;
 import cn.jxufe.service.UserBagService;
+import cn.jxufe.service.UserService;
 
 /**
  * 处理农场相关操作的控制器
@@ -27,6 +28,8 @@ public class GameController {
     private GameService gameService;
     @Autowired
     private UserBagService userBagService;
+    @Autowired
+    private UserService userService;
 
     /**
      * 跳转到游戏页面
@@ -35,7 +38,7 @@ public class GameController {
      */
     @RequestMapping("/index")
     public String index() {
-        return "game";
+        return "cropsGrow/grid";
     }
 
     /**
@@ -64,7 +67,10 @@ public class GameController {
     @ResponseBody
     public Message cleanWeed(HttpSession session, int landIndex) {
         User currUser = (User) session.getAttribute(GameConfig.__DEFAULT_USER_NAME_SESSION);
-        return gameService.cleanDeadLeaves(currUser.getUsername(), landIndex);
+        Message message = gameService.cleanDeadLeaves(currUser.getUsername(), landIndex);
+        currUser =  userService.findByUsername(currUser.getUsername());
+    	session.setAttribute("user", currUser);
+        return message;
     }
 
 
@@ -94,7 +100,10 @@ public class GameController {
     @ResponseBody
     public Message harvest(HttpSession session, int landIndex) {
         User currUser = (User) session.getAttribute(GameConfig.__DEFAULT_USER_NAME_SESSION);
-        return gameService.harvest(currUser.getUsername(), landIndex);
+        Message message = gameService.harvest(currUser.getUsername(), landIndex);
+        currUser =  userService.findByUsername(currUser.getUsername());
+    	session.setAttribute("user", currUser);
+        return message;
     }
 
     /**
@@ -108,7 +117,10 @@ public class GameController {
     @ResponseBody
     public Message killBug(HttpSession session, int landIndex) {
         User currUser = (User) session.getAttribute(GameConfig.__DEFAULT_USER_NAME_SESSION);
-        return gameService.killBug(currUser.getUsername(), landIndex);
+        Message message = gameService.killBug(currUser.getUsername(), landIndex);
+        currUser =  userService.findByUsername(currUser.getUsername());
+    	session.setAttribute("user", currUser);
+        return message;
     }
     
     /**

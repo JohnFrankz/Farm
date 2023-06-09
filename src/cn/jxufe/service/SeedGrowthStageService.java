@@ -33,4 +33,6 @@ public interface SeedGrowthStageService {
      * @return 返回删除结果
      */
     Message delete(Long id);
+    
+    SeedGrowthStage getSeedGrowthStage(int seedId, int growthStage);
 }

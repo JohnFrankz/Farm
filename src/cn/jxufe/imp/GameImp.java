@@ -128,7 +128,6 @@ public class GameImp implements GameService {
 
         user.setExperience(user.getExperience() + GameConfig.__CLEAN_DEAD_LEAVES_ADD_EXP);
         user.setPoints(user.getPoints() + GameConfig.__CLEAN_DEAD_LEAVES_ADD_POINTS);
-        land.setIsCrop(GameConfig.__LAND_UNPLANTED_CODE);
         userDao.save(user);
         
         Seed seed = seedDao.findBySeedId(land.getCropId());
@@ -150,8 +149,8 @@ public class GameImp implements GameService {
         sendCropStatusUpdateMessage(land);
         
         farmLandStatusDao.save(land);
-        return MessageUtils.createSuccessMessage("清除枯叶成功\n经验+" + GameConfig.__CLEAN_DEAD_LEAVES_ADD_EXP +
-                                                    "\n积分+" + GameConfig.__CLEAN_DEAD_LEAVES_ADD_POINTS);
+        return MessageUtils.createSuccessMessage("清除枯叶成功</br>经验+" + GameConfig.__CLEAN_DEAD_LEAVES_ADD_EXP +
+                                                    "</br>积分+" + GameConfig.__CLEAN_DEAD_LEAVES_ADD_POINTS);
     }
 
     /**
@@ -193,7 +192,7 @@ public class GameImp implements GameService {
         land.setIsCrop(GameConfig.__LAND_PLANTED_CODE);
         land.setCropId(seedId);
         land.setCropStatus(GameConfig.__CROP_SEED_STATUS_CODE);
-        land.setCurrentStage(GameConfig.__CROP_GROWTH_STAGE_CODE);
+        land.setCurrentStage(GameConfig.__CROP_SEED_STAGE_CODE);
         land.setCurrentStateHasGrownTime(0);
         land.setStateEndTime(new Date(new Date().getTime() + seedStage.getGrowthTime() * 1000));
         land.setCurrentSeason(1);
@@ -226,7 +225,7 @@ public class GameImp implements GameService {
     @Override
     @Transactional
     public Message harvest(String username, int landIndex) {
-        if (landIndex >= GameConfig.__LAND_MAX_INDEX) {
+        if (landIndex > GameConfig.__LAND_MAX_INDEX) {
             return MessageUtils.createErrorMessage("土地不存在");
         }
         User user = userDao.findByUsername(username);
@@ -255,9 +254,9 @@ public class GameImp implements GameService {
         sendCropStatusUpdateMessage(land);
         userDao.save(user);
         farmLandStatusDao.save(land);
-        return MessageUtils.createSuccessMessage("收获成功\n经验+" + seed.getExperience() +
-                                                "、积分+" + seed.getPoints() +
-                                                "、金币+" + seed.getSalePrice() * land.getOutput());
+        return MessageUtils.createSuccessMessage("收获成功</br>经验+" + seed.getExperience() + 
+                                                "</br>积分+" + seed.getPoints() +
+                                                "</br>金币+" + seed.getSalePrice() * land.getOutput());
     }
 
     /**
@@ -298,9 +297,9 @@ public class GameImp implements GameService {
         farmLandStatusDao.save(land);
 
         sendCropStatusUpdateMessage(land);
-        return MessageUtils.createSuccessMessage("杀虫成功\n经验+" + GameConfig.__KILL_BUG_ADD_EXP +
-                                                "、积分+" + GameConfig.__KILL_BUG_ADD_POINT +
-                                                "、金币+" + GameConfig.__KILL_BUG_ADD_MONEY);
+        return MessageUtils.createSuccessMessage("杀虫成功</br>经验+" + GameConfig.__KILL_BUG_ADD_EXP +
+                                                "</br>积分+" + GameConfig.__KILL_BUG_ADD_POINT +
+                                                "</br>金币+" + GameConfig.__KILL_BUG_ADD_MONEY);
     }
 
     /**
@@ -408,9 +407,10 @@ public class GameImp implements GameService {
 		if (nextStageId == GameConfig.__CROP_MATURITY_STAGE_CODE) {
 			farmLandStatus.setIsMature(GameConfig.__LAND_HAS_MATURE_CODE);
 		}
-        if (Math.random() < pestProbability && isCropTimeLongEnough(currStageGrowthEndTime, now)) {
+        if (Math.random() < pestProbability) {
             farmLandStatus.setIsInsect(GameConfig.__LAND_HAS_INSECT_CODE);
         }
+
         farmLandStatus.setCurrentStateHasGrownTime(
                 farmLandStatus.getCurrentStateHasGrownTime() + GameConfig.__LAND_STATUS_CHECK_INTERVAL);
     }
