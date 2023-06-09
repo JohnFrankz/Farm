@@ -56,7 +56,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 parent.document.querySelector('#bottom').src = '<%=basePath%>/seed.jsp';
 	 
 	 
-	 var allSoil=["","黄土地","黑土地","红土地","金土地"];
+	 var allSoil=["","红土地","黑土地","金土地","紫土地"];
 	 var allSeedType = ["","普通","高级","梦幻"];
     
 	var cardview = $.extend({}, $.fn.datagrid.defaults.view, {
