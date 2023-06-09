@@ -99,6 +99,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		align-items: center;
 		cursor: pointer;
 	}
+	
+	.spade{
+		position:absolute;
+		width:55px;
+		height:55px;
+		top:480px;
+		left:180px;
+		background:url(../images/clean.png);
+		border:thick double green;
+		-webkit-border-radius: 50%;
+		-moz-border-radius: 50%;
+		border-radius: 50%;
+	}
         
 </style>
 <body>
@@ -113,6 +126,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    		<img src="../images/left.png" style="transform: rotate(180deg);">
 		    	</div>
     		</div>
+    	<div id="spade" class="spade"> </div>
 	</div>
 	
 	<audio id="worm2" src="../sounds/worm2.mp3"></audio>
@@ -184,6 +198,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				 }
 			 }
 		 })
+		 
+		 
+		 $(document).on('click', '#spade', function () {
+			 
+			 $('body').css("cursor", "url(../cursor/clean.cur),default");
+			 var land = landMap.get(parseInt(this.getAttribute('data-landIndex')));
+			 if(land.isCrop == 1){
+				 chop(land.landIndex);
+			 } 
+			 
+		 }); 
  
 		 $(document).on('click', '.clickBox', function () {
 		     var land = landMap.get(parseInt(this.getAttribute('data-landIndex')));
@@ -658,6 +683,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			}
  		})
  		  parent.document.querySelector('#menu').src = '<%=basePath%>/menu.jsp';
+ 	}
+ 	
+ 	function chop(landIndex){
+ 		var url = '<%=basePath%>/game/removeCrop?landIndex=' + landIndex;
+ 		request({},'post',url, false, function(result){
+ 			console.log(result);
+ 		})
  	}
  	
 </script>
