@@ -63,15 +63,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		renderRow: function(target, fields, frozen, rowIndex, rowData){
 			var imgUrl = '<%=basePath%>/images/crops/' + rowData["seedId"] + '/5.png';
 			var main =	'<div id="mainBox_' + rowData['seedId'] + '" style="width:23%; padding: 5px;margin: 0 auto;display: inline-block; float:left; ">' +
-			                '<div style="width:100%; height: 250px; border: 0.2rem outset yellow;  border-radius: 12px;border-collapse:collapse;">' +
+			                '<div style="width:280px; height: 270px;  background-image:url(../images/border.png); background-size:100% 100% ; background-repeat: no-repeat;z-index:1;">' +
 			                    '<div style=" width:100%; ">' +
-			                            '<p style="padding:5px; height: 60px; margin:0;">"' + rowData['prompt'] + '</p>' +
+			                            '<p style="padding:35px 30px 0px 30px; height: 60px; margin:0;">"' + rowData['prompt'] + '</p>' +
 			                    '</div>' +
 			                    '<div id="mainBoxImg_' + rowData['seedId'] + '" style="text-align:center;">' + 
-			                            '<img style="width: 150px;height: 170px; margin-top:10px; " src="' + imgUrl + '" >' + 
+			                            '<img style="width: 150px;height: 170px; padding-top:10px; " src="' + imgUrl + '" >' + 
 			                    '</div>' +
 			                '</div>' + 
-		                        '<div style="padding: 10px;text-align: center;">' +
+		                        '<div style="margin-top: 10px;text-align: center;">' +
 		                            '<input type="button" value="我要购买" class="buyButton" onclick="purchaseSeed(' + rowData['seedId'] + ",\'" + rowData['seedName'] + '\')">' + 
 		                        '</div>'+ 
 			            '</div>';
@@ -183,7 +183,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         $.messager.prompt('提示信息', message, function (number) {
         	var url = '<%=basePath%>/store/buy?seedId=' + seedId + '&num=' + number + '&userName=' + currUserName;
             if (/^[1-9]\d*/.test(number)) {
-                request({fuck: "fuckyou"}, 'post', url, false, function (result) {
+                request({}, 'post', url, false, function (result) {
                     if (result.code == 0) {
                         parent.document.querySelector('#bottom').src = '<%=basePath%>/seed.jsp';
                         parent.document.querySelector('#menu').src = '<%=basePath%>/menu.jsp';

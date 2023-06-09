@@ -48,7 +48,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        </div>
                 
         <script>
-        $("body").css("height",$(window).height()); 
+        window.onload = function() {
+			var frameset = parent.document.getElementsByTagName('frameset')[0];
+		     frameset.rows = '60,*,50';
+		    parent.document.querySelector('#bottom').src = '<%=basePath%>/tools.jsp';
+		    $("body").css("height",$(window).height());
+		}
+	
         
         var rowData = {};
         var isInsertNewRow = false;
@@ -137,7 +143,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     }, {
                         field: 'nickname',
                         title: '昵称',
-                        width: '200',
+                        width: 200,
                         sortable: true,
                         align: 'center',
                         halign: 'center',
@@ -150,12 +156,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     }, {
                         field: 'experience',
                         title: '经验值',
-                        width: '200',
+                        width: 200,
                         align: 'center',
                         halign: 'center',
                         sortable: true,
                         formatter: function (value) {
-                            return '<div height=30px><img src="../images/userImages/jy.png" style="height:22px"><div style="margin-top:3px;height:20px;float:right;margin-left:-65px;margin-right:56px">' + value + '</div></div>';
+                        	return '<div style="display:inline-block; text-align:center;"><img src="../images/userImages/jy.png" style="height:15px">' + value + '</div>';       
                         },
                         editor:{
                         	type:'validatebox',
@@ -172,8 +178,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         halign: 'center',
                     	width:200,
                     	formatter: function (value) {
-                            return '<div height=30px><img src="../images/userImages/jf.png" style="height:23px"><div style="margin-top:3px;height:20px;float:right;margin-left:-67px;margin-right:50px">' + value + '</div></div>';;
-                        },
+                    		return '<div style="display:inline-block; text-align:center;"><img src="../images/userImages/jf.png" style="height:15px">' + value + '</div>';  
+                    	},
                     	editor:{
                         	type:'validatebox',
                         	options:{
@@ -186,9 +192,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 		sortable: true,
                     	align: 'center',
                         halign: 'center',
-                		width: 300,
+                		width: 200,
                 		formatter: function (value) {
-                            return '<div height=30px><img src="../images/userImages/jb.png" style="height:20px"><div style="margin-top:2px;height:20px;float:right;margin-left:-32px;margin-right:20px">' + value + '</div></div>';;
+                            return '<div style="display:inline-block; text-align:center;"><img src="../images/userImages/jb.png" style="height:15px">' + value + '</div>';
                         },
                 		editor:{
                         	type:'validatebox',
