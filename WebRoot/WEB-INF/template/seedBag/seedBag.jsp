@@ -63,12 +63,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		renderRow: function(target, fields, frozen, rowIndex, rowData){
 			var imgUrl = '<%=basePath%>/images/crops/' + rowData["seedId"] + '/5.png';
 			var main =	'<div id="mainBox_' + rowData['seedId'] + '" style="width:23%; padding: 5px;margin: 0 auto;display: inline-block; float:left; ">' +
-			                '<div style="width:280px; height: 270px;  background-image:url(../images/border.png); background-size:100% 100% ; background-repeat: no-repeat;z-index:1;">' +
+			                '<div style="width:280px; height: 330px;  background-image:url(../images/border.png); background-size:100% 100% ; background-repeat: no-repeat;z-index:1;">' +
 			                    '<div style=" width:100%; ">' +
-			                            '<p style="padding:35px 30px 0px 30px; height: 60px; margin:0;">"' + rowData['prompt'] + '</p>' +
+			                            '<p style="padding:55px 30px 0px 30px; height: 60px; margin:0;">"' + rowData['prompt'] + '</p>' +
 			                    '</div>' +
 			                    '<div id="mainBoxImg_' + rowData['seedId'] + '" style="text-align:center;">' + 
-			                            '<img style="width: 150px;height: 170px; padding-top:10px; " src="' + imgUrl + '" >' + 
+			                            '<img style="height: 170px; padding-top:10px; " src="' + imgUrl + '" >' + 
 			                    '</div>' +
 			                '</div>' + 
 		                        '<div style="margin-top: 10px;text-align: center;">' +
@@ -84,8 +84,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$('#seedShopContaineer').dialog({
             title: '种子仓库',
             iconCls: 'icon-seedBag',
-            width: '60%',
-            height: 430,
+            width: '80%',
+            height: 500,
         });
 		
 	seedShopGrid = $('#seedShopGrid').edatagrid({
@@ -180,7 +180,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		console.log(seedName)
 		var currUserName = '${user.username}';
         let message = '请输入您要购买的' + '<span style="color:gold;">' + seedName + '</span>' + '的数量';
-        $.messager.prompt('提示信息', message, function (number) {
+        $.messager.prompt('消息', message, function (number) {
         	var url = '<%=basePath%>/store/buy?seedId=' + seedId + '&num=' + number + '&userName=' + currUserName;
             if (/^[1-9]\d*/.test(number)) {
                 request({}, 'post', url, false, function (result) {

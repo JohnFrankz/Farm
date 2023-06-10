@@ -228,7 +228,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	     frameset.rows = '60,*,50';
 	    parent.document.querySelector('#bottom').src = '<%=basePath%>/tools.jsp';
 	    $("body").css("height",$(window).height());
+	    
 	}
+	
+		
+		
 	
 		var params ={
 				id:'',
@@ -237,10 +241,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 		var seedManageGrid;
 		$(document).ready(function() {
+			
 			seedManageGrid = $('#seedManage').edatagrid({
 				title: '种子清单',
 				width:'100%',
-				height:560,
+				height:690,
 				method:'post',
 				url:'<%=basePath%>/seed/data',
 				saveUrl: '<%=basePath%>/seed/save',

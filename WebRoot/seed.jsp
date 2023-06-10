@@ -124,7 +124,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                console.log(seedId)
 		                var imgUrl ='../images/crops/' + seedId + '/5.png';
 		                var $seedNum = $('<div class="seedNum" style="">' + result[i]['seedNum'] + '</div>');
-		                var $img = $('<img style="display:block; margin-left: auto;margin-right: auto;width:160px; height:170px;" class="seedImg" data-cropId="' + seedId + '" src="' + imgUrl + '" >');
+		                var $img = $('<img style="display:block; margin-left: auto;margin-right: auto; height:160px;" class="seedImg" data-cropId="' + seedId + '" src="' + imgUrl + '" >');
 		                var $seedImgBox = $('<div class="seedImgBox"></div>');
 		                $seedImgBox.append($seedNum);
 		                $seedImgBox.append($img);
