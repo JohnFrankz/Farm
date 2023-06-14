@@ -112,6 +112,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		-moz-border-radius: 50%;
 		border-radius: 50%;
 	}
+	
+	.custom-cursor {
+		  cursor: url(../cursor/clean.cur), default;
+		}
         
 </style>
 <body>
@@ -176,7 +180,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 	
 	var mistake = $('#mistake')[0];
-	
+	 var $spade = $('#spade');
+	 
 	$(function () {
 		initWebSocket();
 		var num = 0;
@@ -200,18 +205,41 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		 })
 		 
 		 
-		 $(document).on('click', '#spade', function () {
-			 
-			 $('body').css("cursor", "url(../cursor/clean.cur),default");
-			 var land = landMap.get(parseInt(this.getAttribute('data-landIndex')));
-			 if(land.isCrop == 1){
-				 chop(land.landIndex);
-			 } 
-			 
-		 }); 
+		$('#spade').on('click', function () {
+		  // $('body').css("cursor", "url(../cursor/clean.cur),default");
+		  var currentCursor = $('body').css("cursor");
+		  var targetCursor = "url(\"http://127.0.0.1:8080/farm//cursor/clean.cur\"), default";
+		  console.log("currentCursor: ", currentCursor)
+		  if (currentCursor !== targetCursor) {
+		    // 如果当前光标不是目标样式，则修改为目标样式
+		    $('body').css("cursor", targetCursor);
+		  } else {
+		    // 如果当前光标是目标样式，则恢复默认样式
+		    $('body').css("cursor", "default");
+		  }
+		  isSpade = !isSpade;
+		  if (isSpade) {
+			  $('.clickBox').css("cursor", targetCursor);
+		  }
+		});
  
 		 $(document).on('click', '.clickBox', function () {
 		     var land = landMap.get(parseInt(this.getAttribute('data-landIndex')));
+				if (isSpade) {
+					if (land.isCrop == 0) 
+						return;
+					if (!(land.currentStage == 6 && land.isWithered == 1)) {
+						$.messager.confirm (' 提示:',' 作物还未成熟，你确认要铲除吗？',function (event){ 
+
+						
+							if(event == 1){ 
+								removeCrop(land.landIndex);
+							}
+						}); 
+					}
+					
+					return;
+			 	}
 		        if (land.isCrop == 0) {
 		            plantCrop(land);
 		        } else if (land.currentStage == 6 && land.isWithered == 1 ) {
@@ -241,20 +269,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			})
 		}) 
 		landTip();
-		
+		var isSpade = 0;
 		$(document).on('mouseenter', '.clickBox', function () {
-			 var land = landMap.get(parseInt(this.getAttribute('data-landIndex')));	       
-	        if (land.isCrop == 0) {
-	        	 $('.clickBox').css("cursor", "url(../cursor/plant3.cur),default");
-	        } else if (land.currentStage == 6 && land.isWithered == 1 ) {
-	        	 $('.clickBox').css("cursor", "url(../cursor/clean.cur),default");
-	        } else if (land.isInsect == 1) {
-	        	 $('.clickBox').css("cursor", "url(../cursor/killBug.cur),default");
-	        } else if(land.currentStage != 5 && land.currentStage != 5){
-	        	 $('.clickBox').css("cursor", "url(../cursor/wait.cur), default");
-	        } else if (land.currentStage == 5  && land.isMature == 1) {
-	        	 $('.clickBox').css("cursor", "url(../cursor/glove.cur),default");
-	        }
+			if (isSpade == 1) {
+				return;
+			}
+			 var land = landMap.get(parseInt(this.getAttribute('data-landIndex')));	   
+			 var currentCursorStyle = $('#spade').css('cursor');
+			 if (currentCursorStyle.indexOf('custom-cursor') === -1) {
+		        if (land.isCrop == 0) {
+		        	 $('.clickBox').css("cursor", "url(../cursor/plant3.cur),default");
+		        } else if (land.currentStage == 6 && land.isWithered == 1 ) {
+		        	 $('.clickBox').css("cursor", "url(../cursor/clean.cur),default");
+		        } else if (land.isInsect == 1) {
+		        	 $('.clickBox').css("cursor", "url(../cursor/killBug.cur),default");
+		        } else if(land.currentStage != 5 && land.currentStage != 5){
+		        	 $('.clickBox').css("cursor", "url(../cursor/wait.cur), default");
+		        } else if (land.currentStage == 5  && land.isMature == 1) {
+		        	 $('.clickBox').css("cursor", "url(../cursor/glove.cur),default");
+		        }
+			 }
 	        
 	    });
 
@@ -329,7 +363,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function addSeedData(i, j, result) {
 	    let land = new Land();
 	    land.landIndex = result.landIndex;
-	    /* console.log(land.landIndex); */
 	    
 		land.currentStage = result.currentStage;
 		land.currentSeason = result.currentSeason;
@@ -549,8 +582,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		var i = Math.floor((data.landIndex) / 6) ;
     	var j = (data.landIndex ) % 6;
 		var $insect = $('#insect_' + data.landIndex);
-	    if (data.isInsect == 0) {
-	        if ($insect[0]) {
+	    if (!data.isCrop || data.isInsect == 0) {
+	        if ( $insect[0]) {
 	        	
 	            $insect.remove();
 	        }
@@ -605,8 +638,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            if (land.isCrop == 1){
 		            var seedName = getSeedName(land.cropId);
 		            var cropState = getCropState(land.cropStatus)
-		            /* console.log(seedName);
-		            console.log(cropState); */
 		            var output = land.output;
 		            var stateEndTime = land.stateEndTime;
 		            var $tip = $('<div style="color: black;"></div>')
@@ -685,12 +716,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		  parent.document.querySelector('#menu').src = '<%=basePath%>/menu.jsp';
  	}
  	
- 	function chop(landIndex){
+ 	function removeCrop(landIndex) {
+ 		var cleanLand = $('#cleanLand')[0];
  		var url = '<%=basePath%>/game/removeCrop?landIndex=' + landIndex;
- 		request({},'post',url, false, function(result){
- 			console.log(result);
+ 		request({},'post',url,false,function(result){
+ 			if(result.code == 0){
+ 				messageBox ('消息',result.msg);
+ 				cleanLand.play();
+ 			} else {
+ 				mistake.play();
+ 				messageBox('消息',result.msg);
+ 			}
  		})
  	}
- 	
+
 </script>
 </html>
