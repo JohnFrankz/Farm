@@ -407,7 +407,7 @@ public class GameImp implements GameService {
 		if (nextStageId == GameConfig.__CROP_MATURITY_STAGE_CODE) {
 			farmLandStatus.setIsMature(GameConfig.__LAND_HAS_MATURE_CODE);
 		}
-        if (Math.random() < pestProbability) {
+        if (nextStageId != GameConfig.__CROP_MATURITY_STAGE_CODE && Math.random() < pestProbability) {
             farmLandStatus.setIsInsect(GameConfig.__LAND_HAS_INSECT_CODE);
         }
 
