@@ -63,7 +63,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		renderRow: function(target, fields, frozen, rowIndex, rowData){
 			var imgUrl = '<%=basePath%>/images/crops/' + rowData["seedId"] + '/5.png';
 			var main =	'<div id="mainBox_' + rowData['seedId'] + '" style="width:23%; padding: 5px;margin: 0 auto;display: inline-block; float:left; ">' +
-			                '<div style="width:280px; height: 330px;  background-image:url(../images/border.png); background-size:100% 100% ; background-repeat: no-repeat;z-index:1;">' +
+			                '<div style="width:280px; height: 320px;  background-image:url(../images/border.png); background-size:100% 100% ; background-repeat: no-repeat;z-index:1;">' +
 			                    '<div style=" width:100%; ">' +
 			                            '<p style="padding:55px 30px 0px 30px; height: 60px; margin:0;">"' + rowData['prompt'] + '</p>' +
 			                    '</div>' +
@@ -85,7 +85,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             title: '种子仓库',
             iconCls: 'icon-seedBag',
             width: '80%',
-            height: 500,
+            height: 480,
         });
 		
 	seedShopGrid = $('#seedShopGrid').edatagrid({

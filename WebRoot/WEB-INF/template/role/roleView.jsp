@@ -68,7 +68,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             grid = $('#grid').edatagrid({
                 title: '用户清单',
                 width: '100%',
-                height: 680,
+                height: 582,
                 method: 'post',
                 url: '<%=basePath%>user/getUser',
                 saveUrl: '<%=basePath%>user/save',
