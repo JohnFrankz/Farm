@@ -256,7 +256,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 //分页
                 pagination:true,
                 pagePosition:'bottom',
-                pageSize:5,
+                pageSize:3,
                 pageList:[3,5,9],
                 columns: [
                 	[{field: 'id',		title: 'ID', width: 10,	sortable: true,	align: 'center', halign: 'center'}, 
@@ -464,7 +464,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			growthStageGrid = $('#growthStage').edatagrid({
 				title:'成长阶段定义',
 				width:'100%',
-				height:300, 
+				height:350, 
 				method:'post',
 				url:'<%=basePath%>/growth/gridData?seedId=' + seedId,
 				saveUrl: '<%=basePath%>/growth/save',

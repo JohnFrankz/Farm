@@ -104,7 +104,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		position:absolute;
 		width:55px;
 		height:55px;
-		top:480px;
+		top:460px;
 		left:180px;
 		background:url(../images/clean.png);
 		border:thick double green;
@@ -133,18 +133,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	<div id="spade" class="spade"> </div>
 	</div>
 	
-	<audio id="worm2" src="../sounds/worm2.mp3"></audio>
-	<audio id="harvest" src="../sounds/harvest.mp3"></audio>
+	<audio id="worm2" src="../sounds/isInsect2.mp3"></audio>
+	<audio id="harvest" src="../sounds/harvest2.mp3"></audio>
 	<audio id="hasPlanted" src="../sounds/hasPlanted.mp3"></audio>
 	<audio id="killworm" src="../sounds/killworm.mp3"></audio>
-	<audio id="plant" src="../sounds/plant.mp3"></audio>
+	<audio id="plant" src="../sounds/plant2.mp3"></audio>
 	<audio id="cleanLand" src="../sounds/cleanLand.mp3"></audio>
 	<audio id="mistake" src="../sounds/mistake.mp3"></audio>
+	<audio id="bgm" src="../sounds/bgm.mp3"></audio>
 	
 </body>
 
 <script>
 	window.onload = function() {
+		var bgm = $('#bgm')[0];
+		//bgm.play();
 		var frameset = parent.document.getElementsByTagName('frameset')[0];
 	    frameset.rows = '60,*,50';
 	    parent.document.querySelector('#bottom').src = '<%=basePath%>/tools.jsp';
@@ -206,7 +209,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		 
 		 
 		$('#spade').on('click', function () {
-		  // $('body').css("cursor", "url(../cursor/clean.cur),default");
 		  var currentCursor = $('body').css("cursor");
 		  var targetCursor = "url(\"http://127.0.0.1:8080/farm//cursor/clean.cur\"), default";
 		  console.log("currentCursor: ", currentCursor)
@@ -229,17 +231,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					if (land.isCrop == 0) 
 						return;
 					if (!(land.currentStage == 6 && land.isWithered == 1)) {
-						$.messager.confirm (' 提示:',' 作物还未成熟，你确认要铲除吗？',function (event){ 
-
-						
-							if(event == 1){ 
+						$.messager.confirm (' 提示:',' 作物还未收获，你确认要铲除吗？',function (event){ 
+							if (event) { 
 								removeCrop(land.landIndex);
+								return;
 							}
 						}); 
+					} else { 
+						removeCrop(land.landIndex); 
 					}
-					
 					return;
 			 	}
+				
 		        if (land.isCrop == 0) {
 		            plantCrop(land);
 		        } else if (land.currentStage == 6 && land.isWithered == 1 ) {
@@ -729,6 +732,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  			}
  		})
  	}
+ 	
+ 	bgm.addEventListener("ended", function() {
+	 		bgm.currentTime = 0;
+	 		bgm.play();
+ 		});
 
 </script>
 </html>
